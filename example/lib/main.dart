@@ -266,10 +266,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
             colorBehindNavBar: Colors.indigo,
             borderRadius: BorderRadius.circular(20.0)),
         popAllScreensOnTapOfSelectedTab: true,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
-        ),
         screenTransitionAnimation: ScreenTransitionAnimation(
           animateTabTransition: true,
           curve: Curves.ease,
@@ -277,6 +273,10 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         ),
         navBarBuilder: (navBarEssentials) => BottomNavStyle1(
           navBarEssentials: navBarEssentials,
+          itemAnimationProperties: ItemAnimationProperties(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
+          ),
         ), // Choose the nav bar widget with this property
       ),
     );

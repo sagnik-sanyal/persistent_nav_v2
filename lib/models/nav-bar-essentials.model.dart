@@ -9,7 +9,6 @@ class NavBarEssentials {
   final double? navBarHeight;
   final NavBarPadding? padding;
   final bool? popScreensOnTapOfSelectedTab;
-  final ItemAnimationProperties? itemAnimationProperties;
   final BuildContext? selectedScreenBuildContext;
 
   const NavBarEssentials({
@@ -21,7 +20,6 @@ class NavBarEssentials {
     this.navBarHeight = 0.0,
     this.padding,
     this.popScreensOnTapOfSelectedTab,
-    this.itemAnimationProperties,
     this.selectedScreenBuildContext,
   });
 
@@ -34,7 +32,6 @@ class NavBarEssentials {
     double? navBarHeight,
     NavBarPadding? padding,
     bool? popScreensOnTapOfSelectedTab,
-    ItemAnimationProperties? itemAnimationProperties,
   }) {
     return NavBarEssentials(
       selectedIndex: selectedIndex ?? this.selectedIndex,
@@ -46,8 +43,6 @@ class NavBarEssentials {
       padding: padding ?? this.padding,
       popScreensOnTapOfSelectedTab:
           popScreensOnTapOfSelectedTab ?? this.popScreensOnTapOfSelectedTab,
-      itemAnimationProperties:
-          itemAnimationProperties ?? this.itemAnimationProperties,
     );
   }
 }

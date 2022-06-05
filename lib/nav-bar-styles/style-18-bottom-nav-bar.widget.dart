@@ -1,27 +1,27 @@
 part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle18 extends StatelessWidget {
-  final NavBarEssentials? navBarEssentials;
+  final NavBarEssentials navBarEssentials;
   final NavBarDecoration? navBarDecoration;
 
   BottomNavStyle18({
     Key? key,
-    this.navBarEssentials = const NavBarEssentials(items: null),
+    required this.navBarEssentials,
     this.navBarDecoration = const NavBarDecoration(),
   });
 
   Widget _buildItem(
       PersistentBottomNavBarItem item, bool isSelected, double? height) {
-    return this.navBarEssentials!.navBarHeight == 0
+    return this.navBarEssentials.navBarHeight == 0
         ? SizedBox.shrink()
         : Container(
             width: 150.0,
             height: height,
             padding: EdgeInsets.only(
-                top: this.navBarEssentials!.padding?.top ??
-                    this.navBarEssentials!.navBarHeight! * 0.15,
-                bottom: this.navBarEssentials!.padding?.bottom ??
-                    this.navBarEssentials!.navBarHeight! * 0.12),
+                top: this.navBarEssentials.padding?.top ??
+                    this.navBarEssentials.navBarHeight! * 0.15,
+                bottom: this.navBarEssentials.padding?.bottom ??
+                    this.navBarEssentials.navBarHeight! * 0.12),
             child: Container(
               alignment: Alignment.center,
               height: height,
@@ -84,15 +84,15 @@ class BottomNavStyle18 extends StatelessWidget {
 
   Widget _buildMiddleItem(BuildContext context, PersistentBottomNavBarItem item,
       bool isSelected, double? height) {
-    return this.navBarEssentials!.navBarHeight == 0
+    return this.navBarEssentials.navBarHeight == 0
         ? SizedBox.shrink()
         : Container(
             width: MediaQuery.of(context).size.width / 5.0,
             margin: EdgeInsets.only(
-                top: this.navBarEssentials!.padding?.top ??
-                    this.navBarEssentials!.navBarHeight! * 0.1,
-                bottom: this.navBarEssentials!.padding?.bottom ??
-                    this.navBarEssentials!.navBarHeight! * 0.1,
+                top: this.navBarEssentials.padding?.top ??
+                    this.navBarEssentials.navBarHeight! * 0.1,
+                bottom: this.navBarEssentials.padding?.bottom ??
+                    this.navBarEssentials.navBarHeight! * 0.1,
                 left: 10.0,
                 right: 10.0),
             decoration: BoxDecoration(
@@ -138,40 +138,40 @@ class BottomNavStyle18 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final midIndex = (this.navBarEssentials!.items!.length / 2).floor();
+    final midIndex = (this.navBarEssentials.items!.length / 2).floor();
     return ClipRRect(
       borderRadius: this.navBarDecoration!.borderRadius ?? BorderRadius.zero,
       child: Stack(
         children: <Widget>[
           Container(
             width: double.infinity,
-            height: this.navBarEssentials!.navBarHeight,
+            height: this.navBarEssentials.navBarHeight,
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: this.navBarEssentials!.items!.map((item) {
-                    int index = this.navBarEssentials!.items!.indexOf(item);
+                  children: this.navBarEssentials.items!.map((item) {
+                    int index = this.navBarEssentials.items!.indexOf(item);
                     return index != midIndex
                         ? Flexible(
                             child: GestureDetector(
                               onTap: () {
                                 if (this
-                                        .navBarEssentials!
+                                        .navBarEssentials
                                         .items![index]
                                         .onPressed !=
                                     null) {
                                   this
-                                          .navBarEssentials!
+                                          .navBarEssentials
                                           .items![index]
                                           .onPressed!(
                                       this
-                                          .navBarEssentials!
+                                          .navBarEssentials
                                           .selectedScreenBuildContext);
                                 } else {
-                                  this.navBarEssentials!.onItemSelected!(index);
+                                  this.navBarEssentials.onItemSelected!(index);
                                 }
                               },
                               child: index == midIndex
@@ -180,31 +180,29 @@ class BottomNavStyle18 extends StatelessWidget {
                                       child: _buildMiddleItem(
                                           context,
                                           item,
-                                          this
-                                                  .navBarEssentials!
-                                                  .selectedIndex ==
+                                          this.navBarEssentials.selectedIndex ==
                                               index,
-                                          this.navBarEssentials!.navBarHeight))
+                                          this.navBarEssentials.navBarHeight))
                                   : _buildItem(
                                       item,
-                                      this.navBarEssentials!.selectedIndex ==
+                                      this.navBarEssentials.selectedIndex ==
                                           index,
-                                      this.navBarEssentials!.navBarHeight),
+                                      this.navBarEssentials.navBarHeight),
                             ),
                           )
                         : GestureDetector(
                             onTap: () {
                               if (this
-                                      .navBarEssentials!
+                                      .navBarEssentials
                                       .items![index]
                                       .onPressed !=
                                   null) {
-                                this.navBarEssentials!.items![index].onPressed!(
+                                this.navBarEssentials.items![index].onPressed!(
                                     this
-                                        .navBarEssentials!
+                                        .navBarEssentials
                                         .selectedScreenBuildContext);
                               } else {
-                                this.navBarEssentials!.onItemSelected!(index);
+                                this.navBarEssentials.onItemSelected!(index);
                               }
                             },
                             child: index == midIndex
@@ -213,35 +211,33 @@ class BottomNavStyle18 extends StatelessWidget {
                                     child: _buildMiddleItem(
                                         context,
                                         item,
-                                        this.navBarEssentials!.selectedIndex ==
+                                        this.navBarEssentials.selectedIndex ==
                                             index,
-                                        this.navBarEssentials!.navBarHeight))
+                                        this.navBarEssentials.navBarHeight))
                                 : _buildItem(
                                     item,
-                                    this.navBarEssentials!.selectedIndex ==
+                                    this.navBarEssentials.selectedIndex ==
                                         index,
-                                    this.navBarEssentials!.navBarHeight),
+                                    this.navBarEssentials.navBarHeight),
                           );
                   }).toList(),
                 ),
                 Center(
                   child: GestureDetector(
                       onTap: () {
-                        if (this.navBarEssentials!.items![midIndex].onPressed !=
+                        if (this.navBarEssentials.items![midIndex].onPressed !=
                             null) {
-                          this.navBarEssentials!.items![midIndex].onPressed!(
-                              this
-                                  .navBarEssentials!
-                                  .selectedScreenBuildContext);
+                          this.navBarEssentials.items![midIndex].onPressed!(
+                              this.navBarEssentials.selectedScreenBuildContext);
                         } else {
-                          this.navBarEssentials!.onItemSelected!(midIndex);
+                          this.navBarEssentials.onItemSelected!(midIndex);
                         }
                       },
                       child: _buildMiddleItem(
                           context,
-                          this.navBarEssentials!.items![midIndex],
-                          this.navBarEssentials!.selectedIndex == midIndex,
-                          this.navBarEssentials!.navBarHeight)),
+                          this.navBarEssentials.items![midIndex],
+                          this.navBarEssentials.selectedIndex == midIndex,
+                          this.navBarEssentials.navBarHeight)),
                 )
               ],
             ),

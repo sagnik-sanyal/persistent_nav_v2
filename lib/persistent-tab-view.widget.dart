@@ -95,9 +95,6 @@ class PersistentTabView extends StatefulWidget {
 
   final bool hideNavigationBarWhenKeyboardShows;
 
-  /// This controls the animation properties of the items of the NavBar.
-  final ItemAnimationProperties? itemAnimationProperties;
-
   /// Hides the navigation bar with a transition animation.
   /// Use it in conjuction with [Provider](https://pub.dev/packages/provider)
   /// for better results.
@@ -144,7 +141,6 @@ class PersistentTabView extends StatefulWidget {
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
-    this.itemAnimationProperties,
     this.hideNavigationBar,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
   })  : assert(items != null,
@@ -203,7 +199,6 @@ class PersistentTabView extends StatefulWidget {
         this.decoration = NavBarDecoration(colorBehindNavBar: backgroundColor),
         this.isCustomWidget = true,
         this.items = null,
-        this.itemAnimationProperties = null,
         this.navBarHeight = null,
         this.neumorphicProperties = null,
         this.onItemSelected = null,
@@ -483,7 +478,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
               previousIndex: _previousIndex,
               padding: widget.padding,
               selectedScreenBuildContext: _contextList[_controller.index],
-              itemAnimationProperties: widget.itemAnimationProperties,
               items: widget.items,
               backgroundColor: widget.backgroundColor,
               navBarHeight: _navBarHeight,

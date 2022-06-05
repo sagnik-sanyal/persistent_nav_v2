@@ -1,32 +1,37 @@
 part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle7 extends StatelessWidget {
-  final NavBarEssentials? navBarEssentials;
+  final NavBarEssentials navBarEssentials;
+
+  /// This controls the animation properties of the items of the NavBar.
+  final ItemAnimationProperties itemAnimationProperties;
 
   BottomNavStyle7({
     Key? key,
-    this.navBarEssentials = const NavBarEssentials(items: null),
+    required this.navBarEssentials,
+    this.itemAnimationProperties = const ItemAnimationProperties(
+      duration: Duration(milliseconds: 400),
+      curve: Curves.ease,
+    ),
   });
 
   Widget _buildItem(
       PersistentBottomNavBarItem item, bool isSelected, double? height) {
-    return this.navBarEssentials!.navBarHeight == 0
+    return this.navBarEssentials.navBarHeight == 0
         ? SizedBox.shrink()
         : AnimatedContainer(
             width: isSelected ? 120 : 50,
             height: height! / 1.6,
-            duration:
-                this.navBarEssentials!.itemAnimationProperties?.duration ??
-                    Duration(milliseconds: 400),
-            curve: this.navBarEssentials!.itemAnimationProperties?.curve ??
-                Curves.ease,
+            duration: this.itemAnimationProperties.duration ??
+                Duration(milliseconds: 400),
+            curve: this.itemAnimationProperties.curve ?? Curves.ease,
             padding: EdgeInsets.all(item.contentPadding),
             decoration: isSelected
                 ? BoxDecoration(
                     color: isSelected
                         ? item.activeColorPrimary
                         : this
-                            .navBarEssentials!
+                            .navBarEssentials
                             .backgroundColor!
                             .withOpacity(0.0),
                     borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -35,7 +40,7 @@ class BottomNavStyle7 extends StatelessWidget {
                     color: isSelected
                         ? item.activeColorPrimary
                         : this
-                            .navBarEssentials!
+                            .navBarEssentials
                             .backgroundColor!
                             .withOpacity(0.0),
                     borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -102,38 +107,38 @@ class BottomNavStyle7 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: this.navBarEssentials!.navBarHeight,
+      height: this.navBarEssentials.navBarHeight,
       padding: EdgeInsets.only(
-          top: this.navBarEssentials!.padding?.top ??
-              this.navBarEssentials!.navBarHeight! * 0.15,
-          left: this.navBarEssentials!.padding?.left ??
+          top: this.navBarEssentials.padding?.top ??
+              this.navBarEssentials.navBarHeight! * 0.15,
+          left: this.navBarEssentials.padding?.left ??
               MediaQuery.of(context).size.width * 0.07,
-          right: this.navBarEssentials!.padding?.right ??
+          right: this.navBarEssentials.padding?.right ??
               MediaQuery.of(context).size.width * 0.07,
-          bottom: this.navBarEssentials!.padding?.bottom ??
-              this.navBarEssentials!.navBarHeight! * 0.15),
+          bottom: this.navBarEssentials.padding?.bottom ??
+              this.navBarEssentials.navBarHeight! * 0.15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials!.items!.map((item) {
-          int index = this.navBarEssentials!.items!.indexOf(item);
+        children: this.navBarEssentials.items!.map((item) {
+          int index = this.navBarEssentials.items!.indexOf(item);
           return Flexible(
-            flex: this.navBarEssentials!.selectedIndex == index ? 2 : 1,
+            flex: this.navBarEssentials.selectedIndex == index ? 2 : 1,
             child: GestureDetector(
               onTap: () {
-                if (this.navBarEssentials!.items![index].onPressed != null) {
-                  this.navBarEssentials!.items![index].onPressed!(
-                      this.navBarEssentials!.selectedScreenBuildContext);
+                if (this.navBarEssentials.items![index].onPressed != null) {
+                  this.navBarEssentials.items![index].onPressed!(
+                      this.navBarEssentials.selectedScreenBuildContext);
                 } else {
-                  this.navBarEssentials!.onItemSelected!(index);
+                  this.navBarEssentials.onItemSelected!(index);
                 }
               },
               child: Container(
                 color: Colors.transparent,
                 child: _buildItem(
                     item,
-                    this.navBarEssentials!.selectedIndex == index,
-                    this.navBarEssentials!.navBarHeight),
+                    this.navBarEssentials.selectedIndex == index,
+                    this.navBarEssentials.navBarHeight),
               ),
             ),
           );
