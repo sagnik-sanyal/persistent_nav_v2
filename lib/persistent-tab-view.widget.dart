@@ -224,11 +224,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   late List<BuildContext?> _contextList;
   late PersistentTabController _controller;
   double? _navBarHeight;
-  int? _previousIndex;
-  int? _currentIndex;
-  bool? _isCompleted;
-  bool? _isAnimating;
-  late bool _sendScreenContext;
+  late int _previousIndex;
+  late int _currentIndex;
+  bool _isCompleted = false;
+  bool _isAnimating = false;
+  bool _sendScreenContext = false;
 
   @override
   void initState() {
@@ -242,10 +242,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
     _previousIndex = _controller.index;
     _currentIndex = _controller.index;
-
-    _isCompleted = false;
-    _isAnimating = false;
-    _sendScreenContext = false;
 
     _controller.addListener(() {
       if (_controller.index != _currentIndex) {
@@ -296,7 +292,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 if (_sendScreenContext) {
                   _sendScreenContext = false;
                   widget.selectedTabScreenContext!(
-                      _contextList[_controller!.index]);
+                      _contextList[_controller.index]);
                 }
                 return Material(elevation: 0, child: widget.screens[index]);
               },
@@ -326,7 +322,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 if (_sendScreenContext) {
                   _sendScreenContext = false;
                   widget.selectedTabScreenContext!(
-                      _contextList[_controller!.index]);
+                      _contextList[_controller.index]);
                 }
                 return Material(elevation: 0, child: widget.screens[index]);
               },
@@ -399,7 +395,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 if (_sendScreenContext) {
                   _sendScreenContext = false;
                   widget.selectedTabScreenContext!(
-                      _contextList[_controller!.index]);
+                      _contextList[_controller.index]);
                 }
                 return Material(elevation: 0, child: widget.screens[index]);
               },
@@ -464,7 +460,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             if (_sendScreenContext) {
               _sendScreenContext = false;
               widget
-                  .selectedTabScreenContext!(_contextList[_controller!.index]);
+                  .selectedTabScreenContext!(_contextList[_controller.index]);
             }
             return Material(elevation: 0, child: widget.screens[index]);
           });
@@ -486,7 +482,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           stateManagement: widget.stateManagement,
           screenTransitionAnimation: widget.screenTransitionAnimation,
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          animatePadding: _isAnimating! || _isCompleted!,
+          animatePadding: _isAnimating || _isCompleted,
           tabBar: PersistentBottomNavBar(
             navBarEssentials: NavBarEssentials(
               selectedIndex: _controller.index,
@@ -539,7 +535,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
               left: false,
               bottom: (widget.items != null &&
                           widget.items![_controller.index].opacity < 1.0) ||
-                      (widget.hideNavigationBar != null && _isCompleted!)
+                      (widget.hideNavigationBar != null && _isCompleted)
                   ? false
                   : widget.margin.bottom > 0
                       ? false
