@@ -259,7 +259,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       }
     });
     if (widget.selectedTabScreenContext != null) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
         widget.selectedTabScreenContext!(_contextList[_controller.index]);
       });
     }
@@ -273,10 +273,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             navigatorKey:
                 widget.routeAndNavigatorSettings!.navigatorKeys == null
                     ? null
-                    : widget.routeAndNavigatorSettings!
-                        .navigatorKeys![_controller.index],
-            navigatorObservers:
-                widget.routeAndNavigatorSettings!.navigatorObservers,
+                    : widget.routeAndNavigatorSettings!.navigatorKeys![index],
+            navigatorObservers: widget
+                    .routeAndNavigatorSettings!.navigatorObservers.isEmpty
+                ? []
+                : widget.routeAndNavigatorSettings!.navigatorObservers[index],
             onGenerateRoute: widget.routeAndNavigatorSettings!.onGenerateRoute,
             onUnknownRoute: widget.routeAndNavigatorSettings!.onUnknownRoute,
             routes: widget.routeAndNavigatorSettings!.routes,
@@ -294,7 +295,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 _contextList[index] = screenContext;
                 if (_sendScreenContext) {
                   _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(_contextList[index]);
+                  widget.selectedTabScreenContext!(
+                      _contextList[_controller!.index]);
                 }
                 return Material(elevation: 0, child: widget.screens[index]);
               },
@@ -323,7 +325,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 _contextList[index] = screenContext;
                 if (_sendScreenContext) {
                   _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(_contextList[index]);
+                  widget.selectedTabScreenContext!(
+                      _contextList[_controller!.index]);
                 }
                 return Material(elevation: 0, child: widget.screens[index]);
               },
@@ -353,9 +356,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                             min(
                                 widget.navBarHeight!,
                                 max(
-                                        widget.decoration!.borderRadius.topRight
+                                        (widget.decoration!.borderRadius ??
+                                                BorderRadius.zero)
+                                            .topRight
                                             .y,
-                                        widget.decoration!.borderRadius.topLeft
+                                        (widget.decoration!.borderRadius ??
+                                                BorderRadius.zero)
+                                            .topLeft
                                             .y) +
                                     (widget.decoration?.border != null
                                         ? widget.decoration!.border!.dimensions
@@ -391,7 +398,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 _contextList[index] = screenContext;
                 if (_sendScreenContext) {
                   _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(_contextList[index]);
+                  widget.selectedTabScreenContext!(
+                      _contextList[_controller!.index]);
                 }
                 return Material(elevation: 0, child: widget.screens[index]);
               },
@@ -421,9 +429,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                             min(
                                 widget.navBarHeight!,
                                 max(
-                                        widget.decoration!.borderRadius.topRight
+                                        (widget.decoration!.borderRadius ??
+                                                BorderRadius.zero)
+                                            .topRight
                                             .y,
-                                        widget.decoration!.borderRadius.topLeft
+                                        (widget.decoration!.borderRadius ??
+                                                BorderRadius.zero)
+                                            .topLeft
                                             .y) +
                                     (widget.decoration?.border != null
                                         ? widget.decoration!.border!.dimensions
@@ -451,7 +463,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             _contextList[index] = screenContext;
             if (_sendScreenContext) {
               _sendScreenContext = false;
-              widget.selectedTabScreenContext!(_contextList[index]);
+              widget
+                  .selectedTabScreenContext!(_contextList[_controller!.index]);
             }
             return Material(elevation: 0, child: widget.screens[index]);
           });

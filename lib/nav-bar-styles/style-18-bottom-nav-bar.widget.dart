@@ -52,32 +52,27 @@ class BottomNavStyle18 extends StatelessWidget {
                       ),
                       item.title == null
                           ? SizedBox.shrink()
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 15.0),
-                              child: Material(
-                                type: MaterialType.transparency,
-                                child: FittedBox(
-                                    child: Text(
-                                  item.title!,
-                                  style: item.textStyle != null
-                                      ? (item.textStyle!.apply(
-                                          color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
-                                              : item.inactiveColorPrimary))
-                                      : TextStyle(
-                                          color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
-                                              : item.inactiveColorPrimary,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12.0),
-                                )),
-                              ),
+                          : Material(
+                              type: MaterialType.transparency,
+                              child: FittedBox(
+                                  child: Text(
+                                item.title!,
+                                style: item.textStyle != null
+                                    ? (item.textStyle!.apply(
+                                        color: isSelected
+                                            ? (item.activeColorSecondary == null
+                                                ? item.activeColorPrimary
+                                                : item.activeColorSecondary)
+                                            : item.inactiveColorPrimary))
+                                    : TextStyle(
+                                        color: isSelected
+                                            ? (item.activeColorSecondary == null
+                                                ? item.activeColorPrimary
+                                                : item.activeColorSecondary)
+                                            : item.inactiveColorPrimary,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12.0),
+                              )),
                             )
                     ],
                   )
@@ -145,7 +140,7 @@ class BottomNavStyle18 extends StatelessWidget {
   Widget build(BuildContext context) {
     final midIndex = (this.navBarEssentials!.items!.length / 2).floor();
     return ClipRRect(
-      borderRadius: this.navBarDecoration!.borderRadius,
+      borderRadius: this.navBarDecoration!.borderRadius ?? BorderRadius.zero,
       child: Stack(
         children: <Widget>[
           Container(

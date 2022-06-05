@@ -140,6 +140,7 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
       _selectedIndex = widget.tabBar.navBarEssentials!.selectedIndex;
     }
     Widget content = _TabSwitchingView(
+      key: Key("TabSwitchingView"),
       currentTabIndex: _controller!.index,
       tabCount: widget.itemCount,
       tabBuilder: widget.tabBuilder,
@@ -160,17 +161,19 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
         widget.tabBar.navBarDecoration!.borderRadius != BorderRadius.zero) {
       final double bottomPadding = widget.bottomScreenMargin ??
           widget.tabBar.navBarEssentials!.navBarHeight! -
-              (min(
-                  widget.tabBar.navBarEssentials!.navBarHeight!,
-                  max(
-                          widget
-                              .tabBar.navBarDecoration!.borderRadius.topRight.y,
-                          widget.tabBar.navBarDecoration!.borderRadius.topLeft
-                              .y) +
-                      (widget.tabBar.navBarDecoration?.border != null
-                          ? widget.tabBar.navBarDecoration!.border!.dimensions
-                              .vertical
-                          : 0.0)));
+              (widget.tabBar.navBarDecoration!.borderRadius != null
+                  ? min(
+                      widget.tabBar.navBarEssentials!.navBarHeight!,
+                      max(
+                              widget.tabBar.navBarDecoration!.borderRadius!
+                                  .topRight.y,
+                              widget.tabBar.navBarDecoration!.borderRadius!
+                                  .topLeft.y) +
+                          (widget.tabBar.navBarDecoration?.border != null
+                              ? widget.tabBar.navBarDecoration!.border!
+                                  .dimensions.vertical
+                              : 0.0))
+                  : 0.0);
       contentPadding = bottomPadding;
     } else {
       if ((!widget.resizeToAvoidBottomInset ||
@@ -252,13 +255,15 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
 
 class _TabSwitchingView extends StatefulWidget {
   const _TabSwitchingView({
+    Key? key,
     required this.currentTabIndex,
     required this.tabCount,
     required this.stateManagement,
     required this.tabBuilder,
     required this.screenTransitionAnimation,
     required this.backgroundColor,
-  }) : assert(tabCount != null && tabCount > 0);
+  })  : assert(tabCount != null && tabCount > 0),
+        super(key: key);
 
   final int currentTabIndex;
   final int? tabCount;
@@ -399,19 +404,23 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
               enabled: active,
               child: FocusScope(
                 node: tabFocusNodes[index],
-                child: Builder(builder: (BuildContext context) {
-                  return shouldBuildTab[index]
-                      ? (widget.screenTransitionAnimation!.animateTabTransition
-                          ? AnimatedBuilder(
-                              animation: _animations[index]!,
-                              builder: (context, child) => Transform.translate(
-                                offset: Offset(_animations[index]!.value, 0),
-                                child: widget.tabBuilder(context, index),
-                              ),
-                            )
-                          : widget.tabBuilder(context, index))
-                      : Container();
-                }),
+                child: Builder(
+                  builder: (BuildContext context) {
+                    return shouldBuildTab[index]
+                        ? (widget
+                                .screenTransitionAnimation!.animateTabTransition
+                            ? AnimatedBuilder(
+                                animation: _animations[index]!,
+                                builder: (context, child) =>
+                                    Transform.translate(
+                                  offset: Offset(_animations[index]!.value, 0),
+                                  child: widget.tabBuilder(context, index),
+                                ),
+                              )
+                            : widget.tabBuilder(context, index))
+                        : Container();
+                  },
+                ),
               ),
             ),
           );

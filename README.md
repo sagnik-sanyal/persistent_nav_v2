@@ -1,8 +1,11 @@
 # Persistent Bottom Navigation Bar Version 2
 
-[![pub package version](https://img.shields.io/pub/v/persistent_bottom_nav_bar_v2)](https://pub.dev/packages/persistent_bottom_nav_bar_v2)
-[![license](https://img.shields.io/github/license/jb3rndt/PersistentBottomNavBarV2)](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/LICENSE)
-[![github stars](https://img.shields.io/github/stars/jb3rndt/PersistentBottomNavBarV2?style=social)](https://github.com/jb3rndt/PersistentBottomNavBarV2/stargazers)
+[![Build](https://github.com/jb3rndt/PersistentBottomNavBarV2/actions/workflows/tests.yaml/badge.svg?branch=master)](https://github.com/jb3rndt/PersistentBottomNavBarV2/actions)
+[![Coverage](https://codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/)
+[![Pub package version](https://img.shields.io/pub/v/persistent_bottom_nav_bar_v2)](https://pub.dev/packages/persistent_bottom_nav_bar_v2)
+[![License](https://img.shields.io/github/license/jb3rndt/PersistentBottomNavBarV2)](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/LICENSE)
+[![GitHub issues](https://badgen.net/github/issues/jb3rndt/PersistentBottomNavBarV2/)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/issues/)
+[![GitHub stars](https://img.shields.io/github/stars/jb3rndt/PersistentBottomNavBarV2?logo=github&colorB=dargreen)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/stargazers/)
 
 A persistent/static bottom navigation bar for Flutter.
 
@@ -332,7 +335,7 @@ If you want to have your own style for the navigation bar, follow these steps:
                 onItemSelected: (int) {
                     setState(() {}); // This is required to update the nav bar if Android back button is pressed
                 },
-                customWidget: CustomNavBarWidget( // Your custom widget goes here
+                customWidget: (navBarEssentials) =>CustomNavBarWidget( // Your custom widget goes here
                     items: _navBarsItems(),
                     selectedIndex: _controller.index,
                     onItemSelected: (index) {
