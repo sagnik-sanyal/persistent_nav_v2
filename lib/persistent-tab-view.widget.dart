@@ -47,14 +47,11 @@ class PersistentTabView extends StatefulWidget {
   /// The margin around the navigation bar.
   final EdgeInsets margin;
 
-  /// Custom navigation bar widget builder.
-  final Widget Function(NavBarEssentials)? customWidget;
-
   /// TODO update doc:
   /// Builder for the Navigation Bar Widget. This also exposes
   /// [NavBarEssentials] for further control. You can either pass a custom
   /// Widget or choose one of the predefined Navigation Bars.
-  final Widget? navBarWidget;
+  final Widget Function(NavBarEssentials) navBarBuilder;
 
   /// If using `custom` navBarStyle, define this instead of the `items` property
   final int? itemCount;
@@ -127,6 +124,7 @@ class PersistentTabView extends StatefulWidget {
     Key? key,
     this.items,
     required this.screens,
+    required this.navBarBuilder,
     this.controller,
     this.navBarHeight = kBottomNavigationBarHeight,
     this.margin = EdgeInsets.zero,
@@ -149,7 +147,6 @@ class PersistentTabView extends StatefulWidget {
     this.itemAnimationProperties,
     this.hideNavigationBar,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
-    this.navBarWidget,
   })  : assert(items != null,
             "Items can only be null in case of custom navigation bar style. Please add the items!"),
         assert(
@@ -160,7 +157,6 @@ class PersistentTabView extends StatefulWidget {
             "screens and items length should be same. If you are using the onPressed callback function of 'PersistentBottomNavBarItem', enter a dummy screen like Container() in its place in the screens"),
         assert(items!.length >= 2 && items.length <= 6,
             "NavBar should have at least 2 or maximum 6 items (Except for styles 15-18)"),
-        this.customWidget = null,
         this.isCustomWidget = false,
         this.itemCount = items?.length,
         this.routeAndNavigatorSettings = null,
@@ -180,9 +176,8 @@ class PersistentTabView extends StatefulWidget {
     this.controller,
     this.margin = EdgeInsets.zero,
     this.floatingActionButton,
-    required this.customWidget,
     required this.itemCount,
-    this.navBarWidget,
+    required this.navBarBuilder,
     this.resizeToAvoidBottomInset = true,
     this.bottomScreenMargin,
     this.selectedTabScreenContext,
@@ -307,7 +302,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           ),
         ],
       );
-    } else if (false/*widget.navBarStyle == NavBarStyle.style15*/) {
+    } else if (false /*widget.navBarStyle == NavBarStyle.style15*/) {
       // TODO: base condition on navbarwidget type / attribute
       // This creates an invisible gesturedetector above the navbar so the button that is raised up can be clicked outside the navbar.
       // It is moved by translation which is not respected by gesturedetector which is why this is needed.
@@ -382,7 +377,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 ),
         ],
       );
-    } else if (false/*widget.navBarStyle == NavBarStyle.style16*/) {
+    } else if (false /*widget.navBarStyle == NavBarStyle.style16*/) {
       // TODO see above
       return Stack(
         fit: StackFit.expand,
@@ -459,8 +454,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             _contextList[index] = screenContext;
             if (_sendScreenContext) {
               _sendScreenContext = false;
-              widget
-                  .selectedTabScreenContext!(_contextList[_controller.index]);
+              widget.selectedTabScreenContext!(_contextList[_controller.index]);
             }
             return Material(elevation: 0, child: widget.screens[index]);
           });
@@ -510,11 +504,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             isCustomWidget: widget.isCustomWidget,
             navBarDecoration: widget.decoration,
             margin: widget.margin,
-            navBarWidget: widget.navBarWidget,
+            navBarBuilder: widget.navBarBuilder,
             confineToSafeArea: widget.confineInSafeArea,
             hideNavigationBar: widget.hideNavigationBar,
             neumorphicProperties: widget.neumorphicProperties,
-            customNavBarWidget: widget.customWidget,
             onAnimationComplete: (isAnimating, isCompleted) {
               if (_isAnimating != isAnimating) {
                 setState(() {

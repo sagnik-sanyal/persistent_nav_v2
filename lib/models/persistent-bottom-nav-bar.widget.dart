@@ -3,26 +3,24 @@ part of persistent_bottom_nav_bar_v2;
 class PersistentBottomNavBar extends StatelessWidget {
   final EdgeInsets? margin;
   final bool? confineToSafeArea;
-  final Widget Function(NavBarEssentials navBarEssentials)? customNavBarWidget;
   final bool? hideNavigationBar;
   final Function(bool, bool)? onAnimationComplete;
   final NeumorphicProperties? neumorphicProperties;
   final NavBarEssentials? navBarEssentials;
   final NavBarDecoration? navBarDecoration;
-  final Widget? navBarWidget;
+  final Widget Function(NavBarEssentials) navBarBuilder;
   final bool? isCustomWidget;
 
   const PersistentBottomNavBar({
     Key? key,
+    required this.navBarBuilder,
     this.margin,
     this.confineToSafeArea,
-    this.customNavBarWidget,
     this.hideNavigationBar,
     this.onAnimationComplete,
     this.neumorphicProperties = const NeumorphicProperties(),
     this.navBarEssentials,
     this.navBarDecoration,
-    this.navBarWidget,
     this.isCustomWidget = false,
   }) : super(key: key);
 
@@ -40,7 +38,7 @@ class PersistentBottomNavBar extends StatelessWidget {
                       color: this.navBarEssentials!.backgroundColor,
                       height: this.navBarEssentials!.navBarHeight,
                       child:
-                          this.customNavBarWidget?.call(this.navBarEssentials!),
+                          this.navBarBuilder(this.navBarEssentials!),
                     ),
                   )
                 : Container(
@@ -53,9 +51,7 @@ class PersistentBottomNavBar extends StatelessWidget {
                           : confineToSafeArea ?? true,
                       child: Container(
                         height: this.navBarEssentials!.navBarHeight,
-                        child: this
-                            .customNavBarWidget
-                            ?.call(this.navBarEssentials!),
+                        child: this.navBarBuilder(this.navBarEssentials!),
                       ),
                     ),
                   )
@@ -79,7 +75,7 @@ class PersistentBottomNavBar extends StatelessWidget {
                                 .items![this.navBarEssentials!.selectedIndex!]
                                 .opacity,
                           ),
-                          child: this.navBarWidget ?? Container(),
+                          child: this.navBarBuilder(this.navBarEssentials!),
                         ),
                       )
                     : Container(
@@ -99,7 +95,7 @@ class PersistentBottomNavBar extends StatelessWidget {
                                   (this.hideNavigationBar ?? false)
                               ? false
                               : confineToSafeArea ?? true,
-                          child: this.navBarWidget ?? Container(),
+                          child: this.navBarBuilder(this.navBarEssentials!),
                         ),
                       )
                 : Container(
@@ -140,7 +136,7 @@ class PersistentBottomNavBar extends StatelessWidget {
                                         (this.hideNavigationBar ?? false)
                                     ? false
                                     : confineToSafeArea ?? true,
-                            child: this.navBarWidget ?? Container(),
+                            child: this.navBarBuilder(this.navBarEssentials!),
                           ),
                         ),
                       ),
@@ -165,7 +161,7 @@ class PersistentBottomNavBar extends StatelessWidget {
   PersistentBottomNavBar copyWith({
     EdgeInsets? margin,
     bool? confineToSafeArea,
-    Widget Function(NavBarEssentials)? customNavBarWidget,
+    Widget Function(NavBarEssentials)? navBarBuilder,
     bool? hideNavigationBar,
     Function(bool, bool)? onAnimationComplete,
     NeumorphicProperties? neumorphicProperties,
@@ -176,14 +172,13 @@ class PersistentBottomNavBar extends StatelessWidget {
   }) =>
       PersistentBottomNavBar(
         margin: margin ?? this.margin,
+        navBarBuilder: navBarBuilder ?? this.navBarBuilder,
         confineToSafeArea: confineToSafeArea ?? this.confineToSafeArea,
-        customNavBarWidget: customNavBarWidget ?? this.customNavBarWidget,
         hideNavigationBar: hideNavigationBar ?? this.hideNavigationBar,
         onAnimationComplete: onAnimationComplete ?? this.onAnimationComplete,
         neumorphicProperties: neumorphicProperties ?? this.neumorphicProperties,
         navBarEssentials: navBarEssentials ?? this.navBarEssentials,
         navBarDecoration: navBarDecoration ?? this.navBarDecoration,
-        navBarWidget: navBarWidget ?? this.navBarWidget,
         isCustomWidget: isCustomWidget ?? this.isCustomWidget,
       );
 

@@ -237,8 +237,12 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         margin: EdgeInsets.all(0.0),
         popActionScreens: PopActionScreensType.all,
         bottomScreenMargin: 0.0,
-        floatingActionButton:
-            IconButton(onPressed: () {}, icon: Icon(Icons.ac_unit, size: 	40,)),
+        floatingActionButton: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.ac_unit,
+              size: 40,
+            )),
         onWillPop: (context) async {
           await showDialog(
             context: context,
@@ -271,8 +275,9 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarWidget:
-            BottomNavStyle1(), // Choose the nav bar widget with this property
+        navBarBuilder: (navBarEssentials) => BottomNavStyle1(
+          navBarEssentials: navBarEssentials,
+        ), // Choose the nav bar widget with this property
       ),
     );
   }
@@ -406,7 +411,7 @@ class _CustomWidgetExampleState extends State<CustomWidgetExample> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        customWidget: (navBarEssentials) => CustomNavBarWidget(
+        navBarBuilder: (navBarEssentials) => CustomNavBarWidget(
           items: _navBarsItems(),
           onItemSelected: (index) {
             setState(() {
