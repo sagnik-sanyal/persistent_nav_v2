@@ -77,9 +77,7 @@ class _BottomNavStyle11State extends State<BottomNavStyle11>
                               ? item.activeColorPrimary
                               : item.inactiveColorPrimary,
                         ),
-                        child: isSelected
-                            ? item.icon
-                            : item.inactiveIcon ?? item.icon,
+                        child: isSelected ? item.icon : item.inactiveIcon,
                       ),
                     ),
                     item.title == null

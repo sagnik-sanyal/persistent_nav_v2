@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `itemAnimationProperties` now have to be applied to the NavBar Widget directly instead of being passed through to `navBarEssentials` and being accessible from there
 - navBarStyle now is a widget builder which also allows to pass a custom Widget instead of the predefined ones
 - Make items primary color the title and icon color and secondary the background color
+- Make inactiveIcon default to icon globally
 
 ## [4.2.3] - 2022-06-03
 ### Fixed

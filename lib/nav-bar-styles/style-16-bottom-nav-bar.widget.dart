@@ -42,9 +42,7 @@ class BottomNavStyle16 extends StatelessWidget {
                                 ? item.activeColorPrimary
                                 : item.inactiveColorPrimary,
                           ),
-                          child: isSelected
-                              ? item.icon
-                              : item.inactiveIcon ?? item.icon,
+                          child: isSelected ? item.icon : item.inactiveIcon,
                         ),
                       ),
                       item.title == null
@@ -121,7 +119,7 @@ class BottomNavStyle16 extends StatelessWidget {
                                     ),
                                     child: isSelected
                                         ? item.icon
-                                        : item.inactiveIcon ?? item.icon,
+                                        : item.inactiveIcon,
                                   ),
                                 ),
                               ],

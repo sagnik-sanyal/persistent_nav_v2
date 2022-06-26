@@ -5,8 +5,8 @@ class PersistentBottomNavBarItem {
   /// Icon for the bar item.
   final Widget icon;
 
-  /// In-Active icon for the bar item.
-  final Widget? inactiveIcon;
+  /// In-Active icon for the bar item. Defaults to `icon`
+  final Widget inactiveIcon;
 
   /// Title for the bar item. Might not appear is some `styles`.
   final String? title;
@@ -57,7 +57,7 @@ class PersistentBottomNavBarItem {
 
   PersistentBottomNavBarItem({
     required this.icon,
-    this.inactiveIcon,
+    Icon? inactiveIcon,
     this.title,
     this.contentPadding = 5.0,
     this.activeColorPrimary = CupertinoColors.activeBlue,
@@ -71,7 +71,8 @@ class PersistentBottomNavBarItem {
     this.onSelectedTabPressWhenNoScreensPushed,
     this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
     this.onPressed,
-  })  : activeColorSecondary =
+  })  : inactiveIcon = inactiveIcon ?? icon,
+        activeColorSecondary =
             activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
         assert(opacity >= 0 && opacity <= 1.0);
 }
