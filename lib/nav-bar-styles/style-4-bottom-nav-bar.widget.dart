@@ -38,14 +38,11 @@ class BottomNavStyle4 extends StatelessWidget {
                   Expanded(
                     child: IconTheme(
                       data: IconThemeData(
-                          size: item.iconSize,
-                          color: isSelected
-                              ? (item.activeColorSecondary == null
-                                  ? item.activeColorPrimary
-                                  : item.activeColorSecondary)
-                              : item.inactiveColorPrimary == null
-                                  ? item.activeColorPrimary
-                                  : item.inactiveColorPrimary),
+                        size: item.iconSize,
+                        color: isSelected
+                            ? item.activeColorPrimary
+                            : item.inactiveColorPrimary,
+                      ),
                       child: isSelected
                           ? item.icon
                           : item.inactiveIcon ?? item.icon,
@@ -57,22 +54,20 @@ class BottomNavStyle4 extends StatelessWidget {
                           type: MaterialType.transparency,
                           child: DefaultTextStyle.merge(
                             style: item.textStyle != null
-                                ? (item.textStyle!.apply(
+                                ? item.textStyle!.apply(
                                     color: isSelected
-                                        ? (item.activeColorSecondary == null
-                                            ? item.activeColorPrimary
-                                            : item.activeColorSecondary)
-                                        : item.inactiveColorPrimary))
+                                        ? item.activeColorPrimary
+                                        : item.inactiveColorPrimary)
                                 : TextStyle(
                                     color: isSelected
-                                        ? (item.activeColorSecondary == null
-                                            ? item.activeColorPrimary
-                                            : item.activeColorSecondary)
+                                        ? item.activeColorPrimary
                                         : item.inactiveColorPrimary,
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 12.0),
+                                    fontSize: 12.0,
+                                  ),
                             child: FittedBox(
-                                child: Text(isSelected ? item.title! : " ")),
+                              child: Text(isSelected ? item.title! : " "),
+                            ),
                           ),
                         ),
                 ],

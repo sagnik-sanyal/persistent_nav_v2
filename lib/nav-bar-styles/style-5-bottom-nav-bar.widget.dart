@@ -25,14 +25,11 @@ class BottomNavStyle5 extends StatelessWidget {
                   Expanded(
                     child: IconTheme(
                       data: IconThemeData(
-                          size: item.iconSize,
-                          color: isSelected
-                              ? (item.activeColorSecondary == null
-                                  ? item.activeColorPrimary
-                                  : item.activeColorSecondary)
-                              : item.inactiveColorPrimary == null
-                                  ? item.activeColorPrimary
-                                  : item.inactiveColorPrimary),
+                        size: item.iconSize,
+                        color: isSelected
+                            ? item.activeColorPrimary
+                            : item.inactiveColorPrimary,
+                      ),
                       child: isSelected
                           ? item.icon
                           : item.inactiveIcon ?? item.icon,
@@ -42,12 +39,11 @@ class BottomNavStyle5 extends StatelessWidget {
                     height: 5.0,
                     width: 5.0,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100.0),
-                        color: isSelected
-                            ? (item.activeColorSecondary == null
-                                ? item.activeColorPrimary
-                                : item.activeColorSecondary)
-                            : Colors.transparent),
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: isSelected
+                          ? item.activeColorSecondary
+                          : Colors.transparent,
+                    ),
                   ),
                 ],
               ),

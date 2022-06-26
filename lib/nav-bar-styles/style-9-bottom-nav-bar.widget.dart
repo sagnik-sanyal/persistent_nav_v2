@@ -43,14 +43,11 @@ class BottomNavStyle9 extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: IconTheme(
                       data: IconThemeData(
-                          size: item.iconSize,
-                          color: isSelected
-                              ? (item.activeColorSecondary == null
-                                  ? item.activeColorPrimary
-                                  : item.activeColorSecondary)
-                              : item.inactiveColorPrimary == null
-                                  ? item.activeColorPrimary
-                                  : item.inactiveColorPrimary),
+                        size: item.iconSize,
+                        color: isSelected
+                            ? item.activeColorPrimary
+                            : item.inactiveColorPrimary,
+                      ),
                       child: isSelected
                           ? item.icon
                           : item.inactiveIcon ?? item.icon,
@@ -66,20 +63,15 @@ class BottomNavStyle9 extends StatelessWidget {
                                   child: Text(
                                     item.title!,
                                     style: item.textStyle != null
-                                        ? (item.textStyle!.apply(
+                                        ? item.textStyle!.apply(
                                             color: isSelected
-                                                ? (item.activeColorSecondary ==
-                                                        null
-                                                    ? item.activeColorPrimary
-                                                    : item.activeColorSecondary)
-                                                : item.inactiveColorPrimary))
-                                        : TextStyle(
-                                            color: (item.activeColorSecondary ==
-                                                    null
                                                 ? item.activeColorPrimary
-                                                : item.activeColorSecondary),
+                                                : item.inactiveColorPrimary)
+                                        : TextStyle(
+                                            color: item.activeColorPrimary,
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 12.0),
+                                            fontSize: 12.0,
+                                          ),
                                   ),
                                 ),
                               ),

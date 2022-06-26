@@ -78,14 +78,11 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
                     Expanded(
                       child: IconTheme(
                         data: IconThemeData(
-                            size: item.iconSize,
-                            color: isSelected
-                                ? (item.activeColorSecondary == null
-                                    ? item.activeColorPrimary
-                                    : item.activeColorSecondary)
-                                : item.inactiveColorPrimary == null
-                                    ? item.activeColorPrimary
-                                    : item.inactiveColorPrimary),
+                          size: item.iconSize,
+                          color: isSelected
+                              ? item.activeColorPrimary
+                              : item.inactiveColorPrimary,
+                        ),
                         child: isSelected
                             ? item.icon
                             : item.inactiveIcon ?? item.icon,
@@ -101,19 +98,13 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
                                 child: Text(
                                   item.title!,
                                   style: item.textStyle != null
-                                      ? (item.textStyle!.apply(
+                                      ? item.textStyle!.apply(
                                           color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
-                                              : item.inactiveColorPrimary))
+                                              ? item.activeColorPrimary
+                                              : item.inactiveColorPrimary)
                                       : TextStyle(
                                           color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
+                                              ? item.activeColorPrimary
                                               : item.inactiveColorPrimary,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 12.0),
@@ -129,12 +120,11 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
                         height: 5.0,
                         width: itemWidth * 0.8,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.0),
-                            color: isSelected
-                                ? (item.activeColorSecondary == null
-                                    ? item.activeColorPrimary
-                                    : item.activeColorSecondary)
-                                : Colors.transparent),
+                          borderRadius: BorderRadius.circular(100.0),
+                          color: isSelected
+                              ? item.activeColorSecondary
+                              : Colors.transparent,
+                        ),
                       ),
                     ),
                   ],

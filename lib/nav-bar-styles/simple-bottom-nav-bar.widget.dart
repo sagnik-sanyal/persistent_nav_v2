@@ -34,12 +34,8 @@ class BottomNavSimple extends StatelessWidget {
                           data: IconThemeData(
                               size: item.iconSize,
                               color: isSelected
-                                  ? (item.activeColorSecondary == null
-                                      ? item.activeColorPrimary
-                                      : item.activeColorSecondary)
-                                  : item.inactiveColorPrimary == null
-                                      ? item.activeColorPrimary
-                                      : item.inactiveColorPrimary),
+                                  ? item.activeColorPrimary
+                                  : item.inactiveColorPrimary),
                           child: isSelected
                               ? item.icon
                               : item.inactiveIcon ?? item.icon,
@@ -52,28 +48,24 @@ class BottomNavSimple extends StatelessWidget {
                               child: Material(
                                 type: MaterialType.transparency,
                                 child: FittedBox(
-                                    child: Text(
-                                  item.title!,
-                                  style: item.textStyle != null
-                                      ? (item.textStyle!.apply(
-                                          color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
-                                              : item.inactiveColorPrimary))
-                                      : TextStyle(
-                                          color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
-                                              : item.inactiveColorPrimary,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12.0),
-                                )),
+                                  child: Text(
+                                    item.title!,
+                                    style: item.textStyle != null
+                                        ? item.textStyle!.apply(
+                                            color: isSelected
+                                                ? item.activeColorPrimary
+                                                : item.inactiveColorPrimary)
+                                        : TextStyle(
+                                            color: isSelected
+                                                ? item.activeColorPrimary
+                                                : item.inactiveColorPrimary,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12.0,
+                                          ),
+                                  ),
+                                ),
                               ),
-                            )
+                            ),
                     ],
                   )
                 ],

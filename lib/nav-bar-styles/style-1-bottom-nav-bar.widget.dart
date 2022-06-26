@@ -28,7 +28,7 @@ class BottomNavStyle1 extends StatelessWidget {
             padding: EdgeInsets.all(item.contentPadding),
             decoration: BoxDecoration(
               color: isSelected
-                  ? item.activeColorPrimary.withOpacity(0.2)
+                  ? item.activeColorSecondary
                   : navBarEssentials.backgroundColor!.withOpacity(0.0),
               borderRadius: BorderRadius.all(Radius.circular(50)),
             ),
@@ -47,12 +47,8 @@ class BottomNavStyle1 extends StatelessWidget {
                         data: IconThemeData(
                             size: item.iconSize,
                             color: isSelected
-                                ? (item.activeColorSecondary == null
-                                    ? item.activeColorPrimary
-                                    : item.activeColorSecondary)
-                                : item.inactiveColorPrimary == null
-                                    ? item.activeColorPrimary
-                                    : item.inactiveColorPrimary),
+                                ? item.activeColorPrimary
+                                : item.inactiveColorPrimary),
                         child: isSelected
                             ? item.icon
                             : item.inactiveIcon ?? item.icon,
@@ -69,18 +65,12 @@ class BottomNavStyle1 extends StatelessWidget {
                                   child: Text(
                                     item.title!,
                                     style: item.textStyle != null
-                                        ? (item.textStyle!.apply(
+                                        ? item.textStyle!.apply(
                                             color: isSelected
-                                                ? (item.activeColorSecondary ==
-                                                        null
-                                                    ? item.activeColorPrimary
-                                                    : item.activeColorSecondary)
-                                                : item.inactiveColorPrimary))
-                                        : TextStyle(
-                                            color: (item.activeColorSecondary ==
-                                                    null
                                                 ? item.activeColorPrimary
-                                                : item.activeColorSecondary),
+                                                : item.inactiveColorPrimary)
+                                        : TextStyle(
+                                            color: item.activeColorPrimary,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 12.0,
                                           ),

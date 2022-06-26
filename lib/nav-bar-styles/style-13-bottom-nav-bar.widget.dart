@@ -78,14 +78,11 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
                     Expanded(
                       child: IconTheme(
                         data: IconThemeData(
-                            size: item.iconSize,
-                            color: isSelected
-                                ? (item.activeColorSecondary == null
-                                    ? item.activeColorPrimary
-                                    : item.activeColorSecondary)
-                                : item.inactiveColorPrimary == null
-                                    ? item.activeColorPrimary
-                                    : item.inactiveColorPrimary),
+                          size: item.iconSize,
+                          color: isSelected
+                              ? item.activeColorPrimary
+                              : item.inactiveColorPrimary,
+                        ),
                         child: isSelected
                             ? item.icon
                             : item.inactiveIcon ?? item.icon,
@@ -96,17 +93,17 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
                         : Transform.translate(
                             offset: _animationList[itemIndex].value,
                             child: AnimatedContainer(
-                              duration: widget.itemAnimationProperties.duration ??
-                                  Duration(milliseconds: 400),
+                              duration:
+                                  widget.itemAnimationProperties.duration ??
+                                      Duration(milliseconds: 400),
                               height: 5.0,
                               width: itemWidth * 0.8,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  color: isSelected
-                                      ? (item.activeColorSecondary == null
-                                          ? item.activeColorPrimary
-                                          : item.activeColorSecondary)
-                                      : Colors.transparent),
+                                borderRadius: BorderRadius.circular(100.0),
+                                color: isSelected
+                                    ? item.activeColorSecondary
+                                    : Colors.transparent,
+                              ),
                             ),
                           ),
                   ],

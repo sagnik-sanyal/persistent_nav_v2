@@ -11,16 +11,16 @@ class PersistentBottomNavBarItem {
   /// Title for the bar item. Might not appear is some `styles`.
   final String? title;
 
-  /// Color for the current selected item in the navigation bar. If `activeColorSecondary` property is empty, this will act in its place (recommended). `cupertino activeBlue` by default.
+  /// Color for `icon` and `title` if item is selected. Defaults to `CupertinoColors.activeBlue`
   final Color activeColorPrimary;
 
-  /// Color for the unselected item(s) in the navigation bar.
-  final Color? inactiveColorPrimary;
+  /// Color for `icon` and `title` if item is unselected. Defaults to `CupertinoColors.systemGrey`
+  final Color inactiveColorPrimary;
 
-  /// Color for the item's `icon` and `title`. In most styles, declaring the the `activeColorPrimary` will be enough. But in some styles like `style7`, this might come help in differentiating the colors.
-  final Color? activeColorSecondary;
+  /// Color for the item background if selected. Defaults to `activeColorPrimary.withOpacity(0.2)`
+  final Color activeColorSecondary;
 
-  /// Color for the item's `inactiveIcon` and `title`. In most styles, declaring the the `inactiveColorPrimary` will be enough. But in some styles like `style7`, this might come help in differentiating the colors.
+  /// Color for the item background if unselected. Defaults to `Colors.transparent`
   final Color inactiveColorSecondary;
 
   /// Padding of the navigation bar item. Applies on all sides. `5.0` by default.
@@ -55,22 +55,23 @@ class PersistentBottomNavBarItem {
 
   final RouteAndNavigatorSettings routeAndNavigatorSettings;
 
-  PersistentBottomNavBarItem(
-      {required this.icon,
-      this.inactiveIcon,
-      this.title,
-      this.contentPadding = 5.0,
-      this.activeColorPrimary = CupertinoColors.activeBlue,
-      this.activeColorSecondary,
-      this.inactiveColorPrimary,
-      this.inactiveColorSecondary = CupertinoColors.systemGrey,
-      this.opacity = 1.0,
-      this.filter,
-      this.textStyle,
-      this.iconSize = 26.0,
-      this.onSelectedTabPressWhenNoScreensPushed,
-      this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
-      this.onPressed}) {
-    assert(opacity >= 0 && opacity <= 1.0);
-  }
+  PersistentBottomNavBarItem({
+    required this.icon,
+    this.inactiveIcon,
+    this.title,
+    this.contentPadding = 5.0,
+    this.activeColorPrimary = CupertinoColors.activeBlue,
+    this.inactiveColorPrimary = CupertinoColors.systemGrey,
+    Color? activeColorSecondary,
+    this.inactiveColorSecondary = Colors.transparent,
+    this.opacity = 1.0,
+    this.filter,
+    this.textStyle,
+    this.iconSize = 26.0,
+    this.onSelectedTabPressWhenNoScreensPushed,
+    this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
+    this.onPressed,
+  })  : activeColorSecondary =
+            activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
+        assert(opacity >= 0 && opacity <= 1.0);
 }

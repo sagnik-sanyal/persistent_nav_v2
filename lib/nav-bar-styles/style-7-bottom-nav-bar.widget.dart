@@ -30,19 +30,13 @@ class BottomNavStyle7 extends StatelessWidget {
                 ? BoxDecoration(
                     color: isSelected
                         ? item.activeColorPrimary
-                        : this
-                            .navBarEssentials
-                            .backgroundColor!
-                            .withOpacity(0.0),
+                        : Colors.transparent,
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   )
                 : BoxDecoration(
                     color: isSelected
                         ? item.activeColorPrimary
-                        : this
-                            .navBarEssentials
-                            .backgroundColor!
-                            .withOpacity(0.0),
+                        : Colors.transparent,
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
             child: Container(
@@ -56,14 +50,11 @@ class BottomNavStyle7 extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: IconTheme(
                       data: IconThemeData(
-                          size: item.iconSize,
-                          color: isSelected
-                              ? (item.activeColorSecondary == null
-                                  ? item.activeColorPrimary
-                                  : item.activeColorSecondary)
-                              : item.inactiveColorPrimary == null
-                                  ? item.activeColorPrimary
-                                  : item.inactiveColorPrimary),
+                        size: item.iconSize,
+                        color: isSelected
+                            ? item.activeColorPrimary
+                            : item.inactiveColorPrimary,
+                      ),
                       child: isSelected
                           ? item.icon
                           : item.inactiveIcon ?? item.icon,
@@ -76,24 +67,20 @@ class BottomNavStyle7 extends StatelessWidget {
                               child: Material(
                                 type: MaterialType.transparency,
                                 child: FittedBox(
-                                    child: Text(
-                                  item.title!,
-                                  style: item.textStyle != null
-                                      ? (item.textStyle!.apply(
-                                          color: isSelected
-                                              ? (item.activeColorSecondary ==
-                                                      null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary)
-                                              : item.inactiveColorPrimary))
-                                      : TextStyle(
-                                          color:
-                                              (item.activeColorSecondary == null
-                                                  ? item.activeColorPrimary
-                                                  : item.activeColorSecondary),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12.0),
-                                )),
+                                  child: Text(
+                                    item.title!,
+                                    style: item.textStyle != null
+                                        ? item.textStyle!.apply(
+                                            color: isSelected
+                                                ? item.activeColorPrimary
+                                                : item.inactiveColorPrimary)
+                                        : TextStyle(
+                                            color: item.activeColorPrimary,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12.0,
+                                          ),
+                                  ),
+                                ),
                               ),
                             )
                           : SizedBox.shrink()
