@@ -283,6 +283,9 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
+        navBarBuilder: (essentials) => BottomNavStyle1(
+          navBarEssentials: essentials,
+        ),
         confineInSafeArea: _confineInSafeArea,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: _handleAndroidBackButtonPress,
@@ -317,16 +320,11 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           borderRadius: BorderRadius.circular(20.0),
         ),
         popAllScreensOnTapOfSelectedTab: _popAllScreensOnTapOfSelectedTab,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
-        ),
         screenTransitionAnimation: ScreenTransitionAnimation(
           animateTabTransition: true,
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle: _navBarStyle,
       ),
     );
   }
