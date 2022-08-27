@@ -297,151 +297,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           ),
         ],
       );
-    } else if (false /*widget.navBarStyle == NavBarStyle.style15*/) {
-      // TODO: base condition on navbarwidget type / attribute
-      // This creates an invisible gesturedetector above the navbar so the button that is raised up can be clicked outside the navbar.
-      // It is moved by translation which is not respected by gesturedetector which is why this is needed.
-      return Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          SizedBox.expand(
-            child: CustomTabView(
-              routeAndNavigatorSettings: _routeAndNavigatorSettings,
-              builder: (BuildContext screenContext) {
-                _contextList[index] = screenContext;
-                if (_sendScreenContext) {
-                  _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(
-                      _contextList[_controller.index]);
-                }
-                return Material(elevation: 0, child: widget.screens[index]);
-              },
-            ),
-          ),
-          _navBarHeight == 0
-              ? SizedBox.shrink()
-              : Positioned(
-                  bottom: (_navBarHeight! -
-                          (widget.bottomScreenMargin ??
-                              _navBarHeight! + widget.margin.top))
-                      .abs(),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (widget.items![(widget.items!.length / 2).floor()]
-                              .onPressed !=
-                          null) {
-                        widget.items![(widget.items!.length / 2).floor()]
-                            .onPressed!(_contextList[_controller.index]);
-                      } else {
-                        _controller.index = (widget.items!.length / 2).floor();
-                      }
-                    },
-                    child: Center(
-                      child: Container(
-                        height: 21.0 +
-                            min(
-                                widget.navBarHeight!,
-                                max(
-                                        (widget.decoration!.borderRadius ??
-                                                BorderRadius.zero)
-                                            .topRight
-                                            .y,
-                                        (widget.decoration!.borderRadius ??
-                                                BorderRadius.zero)
-                                            .topLeft
-                                            .y) +
-                                    (widget.decoration?.border != null
-                                        ? widget.decoration!.border!.dimensions
-                                            .vertical
-                                        : 0.0)),
-                        margin: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width / 2 -
-                                (MediaQuery.of(context).size.width / 5.0 -
-                                        30.0) /
-                                    2),
-                        width: MediaQuery.of(context).size.width / 5.0 - 30.0,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(100.0),
-                              topRight: Radius.circular(100.0),
-                            )),
-                      ),
-                    ),
-                  ),
-                ),
-        ],
-      );
-    } else if (false /*widget.navBarStyle == NavBarStyle.style16*/) {
-      // TODO see above
-      return Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          SizedBox.expand(
-            child: CustomTabView(
-              routeAndNavigatorSettings: _routeAndNavigatorSettings,
-              builder: (BuildContext screenContext) {
-                _contextList[index] = screenContext;
-                if (_sendScreenContext) {
-                  _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(
-                      _contextList[_controller.index]);
-                }
-                return Material(elevation: 0, child: widget.screens[index]);
-              },
-            ),
-          ),
-          _navBarHeight == 0
-              ? SizedBox.shrink()
-              : Positioned(
-                  bottom: (_navBarHeight! -
-                          (widget.bottomScreenMargin ??
-                              _navBarHeight! + widget.margin.top))
-                      .abs(),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (widget.items![(widget.items!.length / 2).floor()]
-                              .onPressed !=
-                          null) {
-                        widget.items![(widget.items!.length / 2).floor()]
-                            .onPressed!(_contextList[_controller.index]);
-                      } else {
-                        _controller.index = (widget.items!.length / 2).floor();
-                      }
-                    },
-                    child: Center(
-                      child: Container(
-                        height: 21 +
-                            min(
-                                widget.navBarHeight!,
-                                max(
-                                        (widget.decoration!.borderRadius ??
-                                                BorderRadius.zero)
-                                            .topRight
-                                            .y,
-                                        (widget.decoration!.borderRadius ??
-                                                BorderRadius.zero)
-                                            .topLeft
-                                            .y) +
-                                    (widget.decoration?.border != null
-                                        ? widget.decoration!.border!.dimensions
-                                            .vertical
-                                        : 0.0)),
-                        margin: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width / 2 -
-                                (MediaQuery.of(context).size.width / 5.0 -
-                                        30.0) /
-                                    2),
-                        width: MediaQuery.of(context).size.width / 5.0 - 30.0,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-        ],
-      );
     } else {
       return CustomTabView(
           routeAndNavigatorSettings: _routeAndNavigatorSettings,
@@ -472,36 +327,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           screenTransitionAnimation: widget.screenTransitionAnimation,
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
           animatePadding: _isAnimating || _isCompleted,
-          tabBar: PersistentBottomNavBar(
-            navBarEssentials: NavBarEssentials(
-              selectedIndex: _controller.index,
-              previousIndex: _previousIndex,
-              padding: widget.padding,
-              selectedScreenBuildContext: _contextList[_controller.index],
-              items: widget.items,
-              backgroundColor: widget.backgroundColor,
-              navBarHeight: _navBarHeight,
-              popScreensOnTapOfSelectedTab:
-                  widget.popAllScreensOnTapOfSelectedTab,
-              onItemSelected: (int index) {
-                if (_controller.index != _previousIndex) {
-                  _previousIndex = _controller.index;
-                }
-                if ((widget.popAllScreensOnTapOfSelectedTab) &&
-                    _previousIndex == index) {
-                  popAllScreens();
-                }
-                _controller.index = index;
-                widget.onItemSelected?.call(index);
-              },
-            ),
-            isCustomWidget: widget.isCustomWidget,
-            navBarDecoration: widget.decoration,
-            margin: widget.margin,
-            navBarBuilder: widget.navBarBuilder,
-            confineToSafeArea: widget.confineInSafeArea,
-            hideNavigationBar: widget.hideNavigationBar,
-            neumorphicProperties: widget.neumorphicProperties,
+          tabBar: OffsetAnimation(
+            hideNavigationBar: widget.hideNavigationBar ?? false,
+            navBarHeight: widget.navBarHeight,
             onAnimationComplete: (isAnimating, isCompleted) {
               if (_isAnimating != isAnimating) {
                 setState(() {
@@ -514,6 +342,60 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 });
               }
             },
+            child: MediaQuery(
+              data: MediaQueryData(
+                padding:
+                    const EdgeInsets.only(bottom: 100), // Simulate gesture bar
+              ),
+              child: PersistentBottomNavBar(
+                navBarEssentials: NavBarEssentials(
+                  selectedIndex: _controller.index,
+                  previousIndex: _previousIndex,
+                  padding: widget.padding,
+                  selectedScreenBuildContext: _contextList[_controller.index],
+                  items: widget.items,
+                  backgroundColor: widget.backgroundColor,
+                  navBarHeight: _navBarHeight,
+                  popScreensOnTapOfSelectedTab:
+                      widget.popAllScreensOnTapOfSelectedTab,
+                  onItemSelected: (int index) {
+                    if (_controller.index != _previousIndex) {
+                      _previousIndex = _controller.index;
+                    }
+                    if ((widget.popAllScreensOnTapOfSelectedTab) &&
+                        _previousIndex == index) {
+                      popAllScreens();
+                    }
+                    _controller.index = index;
+                    widget.onItemSelected?.call(index);
+                  },
+                ),
+                margin: widget.margin,
+                child: widget.navBarBuilder(NavBarEssentials(
+                  selectedIndex: _controller.index,
+                  previousIndex: _previousIndex,
+                  padding: widget.padding,
+                  selectedScreenBuildContext: _contextList[_controller.index],
+                  items: widget.items,
+                  backgroundColor: widget.backgroundColor,
+                  navBarHeight: _navBarHeight,
+                  popScreensOnTapOfSelectedTab:
+                      widget.popAllScreensOnTapOfSelectedTab,
+                  onItemSelected: (int index) {
+                    if (_controller.index != _previousIndex) {
+                      _previousIndex = _controller.index;
+                    }
+                    if ((widget.popAllScreensOnTapOfSelectedTab) &&
+                        _previousIndex == index) {
+                      popAllScreens();
+                    }
+                    _controller.index = index;
+                    widget.onItemSelected?.call(index);
+                  },
+                )),
+                confineToSafeArea: widget.confineInSafeArea,
+              ),
+            ),
           ),
           tabBuilder: (BuildContext context, int index) {
             return SafeArea(

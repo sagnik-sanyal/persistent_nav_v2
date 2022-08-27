@@ -1,189 +1,87 @@
 part of persistent_bottom_nav_bar_v2;
 
 class PersistentBottomNavBar extends StatelessWidget {
-  final EdgeInsets? margin;
-  final bool? confineToSafeArea;
-  final bool? hideNavigationBar;
-  final Function(bool, bool)? onAnimationComplete;
-  final NeumorphicProperties? neumorphicProperties;
+  final EdgeInsets margin;
+  final bool confineToSafeArea;
   final NavBarEssentials? navBarEssentials;
-  final NavBarDecoration? navBarDecoration;
-  final Widget Function(NavBarEssentials) navBarBuilder;
-  final bool? isCustomWidget;
+  final Widget child;
 
   const PersistentBottomNavBar({
     Key? key,
-    required this.navBarBuilder,
-    this.margin,
-    this.confineToSafeArea,
-    this.hideNavigationBar,
-    this.onAnimationComplete,
-    this.neumorphicProperties = const NeumorphicProperties(),
+    required this.child,
+    EdgeInsets? margin,
+    bool? confineToSafeArea,
     this.navBarEssentials,
-    this.navBarDecoration,
-    this.isCustomWidget = false,
-  }) : super(key: key);
-
-  Widget _navBarWidget() => Padding(
-        padding: this.margin!,
-        child: isCustomWidget!
-            ? this.margin!.bottom > 0
-                ? SafeArea(
-                    top: false,
-                    bottom: this.navBarEssentials!.navBarHeight == 0.0 ||
-                            (this.hideNavigationBar ?? false)
-                        ? false
-                        : confineToSafeArea ?? true,
-                    child: Container(
-                      color: this.navBarEssentials!.backgroundColor,
-                      height: this.navBarEssentials!.navBarHeight,
-                      child: this.navBarBuilder(this.navBarEssentials!),
-                    ),
-                  )
-                : Container(
-                    color: this.navBarEssentials!.backgroundColor,
-                    child: SafeArea(
-                      top: false,
-                      bottom: this.navBarEssentials!.navBarHeight == 0.0 ||
-                              (this.hideNavigationBar ?? false)
-                          ? false
-                          : confineToSafeArea ?? true,
-                      child: Container(
-                        height: this.navBarEssentials!.navBarHeight,
-                        child: this.navBarBuilder(this.navBarEssentials!),
-                      ),
-                    ),
-                  )
-            : false /*this.navBarStyle == NavBarStyle.style15 ||
-                    this.navBarStyle == NavBarStyle.style16*/ //TODO: Depend on navbarWidget type
-                ? this.margin!.bottom > 0
-                    ? SafeArea(
-                        top: false,
-                        right: false,
-                        left: false,
-                        bottom: this.navBarEssentials!.navBarHeight == 0.0 ||
-                                (this.hideNavigationBar ?? false)
-                            ? false
-                            : confineToSafeArea ?? true,
-                        child: Container(
-                          decoration: getNavBarDecoration(
-                            decoration: this.navBarDecoration,
-                            color: this.navBarEssentials!.backgroundColor,
-                            opacity: this
-                                .navBarEssentials!
-                                .items![this.navBarEssentials!.selectedIndex!]
-                                .opacity,
-                          ),
-                          child: this.navBarBuilder(this.navBarEssentials!),
-                        ),
-                      )
-                    : Container(
-                        decoration: getNavBarDecoration(
-                          decoration: this.navBarDecoration,
-                          color: this.navBarEssentials!.backgroundColor,
-                          opacity: this
-                              .navBarEssentials!
-                              .items![this.navBarEssentials!.selectedIndex!]
-                              .opacity,
-                        ),
-                        child: SafeArea(
-                          top: false,
-                          right: false,
-                          left: false,
-                          bottom: this.navBarEssentials!.navBarHeight == 0.0 ||
-                                  (this.hideNavigationBar ?? false)
-                              ? false
-                              : confineToSafeArea ?? true,
-                          child: this.navBarBuilder(this.navBarEssentials!),
-                        ),
-                      )
-                : Container(
-                    decoration: getNavBarDecoration(
-                      decoration: this.navBarDecoration,
-                      showBorder: false,
-                      color: this.navBarEssentials!.backgroundColor,
-                      opacity: this
-                          .navBarEssentials!
-                          .items![this.navBarEssentials!.selectedIndex!]
-                          .opacity,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: this.navBarDecoration!.borderRadius ??
-                          BorderRadius.zero,
-                      child: BackdropFilter(
-                        filter: this
-                                .navBarEssentials!
-                                .items![this.navBarEssentials!.selectedIndex!]
-                                .filter ??
-                            ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-                        child: Container(
-                          decoration: getNavBarDecoration(
-                            showOpacity: false,
-                            decoration: navBarDecoration,
-                            color: this.navBarEssentials!.backgroundColor,
-                            opacity: this
-                                .navBarEssentials!
-                                .items![this.navBarEssentials!.selectedIndex!]
-                                .opacity,
-                          ),
-                          child: SafeArea(
-                            top: false,
-                            right: false,
-                            left: false,
-                            bottom:
-                                this.navBarEssentials!.navBarHeight == 0.0 ||
-                                        (this.hideNavigationBar ?? false)
-                                    ? false
-                                    : confineToSafeArea ?? true,
-                            child: this.navBarBuilder(this.navBarEssentials!),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-      );
+  })  : confineToSafeArea = confineToSafeArea ?? true,
+        margin = margin ?? EdgeInsets.zero,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return this.hideNavigationBar == null
-        ? _navBarWidget()
-        : OffsetAnimation(
-            hideNavigationBar: this.hideNavigationBar,
-            navBarHeight: this.navBarEssentials!.navBarHeight,
-            onAnimationComplete: (isAnimating, isComplete) {
-              this.onAnimationComplete!(isAnimating, isComplete);
-            },
-            child: _navBarWidget(),
-          );
+    return Padding(
+      padding: this.margin,
+      child: MediaQuery.removePadding(
+        context: context,
+        // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
+        removeBottom: !this.confineToSafeArea,
+        child: SafeArea(
+          top: false,
+          right: false,
+          left: false,
+          bottom: this.confineToSafeArea && this.margin.bottom != 0,
+          child: this.child,
+        ),
+      ),
+    );
   }
-
-  PersistentBottomNavBar copyWith({
-    EdgeInsets? margin,
-    bool? confineToSafeArea,
-    Widget Function(NavBarEssentials)? navBarBuilder,
-    bool? hideNavigationBar,
-    Function(bool, bool)? onAnimationComplete,
-    NeumorphicProperties? neumorphicProperties,
-    NavBarEssentials? navBarEssentials,
-    NavBarDecoration? navBarDecoration,
-    Widget? navBarWidget,
-    bool? isCustomWidget,
-  }) =>
-      PersistentBottomNavBar(
-        margin: margin ?? this.margin,
-        navBarBuilder: navBarBuilder ?? this.navBarBuilder,
-        confineToSafeArea: confineToSafeArea ?? this.confineToSafeArea,
-        hideNavigationBar: hideNavigationBar ?? this.hideNavigationBar,
-        onAnimationComplete: onAnimationComplete ?? this.onAnimationComplete,
-        neumorphicProperties: neumorphicProperties ?? this.neumorphicProperties,
-        navBarEssentials: navBarEssentials ?? this.navBarEssentials,
-        navBarDecoration: navBarDecoration ?? this.navBarDecoration,
-        isCustomWidget: isCustomWidget ?? this.isCustomWidget,
-      );
 
   bool opaque(int? index) {
     return this.navBarEssentials!.items == null
         ? true
         : !(this.navBarEssentials!.items![index!].opacity < 1.0);
+  }
+}
+
+// TODO: Has to be integrated in every NavBarStyle
+class DecoratedNavBar extends StatelessWidget {
+  final NavBarDecoration decoration;
+  final ImageFilter filter;
+  final Widget child;
+  final Color? color;
+  final double opacity;
+
+  DecoratedNavBar({
+    Key? key,
+    this.decoration = const NavBarDecoration(),
+    required this.child,
+    this.color,
+    ImageFilter? filter,
+    this.opacity = 1.0,
+  })  : filter = filter ?? ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: this.decoration.borderRadius,
+      child: BackdropFilter(
+        filter: this.filter,
+        child: Container(
+          decoration: getNavBarDecoration(
+            decoration: decoration,
+            color: this.color,
+            opacity: this.opacity,
+          ),
+          // TODO: Remove padding before if not confineInSafeArea
+          child: SafeArea(
+            top: false,
+            right: false,
+            left: false,
+            bottom: true,
+            child: this.child,
+          ),
+        ),
+      ),
+    );
   }
 }

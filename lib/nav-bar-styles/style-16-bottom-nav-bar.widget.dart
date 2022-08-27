@@ -2,7 +2,7 @@ part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle16 extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
-  final NavBarDecoration? navBarDecoration;
+  final NavBarDecoration navBarDecoration;
 
   BottomNavStyle16({
     Key? key,
@@ -77,62 +77,39 @@ class BottomNavStyle16 extends StatelessWidget {
 
   Widget _buildMiddleItem(BuildContext context, PersistentBottomNavBarItem item,
       bool isSelected, double? height) {
-    return this.navBarEssentials.navBarHeight == 0
-        ? SizedBox.shrink()
-        : Padding(
-            padding: EdgeInsets.only(
-                top: this.navBarEssentials.padding?.top ?? 0.0,
-                bottom: this.navBarEssentials.padding?.bottom ?? 0.0),
-            child: Stack(
-              children: <Widget>[
-                Transform.translate(
-                  offset: Offset(0, -23),
-                  child: Center(
-                    child: Container(
-                      width: height! - 5.0,
-                      height: height - 5.0,
-                      margin: EdgeInsets.only(top: 2.0, left: 6.0, right: 6.0),
-                      decoration: BoxDecoration(
-                        color: item.activeColorPrimary,
-                        border:
-                            Border.all(color: Colors.transparent, width: 5.0),
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: this.navBarDecoration!.boxShadow,
-                      ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: height,
-                        child: ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  child: IconTheme(
-                                    data: IconThemeData(
-                                      size: item.iconSize,
-                                      color: item.activeColorPrimary,
-                                    ),
-                                    child: isSelected
-                                        ? item.icon
-                                        : item.inactiveIcon,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
+    return Padding(
+      padding: EdgeInsets.only(
+          top: this.navBarEssentials.padding?.top ?? 0.0,
+          bottom: this.navBarEssentials.padding?.bottom ?? 0.0),
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Container(
+              width: height! - 5.0,
+              height: height - 5.0,
+              decoration: BoxDecoration(
+                color: item.activeColorPrimary,
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: this.navBarDecoration.boxShadow,
+              ),
+              child: Container(
+                alignment: Alignment.center,
+                height: height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: IconTheme(
+                        data: IconThemeData(
+                          size: item.iconSize,
+                          color: item.activeColorPrimary,
                         ),
+                        child: isSelected ? item.icon : item.inactiveIcon,
                       ),
                     ),
-                  ),
-                ),
-                item.title == null
-                    ? SizedBox.shrink()
-                    : Padding(
+                    if (item.title != null)
+                      Padding(
                         padding: const EdgeInsets.only(bottom: 5.0),
                         child: Align(
                           alignment: Alignment.bottomCenter,
@@ -158,77 +135,93 @@ class BottomNavStyle16 extends StatelessWidget {
                           ),
                         ),
                       ),
-              ],
+                  ],
+                ),
+              ),
             ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final midIndex = (this.navBarEssentials.items!.length / 2).floor();
-    return Container(
-      width: double.infinity,
-      height: this.navBarEssentials.navBarHeight,
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius:
-                this.navBarDecoration!.borderRadius ?? BorderRadius.zero,
-            child: BackdropFilter(
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 23,
+            ),
+            DecoratedNavBar(
+              decoration: this.navBarDecoration,
               filter: this
-                      .navBarEssentials
-                      .items![this.navBarEssentials.selectedIndex!]
-                      .filter ??
-                  ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: this.navBarEssentials.items!.map((item) {
-                  int index = this.navBarEssentials.items!.indexOf(item);
-                  return Flexible(
-                    child: GestureDetector(
-                      onTap: () {
-                        if (this.navBarEssentials.items![index].onPressed !=
-                            null) {
-                          this.navBarEssentials.items![index].onPressed!(
-                              this.navBarEssentials.selectedScreenBuildContext);
-                        } else {
-                          this.navBarEssentials.onItemSelected!(index);
-                        }
-                      },
-                      child: index == midIndex
-                          ? Container(width: 150, color: Colors.transparent)
-                          : _buildItem(
-                              item,
-                              this.navBarEssentials.selectedIndex == index,
-                              this.navBarEssentials.navBarHeight),
-                    ),
-                  );
-                }).toList(),
+                  .navBarEssentials
+                  .items![this.navBarEssentials.selectedIndex!]
+                  .filter,
+              color: this.navBarEssentials.backgroundColor,
+              opacity: this
+                  .navBarEssentials
+                  .items![this.navBarEssentials.selectedIndex!]
+                  .opacity,
+              child: Container(
+                height: this.navBarEssentials.navBarHeight!,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: this.navBarEssentials.items!.map((item) {
+                    int index = this.navBarEssentials.items!.indexOf(item);
+                    return Flexible(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (this.navBarEssentials.items![index].onPressed !=
+                              null) {
+                            this.navBarEssentials.items![index].onPressed!(this
+                                .navBarEssentials
+                                .selectedScreenBuildContext);
+                          } else {
+                            this.navBarEssentials.onItemSelected!(index);
+                          }
+                        },
+                        child: index == midIndex
+                            ? Container(width: 150, color: Colors.transparent)
+                            : _buildItem(
+                                item,
+                                this.navBarEssentials.selectedIndex == index,
+                                this.navBarEssentials.navBarHeight),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
+          ],
+        ),
+        Positioned(
+          top: 0,
+          child: Center(
+            child: GestureDetector(
+                onTap: () {
+                  if (this.navBarEssentials.items![midIndex].onPressed !=
+                      null) {
+                    this.navBarEssentials.items![midIndex].onPressed!(
+                        this.navBarEssentials.selectedScreenBuildContext);
+                  } else {
+                    this.navBarEssentials.onItemSelected!(midIndex);
+                  }
+                },
+                child: _buildMiddleItem(
+                    context,
+                    this.navBarEssentials.items![midIndex],
+                    this.navBarEssentials.selectedIndex == midIndex,
+                    this.navBarEssentials.navBarHeight)),
           ),
-          this.navBarEssentials.navBarHeight == 0
-              ? SizedBox.shrink()
-              : Center(
-                  child: GestureDetector(
-                      onTap: () {
-                        if (this.navBarEssentials.items![midIndex].onPressed !=
-                            null) {
-                          this.navBarEssentials.items![midIndex].onPressed!(
-                              this.navBarEssentials.selectedScreenBuildContext);
-                        } else {
-                          this.navBarEssentials.onItemSelected!(midIndex);
-                        }
-                      },
-                      child: _buildMiddleItem(
-                          context,
-                          this.navBarEssentials.items![midIndex],
-                          this.navBarEssentials.selectedIndex == midIndex,
-                          this.navBarEssentials.navBarHeight)),
-                )
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

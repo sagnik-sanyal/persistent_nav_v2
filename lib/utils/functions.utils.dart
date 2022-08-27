@@ -5,7 +5,6 @@ BoxDecoration getNavBarDecoration({
   NavBarDecoration? decoration = const NavBarDecoration(),
   required double opacity,
   bool showBorder = true,
-  bool showOpacity = true,
   Color? color = Colors.white,
 }) {
   if (opacity < 1.0) {
