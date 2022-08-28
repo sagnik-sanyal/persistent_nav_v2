@@ -42,20 +42,23 @@ class PersistentTabScaffold extends StatefulWidget {
     required this.tabBar,
     required this.tabBuilder,
     this.controller,
+    this.opacities = const [],
     this.backgroundColor,
+    this.confineInSafeArea = true,
+    this.margin = EdgeInsets.zero,
     this.resizeToAvoidBottomInset = true,
-    this.bottomScreenMargin,
     this.stateManagement,
+    this.isOpaque = false,
     this.screenTransitionAnimation,
+    this.navBarHeight = kBottomNavigationBarHeight,
     this.itemCount,
+    this.hideNavigationBar = false,
+    this.colorBehindNavBar = Colors.transparent,
+    this.navBarOverlap = const NavBarOverlap.full(),
     this.animatePadding = false,
-  })  : assert(
-            controller == null || controller.index < itemCount!,
-            "The PersistentTabController's current index ${controller.index} is "
-            'out of bounds for the tab bar with ${tabBar.navBarEssentials!.items!.length} tabs'),
-        super(key: key);
+  }) : super(key: key);
 
-  final PersistentBottomNavBar tabBar;
+  final Widget tabBar;
 
   final PersistentTabController? controller;
 
@@ -67,9 +70,23 @@ class PersistentTabScaffold extends StatefulWidget {
 
   final int? itemCount;
 
-  final double? bottomScreenMargin;
+  final double navBarHeight;
+
+  final bool isOpaque;
+
+  final bool confineInSafeArea;
+
+  final EdgeInsets margin;
+
+  final List<double> opacities;
+
+  final bool hideNavigationBar;
+
+  final Color colorBehindNavBar;
 
   final bool? stateManagement;
+
+  final NavBarOverlap navBarOverlap;
 
   final ScreenTransitionAnimation? screenTransitionAnimation;
 
@@ -81,21 +98,17 @@ class PersistentTabScaffold extends StatefulWidget {
 
 class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
   PersistentTabController? _controller;
-  int? _selectedIndex;
-  late bool _isTapAction;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.controller!.index;
-    _isTapAction = false;
     _updateTabController();
   }
 
   void _updateTabController({bool shouldDisposeOldController = false}) {
     final PersistentTabController newController = widget.controller ??
         PersistentTabController(
-            initialIndex: widget.tabBar.navBarEssentials!.selectedIndex!);
+            initialIndex: 0); //widget.tabBar.navBarEssentials!.selectedIndex!);
 
     if (newController == _controller) {
       return;
@@ -134,110 +147,75 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
   Widget build(BuildContext context) {
     final MediaQueryData existingMediaQuery = MediaQuery.of(context);
     MediaQueryData newMediaQuery = MediaQuery.of(context);
-    if (_isTapAction) {
-      _isTapAction = false;
-    } else {
-      _selectedIndex = widget.tabBar.navBarEssentials!.selectedIndex;
-    }
+
     Widget content = _TabSwitchingView(
-      key: Key("TabSwitchingView"),
-      currentTabIndex: _controller!.index,
-      tabCount: widget.itemCount,
-      tabBuilder: widget.tabBuilder,
-      stateManagement: widget.stateManagement,
-      screenTransitionAnimation: widget.screenTransitionAnimation,
-      backgroundColor: widget.tabBar.navBarEssentials!.backgroundColor,
-    );
+        key: Key("TabSwitchingView"),
+        currentTabIndex: _controller!.index,
+        tabCount: widget.itemCount,
+        tabBuilder: widget.tabBuilder,
+        stateManagement: widget.stateManagement,
+        screenTransitionAnimation: widget.screenTransitionAnimation,
+        backgroundColor: Colors
+            .transparent //widget.tabBar.navBarEssentials!.backgroundColor,
+        );
     double contentPadding = 0.0;
 
     if (widget.resizeToAvoidBottomInset) {
       newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
     }
 
-    if (!widget.tabBar.opaque(_selectedIndex)) {
+    double navBarOverlap = 0.0;
+    bool isNotOpaque = _controller!.index > widget.opacities.length
+        ? false
+        : widget.opacities[_controller!.index] != 1.0;
+    if (isNotOpaque && widget.navBarOverlap.fullOverlapWhenNotOpaque) {
+      navBarOverlap = double.infinity;
+    } else {
+      navBarOverlap = widget.navBarOverlap.overlap;
+    }
+    print("navBarOverlap: $navBarOverlap");
+    if (widget.hideNavigationBar) {
       contentPadding = 0.0;
-    } else if (widget
-            .tabBar.navBarDecoration!.adjustScreenBottomPaddingOnCurve &&
-        widget.tabBar.navBarDecoration!.borderRadius != BorderRadius.zero) {
-      final double bottomPadding = widget.bottomScreenMargin ??
-          widget.tabBar.navBarEssentials!.navBarHeight! -
-              (widget.tabBar.navBarDecoration!.borderRadius != null
-                  ? min(
-                      widget.tabBar.navBarEssentials!.navBarHeight!,
-                      max(
-                              widget.tabBar.navBarDecoration!.borderRadius!
-                                  .topRight.y,
-                              widget.tabBar.navBarDecoration!.borderRadius!
-                                  .topLeft.y) +
-                          (widget.tabBar.navBarDecoration?.border != null
-                              ? widget.tabBar.navBarDecoration!.border!
-                                  .dimensions.vertical
-                              : 0.0))
-                  : 0.0);
-      contentPadding = bottomPadding;
     } else {
-      if ((!widget.resizeToAvoidBottomInset ||
-          widget.tabBar.navBarEssentials!.navBarHeight! >
-              existingMediaQuery.viewInsets.bottom)) {
-        final double bottomPadding = widget.bottomScreenMargin ??
-            widget.tabBar.navBarEssentials!.navBarHeight! +
-                (widget.tabBar.navBarDecoration?.border != null
-                    ? widget
-                        .tabBar.navBarDecoration!.border!.dimensions.vertical
-                    : 0.0);
-        contentPadding = bottomPadding;
-      }
+      contentPadding = max(0, widget.navBarHeight - navBarOverlap);
     }
 
-    if (widget.tabBar.hideNavigationBar != null) {
-      content = MediaQuery(
-        data: newMediaQuery,
-        child: AnimatedContainer(
-          duration: Duration(
-              milliseconds:
-                  widget.animatePadding || widget.tabBar.hideNavigationBar!
-                      ? widget.tabBar.hideNavigationBar!
-                          ? 200
-                          : 400
-                      : 0),
-          curve:
-              widget.tabBar.hideNavigationBar! ? Curves.linear : Curves.easeIn,
-          color: widget.tabBar.navBarDecoration!.colorBehindNavBar,
-          padding: EdgeInsets.only(bottom: contentPadding),
-          child: content,
-        ),
-      );
-    } else {
-      content = MediaQuery(
-        data: newMediaQuery,
-        child: Container(
-          color: widget.tabBar.navBarDecoration!.colorBehindNavBar,
-          padding: EdgeInsets.only(bottom: contentPadding),
-          child: content,
-        ),
-      );
-    }
-
-    return DecoratedBox(
-      decoration:
-          widget.tabBar.navBarDecoration!.borderRadius != BorderRadius.zero
-              ? BoxDecoration(
-                  color: CupertinoColors.black.withOpacity(0.0),
-                  borderRadius: widget.tabBar.navBarDecoration!.borderRadius,
-                )
-              : BoxDecoration(color: CupertinoColors.black.withOpacity(1.0)),
-      child: Stack(
-        children: <Widget>[
-          content,
-          MediaQuery(
-            data: existingMediaQuery.copyWith(textScaleFactor: 1),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: widget.tabBar,
-            ),
-          ),
-        ],
+    content = MediaQuery(
+      data: newMediaQuery,
+      child: AnimatedContainer(
+        duration: Duration(
+            milliseconds: widget.animatePadding || widget.hideNavigationBar
+                ? widget.hideNavigationBar
+                    ? 200
+                    : 400
+                : 0),
+        curve: widget.hideNavigationBar ? Curves.linear : Curves.easeIn,
+        color: widget.colorBehindNavBar,
+        padding: EdgeInsets.only(bottom: contentPadding),
+        child: content,
       ),
+    );
+
+    return Stack(
+      children: <Widget>[
+        // TODO: The previous content will change because the safearea gets removed for all tabs
+        SafeArea(
+          top: false,
+          right: false,
+          left: false,
+          bottom: isNotOpaque || widget.hideNavigationBar
+              ? false
+              : widget.confineInSafeArea && widget.margin.bottom == 0,
+          child: content,
+        ),
+        MediaQuery(
+          data: existingMediaQuery.copyWith(textScaleFactor: 1),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: widget.tabBar,
+          ),
+        ),
+      ],
     );
   }
 

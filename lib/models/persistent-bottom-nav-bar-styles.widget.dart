@@ -41,19 +41,16 @@ class NavBarDecoration {
 
   final List<BoxShadow>? boxShadow;
 
-  /// If enabled, the screen's bottom padding will be adjusted accordingly to the amount of curve applied.
-  final bool adjustScreenBottomPaddingOnCurve;
-
   const NavBarDecoration({
     this.border,
     this.gradient,
     this.borderRadius = BorderRadius.zero,
     this.colorBehindNavBar = CupertinoColors.black,
     this.boxShadow,
-    this.adjustScreenBottomPaddingOnCurve = true,
   });
 
-  double heightExposedByCorners() =>
-      max(this.borderRadius.topRight.y, this.borderRadius.topLeft.y) +
-      (this.border != null ? this.border!.dimensions.vertical : 0.0);
+  double exposedHeight() => this.borderRadius != BorderRadius.zero
+      ? max(this.borderRadius.topRight.y, this.borderRadius.topLeft.y) +
+          (this.border?.dimensions.vertical ?? 0.0)
+      : 0.0;
 }

@@ -44,6 +44,10 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to `kBottomNavigationBarHeight` which is `56.0`.
   final double? navBarHeight;
 
+  /// Specifies how much the navBar should float above
+  /// the tab content. Defaults to [NavBarOverlap.full].
+  final NavBarOverlap navBarOverlap;
+
   /// The margin around the navigation bar.
   final EdgeInsets margin;
 
@@ -66,9 +70,6 @@ class PersistentTabView extends StatefulWidget {
   /// 2. If you are on another tab with all screens popped of that given tab, you will be switched to first tab.
   /// 3. If there are screens pushed on the selected tab, a screen will pop on a respective back button press.
   final bool handleAndroidBackButtonPress;
-
-  /// Bottom margin of the screen.
-  final double? bottomScreenMargin;
 
   /// If an already selected tab is pressed/tapped again, all the screens pushed
   /// on that particular tab will pop until the first screen in the stack.
@@ -124,6 +125,7 @@ class PersistentTabView extends StatefulWidget {
     required this.navBarBuilder,
     this.controller,
     this.navBarHeight = kBottomNavigationBarHeight,
+    this.navBarOverlap = const NavBarOverlap.full(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = CupertinoColors.white,
     this.onItemSelected,
@@ -132,7 +134,6 @@ class PersistentTabView extends StatefulWidget {
     this.padding = const NavBarPadding.all(null),
     this.decoration = const NavBarDecoration(),
     this.resizeToAvoidBottomInset = true,
-    this.bottomScreenMargin,
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
@@ -175,7 +176,7 @@ class PersistentTabView extends StatefulWidget {
     required this.itemCount,
     required this.navBarBuilder,
     this.resizeToAvoidBottomInset = true,
-    this.bottomScreenMargin,
+    this.navBarOverlap = const NavBarOverlap.full(),
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
@@ -314,39 +315,39 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   Widget navigationBarWidget() => CupertinoPageScaffold(
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         backgroundColor: Colors.transparent,
-        child: PersistentTabScaffold(
-          controller: _controller,
-          itemCount: widget.items == null
-              ? widget.itemCount ?? 0
-              : widget.items!.length,
-          bottomScreenMargin:
-              widget.hideNavigationBar != null && widget.hideNavigationBar!
-                  ? 0.0
-                  : widget.bottomScreenMargin,
-          stateManagement: widget.stateManagement,
-          screenTransitionAnimation: widget.screenTransitionAnimation,
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          animatePadding: _isAnimating || _isCompleted,
-          tabBar: OffsetAnimation(
-            hideNavigationBar: widget.hideNavigationBar ?? false,
-            navBarHeight: widget.navBarHeight,
-            onAnimationComplete: (isAnimating, isCompleted) {
-              if (_isAnimating != isAnimating) {
-                setState(() {
-                  _isAnimating = isAnimating;
-                });
-              }
-              if (_isCompleted != isCompleted) {
-                setState(() {
-                  _isCompleted = isCompleted;
-                });
-              }
-            },
-            child: MediaQuery(
-              data: MediaQueryData(
-                padding:
-                    const EdgeInsets.only(bottom: 100), // Simulate gesture bar
-              ),
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            padding: const EdgeInsets.only(bottom: 100), // Simulate gesture bar
+          ),
+          child: PersistentTabScaffold(
+            controller: _controller,
+            itemCount: widget.items == null
+                ? widget.itemCount ?? 0
+                : widget.items!.length,
+            stateManagement: widget.stateManagement,
+            navBarOverlap: widget.navBarOverlap,
+            isOpaque: widget.items != null &&
+                widget.items![_controller.index].opacity < 1.0,
+            opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
+            navBarHeight: widget.navBarHeight ?? kBottomNavigationBarHeight,
+            screenTransitionAnimation: widget.screenTransitionAnimation,
+            resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+            animatePadding: _isAnimating || _isCompleted,
+            tabBar: OffsetAnimation(
+              hideNavigationBar: widget.hideNavigationBar ?? false,
+              navBarHeight: widget.navBarHeight,
+              onAnimationComplete: (isAnimating, isCompleted) {
+                if (_isAnimating != isAnimating) {
+                  setState(() {
+                    _isAnimating = isAnimating;
+                  });
+                }
+                if (_isCompleted != isCompleted) {
+                  setState(() {
+                    _isCompleted = isCompleted;
+                  });
+                }
+              },
               child: PersistentBottomNavBar(
                 navBarEssentials: NavBarEssentials(
                   selectedIndex: _controller.index,
@@ -396,22 +397,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 confineToSafeArea: widget.confineInSafeArea,
               ),
             ),
+            tabBuilder: (BuildContext context, int index) {
+              return _buildScreen(index);
+            },
           ),
-          tabBuilder: (BuildContext context, int index) {
-            return SafeArea(
-              top: false,
-              right: false,
-              left: false,
-              bottom: (widget.items != null &&
-                          widget.items![_controller.index].opacity < 1.0) ||
-                      (widget.hideNavigationBar != null && _isCompleted)
-                  ? false
-                  : widget.margin.bottom > 0
-                      ? false
-                      : widget.confineInSafeArea,
-              child: _buildScreen(index),
-            );
-          },
         ),
       );
 

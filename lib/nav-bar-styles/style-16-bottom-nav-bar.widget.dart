@@ -1,5 +1,24 @@
 part of persistent_bottom_nav_bar_v2;
 
+class NavBarOverlap {
+  final double overlap;
+  final bool fullOverlapWhenNotOpaque;
+
+  const NavBarOverlap.full()
+      : overlap = double
+            .infinity, // This is the placeholder so [PersistentTabScaffold] uses the navBarHeight instead
+        fullOverlapWhenNotOpaque = true;
+
+  const NavBarOverlap.none({
+    this.fullOverlapWhenNotOpaque = true,
+  }) : overlap = 0.0;
+
+  const NavBarOverlap.custom({
+    this.overlap = 0.0,
+    this.fullOverlapWhenNotOpaque = true,
+  });
+}
+
 class BottomNavStyle16 extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
   final NavBarDecoration navBarDecoration;
@@ -85,6 +104,7 @@ class BottomNavStyle16 extends StatelessWidget {
         children: <Widget>[
           Center(
             child: Container(
+              // TODO: Causes error when navBarheight is 0.
               width: height! - 5.0,
               height: height - 5.0,
               decoration: BoxDecoration(
