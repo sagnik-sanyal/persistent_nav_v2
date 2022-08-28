@@ -6,7 +6,6 @@ class PersistentTabController extends ChangeNotifier {
       : _index = initialIndex,
         assert(initialIndex >= 0);
 
-  bool _isDisposed = false;
   int get index => _index;
   int _index;
 
@@ -27,16 +26,9 @@ class PersistentTabController extends ChangeNotifier {
     _index = value;
     notifyListeners();
   }
-
-  @mustCallSuper
-  @override
-  void dispose() {
-    _isDisposed = true;
-    super.dispose();
-  }
 }
 
-class PersistentTabScaffold extends StatefulWidget {
+class PersistentTabScaffold extends StatelessWidget {
   PersistentTabScaffold({
     Key? key,
     required this.tabBar,
@@ -93,104 +85,53 @@ class PersistentTabScaffold extends StatefulWidget {
   final bool animatePadding;
 
   @override
-  _PersistentTabScaffoldState createState() => _PersistentTabScaffoldState();
-}
-
-class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
-  PersistentTabController? _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _updateTabController();
-  }
-
-  void _updateTabController({bool shouldDisposeOldController = false}) {
-    final PersistentTabController newController = widget.controller ??
-        PersistentTabController(
-            initialIndex: 0); //widget.tabBar.navBarEssentials!.selectedIndex!);
-
-    if (newController == _controller) {
-      return;
-    }
-
-    if (shouldDisposeOldController) {
-      _controller?.dispose();
-    } else if (_controller?._isDisposed == false) {
-      _controller!.removeListener(_onCurrentIndexChange);
-    }
-
-    newController.addListener(_onCurrentIndexChange);
-    _controller = newController;
-  }
-
-  void _onCurrentIndexChange() {
-    assert(
-        _controller!.index >= 0 && _controller!.index < widget.itemCount!,
-        "The $runtimeType's current index ${_controller!.index} is "
-        'out of bounds for the tab bar with ${widget.itemCount} tabs');
-    setState(() {});
-  }
-
-  @override
-  void didUpdateWidget(PersistentTabScaffold oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
-      _updateTabController(
-          shouldDisposeOldController: oldWidget.controller == null);
-    } else if (_controller!.index >= widget.itemCount!) {
-      _controller!.index = widget.itemCount! - 1;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final MediaQueryData existingMediaQuery = MediaQuery.of(context);
     MediaQueryData newMediaQuery = MediaQuery.of(context);
 
     Widget content = _TabSwitchingView(
         key: Key("TabSwitchingView"),
-        currentTabIndex: _controller!.index,
-        tabCount: widget.itemCount,
-        tabBuilder: widget.tabBuilder,
-        stateManagement: widget.stateManagement,
-        screenTransitionAnimation: widget.screenTransitionAnimation,
-        backgroundColor: Colors
-            .transparent //widget.tabBar.navBarEssentials!.backgroundColor,
+        currentTabIndex: controller!.index,
+        tabCount: itemCount,
+        tabBuilder: tabBuilder,
+        stateManagement: stateManagement,
+        screenTransitionAnimation: screenTransitionAnimation,
+        backgroundColor:
+            Colors.transparent //tabBar.navBarEssentials!.backgroundColor,
         );
     double contentPadding = 0.0;
 
-    if (widget.resizeToAvoidBottomInset) {
+    if (resizeToAvoidBottomInset) {
       newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
     }
 
-    double navBarOverlap = 0.0;
-    bool isNotOpaque = _controller!.index > widget.opacities.length
+    double overlap = 0.0;
+    bool isNotOpaque = controller!.index > opacities.length
         ? false
-        : widget.opacities[_controller!.index] != 1.0;
-    if (isNotOpaque && widget.navBarOverlap.fullOverlapWhenNotOpaque) {
-      navBarOverlap = double.infinity;
+        : opacities[controller!.index] != 1.0;
+    if (isNotOpaque && navBarOverlap.fullOverlapWhenNotOpaque) {
+      overlap = double.infinity;
     } else {
-      navBarOverlap = widget.navBarOverlap.overlap;
+      overlap = navBarOverlap.overlap;
     }
-    print("navBarOverlap: $navBarOverlap");
-    if (widget.hideNavigationBar) {
+
+    if (hideNavigationBar) {
       contentPadding = 0.0;
     } else {
-      contentPadding = max(0, widget.navBarHeight - navBarOverlap);
+      contentPadding = max(0, navBarHeight - overlap);
     }
 
     content = MediaQuery(
       data: newMediaQuery,
       child: AnimatedContainer(
         duration: Duration(
-            milliseconds: widget.animatePadding || widget.hideNavigationBar
-                ? widget.hideNavigationBar
+            milliseconds: animatePadding || hideNavigationBar
+                ? hideNavigationBar
                     ? 200
                     : 400
                 : 0),
-        curve: widget.hideNavigationBar ? Curves.linear : Curves.easeIn,
-        color: widget.colorBehindNavBar,
+        curve: hideNavigationBar ? Curves.linear : Curves.easeIn,
+        color: colorBehindNavBar,
         padding: EdgeInsets.only(bottom: contentPadding),
         child: content,
       ),
@@ -203,31 +144,20 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
           top: false,
           right: false,
           left: false,
-          bottom: isNotOpaque || widget.hideNavigationBar
+          bottom: isNotOpaque || hideNavigationBar
               ? false
-              : widget.confineInSafeArea && widget.margin.bottom == 0,
+              : confineInSafeArea && margin.bottom == 0,
           child: content,
         ),
         MediaQuery(
           data: existingMediaQuery.copyWith(textScaleFactor: 1),
           child: Align(
             alignment: Alignment.bottomCenter,
-            child: widget.tabBar,
+            child: tabBar,
           ),
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    if (widget.controller == null) {
-      _controller?.dispose();
-    } else if (_controller?._isDisposed == false) {
-      _controller!.removeListener(_onCurrentIndexChange);
-    }
-
-    super.dispose();
   }
 }
 
