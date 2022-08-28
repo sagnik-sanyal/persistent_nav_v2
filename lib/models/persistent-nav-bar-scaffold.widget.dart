@@ -89,65 +89,51 @@ class PersistentTabScaffold extends StatelessWidget {
     final MediaQueryData existingMediaQuery = MediaQuery.of(context);
     MediaQueryData newMediaQuery = MediaQuery.of(context);
 
-    Widget content = _TabSwitchingView(
-        key: Key("TabSwitchingView"),
-        currentTabIndex: controller!.index,
-        tabCount: itemCount,
-        tabBuilder: tabBuilder,
-        stateManagement: stateManagement,
-        screenTransitionAnimation: screenTransitionAnimation,
-        backgroundColor:
-            Colors.transparent //tabBar.navBarEssentials!.backgroundColor,
-        );
-    double contentPadding = 0.0;
-
     if (resizeToAvoidBottomInset) {
       newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
     }
 
-    double overlap = 0.0;
-    bool isNotOpaque = controller!.index > opacities.length
-        ? false
-        : opacities[controller!.index] != 1.0;
-    if (isNotOpaque && navBarOverlap.fullOverlapWhenNotOpaque) {
-      overlap = double.infinity;
-    } else {
-      overlap = navBarOverlap.overlap;
-    }
-
-    if (hideNavigationBar) {
-      contentPadding = 0.0;
-    } else {
-      contentPadding = max(0, navBarHeight - overlap);
-    }
-
-    content = MediaQuery(
-      data: newMediaQuery,
-      child: AnimatedContainer(
-        duration: Duration(
-            milliseconds: animatePadding || hideNavigationBar
-                ? hideNavigationBar
-                    ? 200
-                    : 400
-                : 0),
-        curve: hideNavigationBar ? Curves.linear : Curves.easeIn,
-        color: colorBehindNavBar,
-        padding: EdgeInsets.only(bottom: contentPadding),
-        child: content,
-      ),
-    );
-
     return Stack(
       children: <Widget>[
-        // TODO: The previous content will change because the safearea gets removed for all tabs
-        SafeArea(
-          top: false,
-          right: false,
-          left: false,
-          bottom: isNotOpaque || hideNavigationBar
-              ? false
-              : confineInSafeArea && margin.bottom == 0,
-          child: content,
+        MediaQuery(
+          data: newMediaQuery,
+          child: Container(
+            color: colorBehindNavBar,
+            child: _TabSwitchingView(
+                key: Key("TabSwitchingView"),
+                currentTabIndex: controller!.index,
+                tabCount: itemCount,
+                tabBuilder: (context, index) {
+                  double contentPadding = 0.0;
+                  double overlap = 0.0;
+                  bool isNotOpaque = index > opacities.length
+                      ? false
+                      : opacities[index] != 1.0;
+                  if (isNotOpaque && navBarOverlap.fullOverlapWhenNotOpaque) {
+                    overlap = double.infinity;
+                  } else {
+                    overlap = navBarOverlap.overlap;
+                  }
+
+                  if (hideNavigationBar) {
+                    contentPadding = 0.0;
+                  } else {
+                    contentPadding = max(0, navBarHeight - overlap);
+                  }
+                  return PersistentTab(
+                    child: tabBuilder(context, index),
+                    applySafeArea: isNotOpaque || hideNavigationBar
+                        ? false
+                        : confineInSafeArea && margin.bottom == 0,
+                    bottomMargin: contentPadding,
+                  );
+                },
+                stateManagement: stateManagement,
+                screenTransitionAnimation: screenTransitionAnimation,
+                backgroundColor: Colors
+                    .transparent //tabBar.navBarEssentials!.backgroundColor,
+                ),
+          ),
         ),
         MediaQuery(
           data: existingMediaQuery.copyWith(textScaleFactor: 1),
@@ -157,6 +143,32 @@ class PersistentTabScaffold extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class PersistentTab extends StatelessWidget {
+  final Widget? child;
+  final double bottomMargin;
+  final bool applySafeArea;
+
+  PersistentTab({
+    this.child,
+    this.bottomMargin = 0.0,
+    this.applySafeArea = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      right: false,
+      left: false,
+      bottom: applySafeArea,
+      child: Container(
+        child: child,
+        padding: EdgeInsets.only(bottom: bottomMargin),
+      ),
     );
   }
 }
