@@ -1,55 +1,29 @@
 name: Publish
-
 on:
-  push:
-    tags:
-      - "v*"
+  tags:
+    - "v*"
 
 jobs:
-  tagged-release:
-    name: "Tagged Release"
+  test:
+    name: Test and format
+    uses: jb3rndt/PersistentBottomNavBarV2/.github/workflows/tests.yaml@master
+
+  release:
+    name: "Release"
     runs-on: "ubuntu-latest"
+    needs: test
 
     steps:
-      - name: Cache
-        id: cache-flutter
-        uses: actions/cache@v3.0.1
-        with:
-          path: ${{ runner.tool_cache }}/flutter
-          key: flutter-${{ runner.os }}-${{ env.FLUTTER_VERSION }}
-
-      - name: Set up Flutter if not cached
-        if: steps.cache-flutter.outputs.cache-hit != 'true'
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: stable
-
-      - name: Add Flutter to PATH
-        run: echo "$RUNNER_TOOL_CACHE/flutter/bin" >> $GITHUB_PATH
-        shell: bash
-      - name: Flutter doctor
-        run: flutter doctor -v
-
-      # Checkout and get packages.
-      - name: Checkout
-        uses: actions/checkout@v2
-      - run: flutter pub get
-
-      # Run unit tests.
-      - name: Run Unit Tests
-        run: flutter test
-
       - name: Create tagged Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
 
-      - name: Setup credentials
-        run: |
-          mkdir -p ~/.pub-cache/
-          echo ${{secrets.PUB_CREDENTIALS}} | base64 --decode > ~/.pub-cache/credentials.json
-      - name: Release new version
-        run: |
-          dart pub publish -f
+      - name: Publish package to pub.dev
+        uses: sakebook/actions-flutter-pub-publisher@v1.4.0
+        with:
+          credential: ${{ secrets.PUB_CREDENTIALS }}
+          flutter_package: true
+          skip_test: true
+          dry_run: true
