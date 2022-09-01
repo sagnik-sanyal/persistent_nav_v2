@@ -307,7 +307,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
               _sendScreenContext = false;
               widget.selectedTabScreenContext!(_contextList[_controller.index]);
             }
-            return Material(elevation: 0, child: widget.screens[index]);
+            return Material(
+              elevation: 0,
+              child: widget.screens[index],
+              type: MaterialType.transparency,
+            );
           });
     }
   }
