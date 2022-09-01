@@ -217,8 +217,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   double? _navBarHeight;
   late int _previousIndex;
   late int _currentIndex;
-  bool _isCompleted = false;
-  bool _isAnimating = false;
   bool _sendScreenContext = false;
 
   @override
@@ -331,37 +329,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 : widget.items!.length,
             stateManagement: widget.stateManagement,
             navBarOverlap: widget.navBarOverlap,
-            isOpaque: widget.items != null &&
-                widget.items![_controller.index].opacity < 1.0,
             opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
             navBarHeight: widget.navBarHeight ?? kBottomNavigationBarHeight,
             screenTransitionAnimation: widget.screenTransitionAnimation,
             resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-            animatePadding: _isAnimating || _isCompleted,
             tabBar: PersistentBottomNavBar(
-              navBarEssentials: NavBarEssentials(
-                selectedIndex: _controller.index,
-                previousIndex: _previousIndex,
-                padding: widget.padding,
-                selectedScreenBuildContext: _contextList[_controller.index],
-                items: widget.items,
-                backgroundColor: widget.backgroundColor,
-                navBarHeight: _navBarHeight,
-                popScreensOnTapOfSelectedTab:
-                    widget.popAllScreensOnTapOfSelectedTab,
-                onItemSelected: (int index) {
-                  if (_controller.index != _previousIndex) {
-                    _previousIndex = _controller.index;
-                  }
-                  if ((widget.popAllScreensOnTapOfSelectedTab) &&
-                      _previousIndex == index) {
-                    popAllScreens();
-                  }
-                  _controller.index = index;
-                  widget.onItemSelected?.call(index);
-                },
-              ),
               margin: widget.margin,
+              confineToSafeArea: widget.confineInSafeArea, // TODO: Name consistently
               child: widget.navBarBuilder(NavBarEssentials(
                 selectedIndex: _controller.index,
                 previousIndex: _previousIndex,
@@ -384,7 +358,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                   widget.onItemSelected?.call(index);
                 },
               )),
-              confineToSafeArea: widget.confineInSafeArea,
             ),
             tabBuilder: (BuildContext context, int index) {
               return _buildScreen(index);

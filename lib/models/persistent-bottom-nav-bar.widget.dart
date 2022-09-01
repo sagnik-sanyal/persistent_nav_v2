@@ -3,18 +3,14 @@ part of persistent_bottom_nav_bar_v2;
 class PersistentBottomNavBar extends StatelessWidget {
   final EdgeInsets margin;
   final bool confineToSafeArea;
-  final NavBarEssentials? navBarEssentials;
   final Widget child;
 
   const PersistentBottomNavBar({
     Key? key,
     required this.child,
-    EdgeInsets? margin,
-    bool? confineToSafeArea,
-    this.navBarEssentials,
-  })  : confineToSafeArea = confineToSafeArea ?? true,
-        margin = margin ?? EdgeInsets.zero,
-        super(key: key);
+    this.margin = const EdgeInsets.only(),
+    this.confineToSafeArea = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +29,6 @@ class PersistentBottomNavBar extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  bool opaque(int? index) {
-    return this.navBarEssentials!.items == null
-        ? true
-        : !(this.navBarEssentials!.items![index!].opacity < 1.0);
   }
 }
 

@@ -33,26 +33,24 @@ class PersistentTabScaffold extends StatefulWidget {
     Key? key,
     required this.tabBar,
     required this.tabBuilder,
-    this.controller,
+    required this.controller,
     this.opacities = const [],
     this.backgroundColor,
     this.confineInSafeArea = true,
     this.margin = EdgeInsets.zero,
     this.resizeToAvoidBottomInset = true,
     this.stateManagement,
-    this.isOpaque = false,
     this.screenTransitionAnimation,
     this.navBarHeight = kBottomNavigationBarHeight,
     this.itemCount,
     this.hideNavigationBar = false,
     this.colorBehindNavBar = Colors.transparent,
     this.navBarOverlap = const NavBarOverlap.full(),
-    this.animatePadding = false,
   }) : super(key: key);
 
   final Widget tabBar;
 
-  final PersistentTabController? controller;
+  final PersistentTabController controller;
 
   final IndexedWidgetBuilder tabBuilder;
 
@@ -63,8 +61,6 @@ class PersistentTabScaffold extends StatefulWidget {
   final int? itemCount;
 
   final double navBarHeight;
-
-  final bool isOpaque;
 
   final bool confineInSafeArea;
 
@@ -81,8 +77,6 @@ class PersistentTabScaffold extends StatefulWidget {
   final NavBarOverlap navBarOverlap;
 
   final ScreenTransitionAnimation? screenTransitionAnimation;
-
-  final bool animatePadding;
 
   @override
   State<PersistentTabScaffold> createState() => _PersistentTabScaffoldState();
@@ -125,7 +119,7 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
             color: widget.colorBehindNavBar,
             child: _TabSwitchingView(
                 key: Key("TabSwitchingView"),
-                currentTabIndex: widget.controller!.index,
+                currentTabIndex: widget.controller.index,
                 tabCount: widget.itemCount,
                 tabBuilder: (context, index) {
                   double contentPadding = 0.0;
