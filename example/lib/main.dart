@@ -227,6 +227,7 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
+        navBarOverlap: NavBarOverlap.none(),
         confineInSafeArea: true,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
@@ -236,7 +237,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         hideNavigationBarWhenKeyboardShows: true,
         margin: EdgeInsets.all(0.0),
         popActionScreens: PopActionScreensType.all,
-        bottomScreenMargin: 0.0,
         floatingActionButton: IconButton(
             onPressed: () {},
             icon: Icon(

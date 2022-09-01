@@ -28,7 +28,7 @@ class PersistentTabController extends ChangeNotifier {
   }
 }
 
-class PersistentTabScaffold extends StatelessWidget {
+class PersistentTabScaffold extends StatefulWidget {
   PersistentTabScaffold({
     Key? key,
     required this.tabBar,
@@ -85,11 +85,35 @@ class PersistentTabScaffold extends StatelessWidget {
   final bool animatePadding;
 
   @override
+  State<PersistentTabScaffold> createState() => _PersistentTabScaffoldState();
+}
+
+class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
+  late bool _reallyHideNavBar;
+  late bool _navBarFullyShown;
+
+  initState() {
+    super.initState();
+    _reallyHideNavBar = widget.hideNavigationBar;
+    _navBarFullyShown = !widget.hideNavigationBar;
+  }
+
+  didUpdateWidget(PersistentTabScaffold oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.hideNavigationBar != oldWidget.hideNavigationBar) {
+      if (!widget.hideNavigationBar)
+        setState(() {
+          _reallyHideNavBar = false;
+        });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final MediaQueryData existingMediaQuery = MediaQuery.of(context);
     MediaQueryData newMediaQuery = MediaQuery.of(context);
 
-    if (resizeToAvoidBottomInset) {
+    if (widget.resizeToAvoidBottomInset) {
       newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
     }
 
@@ -98,49 +122,66 @@ class PersistentTabScaffold extends StatelessWidget {
         MediaQuery(
           data: newMediaQuery,
           child: Container(
-            color: colorBehindNavBar,
+            color: widget.colorBehindNavBar,
             child: _TabSwitchingView(
                 key: Key("TabSwitchingView"),
-                currentTabIndex: controller!.index,
-                tabCount: itemCount,
+                currentTabIndex: widget.controller!.index,
+                tabCount: widget.itemCount,
                 tabBuilder: (context, index) {
                   double contentPadding = 0.0;
                   double overlap = 0.0;
-                  bool isNotOpaque = index > opacities.length
+                  bool isNotOpaque = index > widget.opacities.length
                       ? false
-                      : opacities[index] != 1.0;
-                  if (isNotOpaque && navBarOverlap.fullOverlapWhenNotOpaque) {
+                      : widget.opacities[index] != 1.0;
+                  if (isNotOpaque &&
+                      widget.navBarOverlap.fullOverlapWhenNotOpaque) {
                     overlap = double.infinity;
                   } else {
-                    overlap = navBarOverlap.overlap;
+                    overlap = widget.navBarOverlap.overlap;
                   }
 
-                  if (hideNavigationBar) {
+                  if (widget.hideNavigationBar) {
                     contentPadding = 0.0;
                   } else {
-                    contentPadding = max(0, navBarHeight - overlap);
+                    contentPadding = max(0, widget.navBarHeight - overlap);
                   }
                   return PersistentTab(
-                    child: tabBuilder(context, index),
-                    applySafeArea: isNotOpaque || hideNavigationBar
+                    child: widget.tabBuilder(context, index),
+                    applySafeArea: isNotOpaque || widget.hideNavigationBar
                         ? false
-                        : confineInSafeArea && margin.bottom == 0,
-                    bottomMargin: contentPadding,
+                        : widget.confineInSafeArea &&
+                            widget.margin.bottom == 0 &&
+                            _navBarFullyShown,
+                    bottomMargin: _navBarFullyShown ? contentPadding : 0.0,
                   );
                 },
-                stateManagement: stateManagement,
-                screenTransitionAnimation: screenTransitionAnimation,
+                stateManagement: widget.stateManagement,
+                screenTransitionAnimation: widget.screenTransitionAnimation,
                 backgroundColor: Colors
-                    .transparent //tabBar.navBarEssentials!.backgroundColor,
+                    .transparent // TODO: tabBar.navBarEssentials!.backgroundColor,
                 ),
           ),
         ),
-        MediaQuery(
-          data: existingMediaQuery.copyWith(textScaleFactor: 1),
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: tabBar,
-          ),
+        AnimatedPositioned(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.ease,
+          bottom: widget.hideNavigationBar
+              ? -(widget.navBarHeight + MediaQuery.of(context).padding.bottom)
+              : 0,
+          right: 0,
+          left: 0,
+          child: _reallyHideNavBar
+              ? Container()
+              : MediaQuery(
+                  data: existingMediaQuery.copyWith(textScaleFactor: 1),
+                  child: widget.tabBar,
+                ),
+          onEnd: () {
+            setState(() {
+              _reallyHideNavBar = widget.hideNavigationBar;
+              _navBarFullyShown = !widget.hideNavigationBar;
+            });
+          },
         ),
       ],
     );
@@ -165,9 +206,9 @@ class PersistentTab extends StatelessWidget {
       right: false,
       left: false,
       bottom: applySafeArea,
-      child: Container(
-        child: child,
+      child: Padding(
         padding: EdgeInsets.only(bottom: bottomMargin),
+        child: child,
       ),
     );
   }

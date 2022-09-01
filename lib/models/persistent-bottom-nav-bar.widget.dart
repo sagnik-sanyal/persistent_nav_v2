@@ -72,7 +72,6 @@ class DecoratedNavBar extends StatelessWidget {
             color: this.color,
             opacity: this.opacity,
           ),
-          // TODO: Remove padding before if not confineInSafeArea
           child: SafeArea(
             top: false,
             right: false,

@@ -317,10 +317,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         backgroundColor: Colors.transparent,
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            padding: const EdgeInsets.only(bottom: 100), // Simulate gesture bar
+            padding: const EdgeInsets.only(bottom: 100), // TODO: Simulate gesture bar
           ),
           child: PersistentTabScaffold(
             controller: _controller,
+            hideNavigationBar: widget.hideNavigationBar ?? false,
             itemCount: widget.items == null
                 ? widget.itemCount ?? 0
                 : widget.items!.length,
@@ -333,69 +334,53 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             screenTransitionAnimation: widget.screenTransitionAnimation,
             resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
             animatePadding: _isAnimating || _isCompleted,
-            tabBar: OffsetAnimation(
-              hideNavigationBar: widget.hideNavigationBar ?? false,
-              navBarHeight: widget.navBarHeight,
-              onAnimationComplete: (isAnimating, isCompleted) {
-                if (_isAnimating != isAnimating) {
-                  setState(() {
-                    _isAnimating = isAnimating;
-                  });
-                }
-                if (_isCompleted != isCompleted) {
-                  setState(() {
-                    _isCompleted = isCompleted;
-                  });
-                }
-              },
-              child: PersistentBottomNavBar(
-                navBarEssentials: NavBarEssentials(
-                  selectedIndex: _controller.index,
-                  previousIndex: _previousIndex,
-                  padding: widget.padding,
-                  selectedScreenBuildContext: _contextList[_controller.index],
-                  items: widget.items,
-                  backgroundColor: widget.backgroundColor,
-                  navBarHeight: _navBarHeight,
-                  popScreensOnTapOfSelectedTab:
-                      widget.popAllScreensOnTapOfSelectedTab,
-                  onItemSelected: (int index) {
-                    if (_controller.index != _previousIndex) {
-                      _previousIndex = _controller.index;
-                    }
-                    if ((widget.popAllScreensOnTapOfSelectedTab) &&
-                        _previousIndex == index) {
-                      popAllScreens();
-                    }
-                    _controller.index = index;
-                    widget.onItemSelected?.call(index);
-                  },
-                ),
-                margin: widget.margin,
-                child: widget.navBarBuilder(NavBarEssentials(
-                  selectedIndex: _controller.index,
-                  previousIndex: _previousIndex,
-                  padding: widget.padding,
-                  selectedScreenBuildContext: _contextList[_controller.index],
-                  items: widget.items,
-                  backgroundColor: widget.backgroundColor,
-                  navBarHeight: _navBarHeight,
-                  popScreensOnTapOfSelectedTab:
-                      widget.popAllScreensOnTapOfSelectedTab,
-                  onItemSelected: (int index) {
-                    if (_controller.index != _previousIndex) {
-                      _previousIndex = _controller.index;
-                    }
-                    if ((widget.popAllScreensOnTapOfSelectedTab) &&
-                        _previousIndex == index) {
-                      popAllScreens();
-                    }
-                    _controller.index = index;
-                    widget.onItemSelected?.call(index);
-                  },
-                )),
-                confineToSafeArea: widget.confineInSafeArea,
+            tabBar: PersistentBottomNavBar(
+              navBarEssentials: NavBarEssentials(
+                selectedIndex: _controller.index,
+                previousIndex: _previousIndex,
+                padding: widget.padding,
+                selectedScreenBuildContext: _contextList[_controller.index],
+                items: widget.items,
+                backgroundColor: widget.backgroundColor,
+                navBarHeight: _navBarHeight,
+                popScreensOnTapOfSelectedTab:
+                    widget.popAllScreensOnTapOfSelectedTab,
+                onItemSelected: (int index) {
+                  if (_controller.index != _previousIndex) {
+                    _previousIndex = _controller.index;
+                  }
+                  if ((widget.popAllScreensOnTapOfSelectedTab) &&
+                      _previousIndex == index) {
+                    popAllScreens();
+                  }
+                  _controller.index = index;
+                  widget.onItemSelected?.call(index);
+                },
               ),
+              margin: widget.margin,
+              child: widget.navBarBuilder(NavBarEssentials(
+                selectedIndex: _controller.index,
+                previousIndex: _previousIndex,
+                padding: widget.padding,
+                selectedScreenBuildContext: _contextList[_controller.index],
+                items: widget.items,
+                backgroundColor: widget.backgroundColor,
+                navBarHeight: _navBarHeight,
+                popScreensOnTapOfSelectedTab:
+                    widget.popAllScreensOnTapOfSelectedTab,
+                onItemSelected: (int index) {
+                  if (_controller.index != _previousIndex) {
+                    _previousIndex = _controller.index;
+                  }
+                  if ((widget.popAllScreensOnTapOfSelectedTab) &&
+                      _previousIndex == index) {
+                    popAllScreens();
+                  }
+                  _controller.index = index;
+                  widget.onItemSelected?.call(index);
+                },
+              )),
+              confineToSafeArea: widget.confineInSafeArea,
             ),
             tabBuilder: (BuildContext context, int index) {
               return _buildScreen(index);

@@ -283,9 +283,10 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        navBarBuilder: (essentials) => BottomNavStyle1(
+        navBarBuilder: (essentials) => BottomNavStyle15(
           navBarEssentials: essentials,
         ),
+        navBarOverlap: NavBarOverlap.none(),
         confineInSafeArea: _confineInSafeArea,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: _handleAndroidBackButtonPress,
@@ -295,7 +296,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         hideNavigationBarWhenKeyboardShows: _hideNavigationBarWhenKeyboardShows,
         margin: EdgeInsets.zero,
         popActionScreens: PopActionScreensType.all,
-        bottomScreenMargin: 0.0,
         onWillPop: (context) async {
           await showDialog(
             context: context,
