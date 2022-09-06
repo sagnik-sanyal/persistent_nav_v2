@@ -5,7 +5,7 @@ class PersistentBottomNavBarItem {
   /// Icon for the bar item.
   final Widget icon;
 
-  /// In-Active icon for the bar item. Defaults to `icon`
+  /// Inactive icon for the bar item. Defaults to `icon`
   final Widget inactiveIcon;
 
   /// Title for the bar item. Might not appear is some `styles`.
@@ -48,8 +48,8 @@ class PersistentBottomNavBarItem {
   /// By default -> `ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0)`.
   final ImageFilter? filter;
 
-  /// `TextStyle` of the title's text.
-  final TextStyle? textStyle;
+  /// `TextStyle` of the title's text. Defaults to `TextStyle(color: CupertinoColors.systemGrey, fontWeight: FontWeight.w400, fontSize: 12.0)`
+  final TextStyle textStyle;
 
   final double iconSize;
 
@@ -66,7 +66,11 @@ class PersistentBottomNavBarItem {
     this.inactiveColorSecondary = Colors.transparent,
     this.opacity = 1.0,
     this.filter,
-    this.textStyle,
+    this.textStyle = const TextStyle(
+      color: CupertinoColors.systemGrey,
+      fontWeight: FontWeight.w400,
+      fontSize: 12.0,
+    ),
     this.iconSize = 26.0,
     this.onSelectedTabPressWhenNoScreensPushed,
     this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
