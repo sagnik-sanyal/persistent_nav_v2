@@ -7,6 +7,7 @@ class NavBarEssentials {
   final List<PersistentBottomNavBarItem>? items;
   final ValueChanged<int>? onItemSelected;
   final double? navBarHeight;
+  // TODO: Make egdeInsets and default to 0.0 or smth that can be overriden
   final NavBarPadding? padding;
   final bool? popScreensOnTapOfSelectedTab;
   final BuildContext? selectedScreenBuildContext;
