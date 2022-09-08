@@ -89,7 +89,7 @@ class PersistentTabView extends StatefulWidget {
   /// Hides the navigation bar with a transition animation.
   /// Use it in conjuction with [Provider](https://pub.dev/packages/provider)
   /// for better results.
-  final bool? hideNavigationBar;
+  final bool hideNavigationBar;
 
   /// Define navigation bar route name and settings here.
   ///
@@ -130,7 +130,7 @@ class PersistentTabView extends StatefulWidget {
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
-    this.hideNavigationBar,
+    this.hideNavigationBar = false,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
   })  : assert(items != null,
             "Items can only be null in case of custom navigation bar style. Please add the items!"),
@@ -177,7 +177,7 @@ class PersistentTabView extends StatefulWidget {
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
-    this.hideNavigationBar,
+    this.hideNavigationBar = false,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
   })  : assert(itemCount == screens.length,
             "screens and items length should be same. If you are using the onPressed callback function of 'PersistentBottomNavBarItem', enter a dummy screen like Container() in its place in the screens"),
@@ -309,7 +309,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           child: PersistentTabScaffold(
             controller: _controller,
             hideNavigationBar:
-                (widget.hideNavigationBar ?? false) || _hideNavBarDueToKeyboard,
+                widget.hideNavigationBar || _hideNavBarDueToKeyboard,
             itemCount: widget.items == null
                 ? widget.itemCount ?? 0
                 : widget.items!.length,

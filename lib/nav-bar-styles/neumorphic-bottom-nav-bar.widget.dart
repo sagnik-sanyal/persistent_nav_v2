@@ -4,18 +4,13 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
   final NeumorphicProperties neumorphicProperties;
   final NavBarAppearance navBarDecoration;
-  final EdgeInsets defaultPadding;
 
   NeumorphicBottomNavBar({
     Key? key,
     required this.navBarEssentials,
     this.navBarDecoration = const NavBarAppearance(),
     this.neumorphicProperties = const NeumorphicProperties(),
-  })  : defaultPadding = EdgeInsets.symmetric(
-          horizontal: navBarEssentials.navBarHeight * 0.06,
-          vertical: navBarEssentials.navBarHeight * 0.12,
-        ),
-        super(key: key);
+  }) : super(key: key);
 
   Widget _getNavItem(
     PersistentBottomNavBarItem item,
@@ -107,7 +102,6 @@ class NeumorphicBottomNavBar extends StatelessWidget {
                 context,
                 item,
                 this.navBarEssentials.selectedIndex == index,
-                // TODO: Navbarheight should not be nullable
               ),
             ),
           );
