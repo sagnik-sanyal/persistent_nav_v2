@@ -82,7 +82,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
-        title: ("Search"),
+        title: "Search",
         activeColorPrimary: Colors.teal,
         inactiveColorPrimary: Colors.grey,
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -95,10 +95,9 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       ),
       PersistentBottomNavBarItem(
           icon: Icon(Icons.add),
-          title: ("Add"),
+          title: "Add",
           activeColorPrimary: Colors.blueAccent,
-          activeColorSecondary: Colors.white,
-          inactiveColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.grey,
           routeAndNavigatorSettings: RouteAndNavigatorSettings(
             initialRoute: '/',
             routes: {
@@ -112,7 +111,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           }),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.message),
-        title: ("Messages"),
+        title: "Messages",
         activeColorPrimary: Colors.deepOrange,
         inactiveColorPrimary: Colors.grey,
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -125,7 +124,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
-        title: ("Settings"),
+        title: "Settings",
         activeColorPrimary: Colors.indigo,
         inactiveColorPrimary: Colors.grey,
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -283,7 +282,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        navBarBuilder: (essentials) => BottomNavStyle15(
+        navBarBuilder: (essentials) => BottomNavStyle17(
           navBarEssentials: essentials,
         ),
         navBarOverlap: NavBarOverlap.none(),

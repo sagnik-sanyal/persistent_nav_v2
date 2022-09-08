@@ -2,6 +2,7 @@ part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle1 extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
+  final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
@@ -9,107 +10,90 @@ class BottomNavStyle1 extends StatelessWidget {
   BottomNavStyle1({
     Key? key,
     required this.navBarEssentials,
-    this.itemAnimationProperties = const ItemAnimationProperties(
-      duration: Duration(milliseconds: 400),
-      curve: Curves.ease,
-    ),
+    this.navBarDecoration = const NavBarDecoration(),
+    this.itemAnimationProperties = const ItemAnimationProperties(),
   });
 
   Widget _buildItem(
-      PersistentBottomNavBarItem item, bool isSelected, double? height) {
-    return this.navBarEssentials.navBarHeight == 0
-        ? SizedBox.shrink()
-        : AnimatedContainer(
-            width: isSelected ? 120 : 50,
-            height: height! / 1.6,
-            duration: this.itemAnimationProperties.duration ??
-                Duration(milliseconds: 400),
-            curve: this.itemAnimationProperties.curve ?? Curves.ease,
-            padding: EdgeInsets.all(item.contentPadding),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? item.activeColorSecondary
-                  : navBarEssentials.backgroundColor!.withOpacity(0.0),
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            child: Container(
-              alignment: Alignment.center,
-              height: height / 1.6,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.only(right: item.title == null ? 0.0 : 8),
-                      child: IconTheme(
-                        data: IconThemeData(
-                            size: item.iconSize,
-                            color: isSelected
-                                ? item.activeColorPrimary
-                                : item.inactiveColorPrimary),
-                        child: isSelected ? item.icon : item.inactiveIcon,
-                      ),
-                    ),
-                  ),
-                  item.title == null
-                      ? SizedBox.shrink()
-                      : isSelected
-                          ? Flexible(
-                              child: Material(
-                                type: MaterialType.transparency,
-                                child: FittedBox(
-                                  child: Text(
-                                    item.title!,
-                                    style: item.textStyle != null
-                                        ? item.textStyle!.apply(
-                                            color: isSelected
-                                                ? item.activeColorPrimary
-                                                : item.inactiveColorPrimary)
-                                        : TextStyle(
-                                            color: item.activeColorPrimary,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12.0,
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : SizedBox.shrink()
-                ],
+      PersistentBottomNavBarItem item, bool isSelected) {
+    return AnimatedContainer(
+      width: isSelected ? 120 : 50,
+      duration: this.itemAnimationProperties.duration,
+      curve: this.itemAnimationProperties.curve,
+      // TODO: is this contentPadding needed / respected in every style?
+      padding: EdgeInsets.all(item.contentPadding),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? item.activeColorSecondary
+            : item.inactiveColorSecondary,
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          IconTheme(
+            data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary),
+            child: isSelected ? item.icon : item.inactiveIcon,
+          ),
+          if (item.title != null && isSelected)
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  item.title!,
+                  softWrap: false,
+                  style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary),
+                ),
               ),
             ),
-          );
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: this.navBarEssentials.navBarHeight,
-      padding: this.navBarEssentials.padding == null
-          ? EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.07,
-              vertical: this.navBarEssentials.navBarHeight! * 0.15,
-            )
-          : EdgeInsets.only(
-              top: this.navBarEssentials.padding?.top ??
-                  this.navBarEssentials.navBarHeight! * 0.15,
-              left: this.navBarEssentials.padding?.left ??
-                  MediaQuery.of(context).size.width * 0.07,
-              right: this.navBarEssentials.padding?.right ??
-                  MediaQuery.of(context).size.width * 0.07,
-              bottom: this.navBarEssentials.padding?.bottom ??
-                  this.navBarEssentials.navBarHeight! * 0.15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials.items!.map((item) {
-          int index = this.navBarEssentials.items!.indexOf(item);
-          return Flexible(
-            flex: this.navBarEssentials.selectedIndex == index ? 2 : 1,
-            child: GestureDetector(
+    return DecoratedNavBar(
+      decoration: this.navBarDecoration,
+      filter: this
+          .navBarEssentials
+          .items![this.navBarEssentials.selectedIndex!]
+          .filter,
+      color: this.navBarEssentials.backgroundColor,
+      opacity: this
+          .navBarEssentials
+          .items![this.navBarEssentials.selectedIndex!]
+          .opacity,
+      child: Container(
+        height: this.navBarEssentials.navBarHeight,
+        padding: this.navBarEssentials.padding == null
+            ? EdgeInsets.symmetric(
+                horizontal: this.navBarEssentials.navBarHeight! * 0.15,
+                vertical: this.navBarEssentials.navBarHeight! * 0.15,
+              )
+            : EdgeInsets.only(
+                top: this.navBarEssentials.padding?.top ??
+                    this.navBarEssentials.navBarHeight! * 0.15,
+                left: this.navBarEssentials.padding?.left ??
+                    this.navBarEssentials.navBarHeight! * 0.15,
+                right: this.navBarEssentials.padding?.right ??
+                    this.navBarEssentials.navBarHeight! * 0.15,
+                bottom: this.navBarEssentials.padding?.bottom ??
+                    this.navBarEssentials.navBarHeight! * 0.15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: this.navBarEssentials.items!.map((item) {
+            int index = this.navBarEssentials.items!.indexOf(item);
+            return GestureDetector(
               onTap: () {
                 if (this.navBarEssentials.items![index].onPressed != null) {
                   this.navBarEssentials.items![index].onPressed!(
@@ -121,10 +105,10 @@ class BottomNavStyle1 extends StatelessWidget {
               child: _buildItem(
                   item,
                   this.navBarEssentials.selectedIndex == index,
-                  this.navBarEssentials.navBarHeight),
-            ),
-          );
-        }).toList(),
+                  ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

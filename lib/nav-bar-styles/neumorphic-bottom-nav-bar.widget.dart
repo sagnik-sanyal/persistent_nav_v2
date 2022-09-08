@@ -21,39 +21,31 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     PersistentBottomNavBarItem item,
     bool isSelected,
   ) =>
-      this.neumorphicProperties.showSubtitleText
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconTheme(
-                  data: IconThemeData(
-                      size: item.iconSize,
-                      color: isSelected
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary),
-                  child: isSelected ? item.icon : item.inactiveIcon,
-                ),
-                FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
-                        color: isSelected
-                            ? item.activeColorPrimary
-                            : item.inactiveColorPrimary),
-                  ),
-                ),
-              ],
-            )
-          : IconTheme(
-              data: IconThemeData(
-                  size: item.iconSize,
-                  color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary),
-              child: isSelected ? item.icon : item.inactiveIcon,
-            );
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconTheme(
+            data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary),
+            child: isSelected ? item.icon : item.inactiveIcon,
+          ),
+          if (this.neumorphicProperties.showSubtitleText)
+            FittedBox(
+              child: Text(
+                item.title!,
+                style: item.textStyle.apply(
+                    color: isSelected
+                        ? item.activeColorPrimary
+                        : item.inactiveColorPrimary),
+              ),
+            ),
+        ],
+      );
 
   Widget _buildItem(
     BuildContext context,

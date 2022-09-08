@@ -24,7 +24,12 @@ part 'nav-bar-styles/neumorphic-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/simple-bottom-nav-bar.widget.dart';
 //Styles
 part 'nav-bar-styles/style-1-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-10-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-2-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-3-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-5-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-6-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-8-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-9-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-11-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-12-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-13-bottom-nav-bar.widget.dart';
@@ -33,14 +38,6 @@ part 'nav-bar-styles/style-15-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-16-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-17-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-18-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-2-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-3-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-4-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-5-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-6-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-7-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-8-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-9-bottom-nav-bar.widget.dart';
 //Neuomorphic-Card
 part 'neumorphic-package-by-serge-software/neumorphic-card.dart';
 //Main TabView Widget
