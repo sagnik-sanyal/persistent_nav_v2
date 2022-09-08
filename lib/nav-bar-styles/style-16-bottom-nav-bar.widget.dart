@@ -119,14 +119,8 @@ class BottomNavStyle16 extends StatelessWidget {
             ),
             DecoratedNavBar(
               appearance: this.navBarDecoration,
-              filter: this
-                  .navBarEssentials
-                  .items![this.navBarEssentials.selectedIndex!]
-                  .filter,
-              opacity: this
-                  .navBarEssentials
-                  .items![this.navBarEssentials.selectedIndex!]
-                  .opacity,
+              filter: this.navBarEssentials.currentItem.filter,
+              opacity: this.navBarEssentials.currentItem.opacity,
               height: this.navBarEssentials.navBarHeight ??
                   kBottomNavigationBarHeight,
               child: Row(

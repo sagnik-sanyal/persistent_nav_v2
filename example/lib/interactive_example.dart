@@ -325,10 +325,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           return false;
         },
         hideNavigationBar: _hideNavBar,
-        decoration: NavBarAppearance(
-            // colorBehindNavBar: Colors.indigo,
-            // borderRadius: BorderRadius.circular(20.0),
-            ),
         popAllScreensOnTapOfSelectedTab: _popAllScreensOnTapOfSelectedTab,
         screenTransitionAnimation: ScreenTransitionAnimation(
           animateTabTransition: true,

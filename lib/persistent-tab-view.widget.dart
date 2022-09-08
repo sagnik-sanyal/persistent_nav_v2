@@ -22,16 +22,12 @@ class PersistentTabView extends StatefulWidget {
   /// Callback when page or tab change is detected.
   final ValueChanged<int>? onItemSelected;
 
-  /// Specifies the curve properties of the NavBar.
-  final NavBarAppearance? decoration;
-
-  /// Style the `neumorphic` navigation bar item.
-  ///
-  /// Works only with style `neumorphic`.
-  final NeumorphicProperties? neumorphicProperties;
-
   /// A custom widget which is displayed at the bottom right of the display at all times.
   final Widget? floatingActionButton;
+
+  /// Position of the floating action button from the bottom right corner.
+  /// `Offset(10, 10)` by default.
+  final Offset floatingActionButtonOffset;
 
   /// Specifies the navBarHeight
   ///
@@ -123,9 +119,8 @@ class PersistentTabView extends StatefulWidget {
     this.margin = EdgeInsets.zero,
     this.colorBehindNavBar = Colors.white,
     this.onItemSelected,
-    this.neumorphicProperties,
     this.floatingActionButton,
-    this.decoration = const NavBarAppearance(),
+    this.floatingActionButtonOffset = const Offset(10, 10),
     this.resizeToAvoidBottomInset = true,
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
@@ -166,6 +161,7 @@ class PersistentTabView extends StatefulWidget {
     this.controller,
     this.margin = EdgeInsets.zero,
     this.floatingActionButton,
+    this.floatingActionButtonOffset = const Offset(10, 10),
     required this.itemCount,
     required this.navBarBuilder,
     this.resizeToAvoidBottomInset = true,
@@ -190,11 +186,9 @@ class PersistentTabView extends StatefulWidget {
                     routeAndNavigatorSettings.navigatorKeys!.length !=
                         itemCount,
             "Number of 'Navigator Keys' must be equal to the number of bottom navigation tabs."),
-        this.decoration = NavBarAppearance(),
         this.isCustomWidget = true,
         this.items = null,
         this.navBarHeight = null,
-        this.neumorphicProperties = null,
         this.onItemSelected = null,
         this.popActionScreens = null,
         super(key: key);
@@ -280,10 +274,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             ),
           ),
           Positioned(
-            bottom: widget.decoration!.decoration?.borderRadius != BorderRadius.zero
-                ? 25.0
-                : 10.0,
-            right: 10.0,
+            bottom: widget.floatingActionButtonOffset.dy,
+            right: widget.floatingActionButtonOffset.dx,
             child: widget.floatingActionButton!,
           ),
         ],

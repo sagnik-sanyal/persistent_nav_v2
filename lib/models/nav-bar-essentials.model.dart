@@ -19,6 +19,8 @@ class NavBarEssentials {
     this.selectedScreenBuildContext,
   });
 
+  PersistentBottomNavBarItem get currentItem => this.items![this.selectedIndex!];
+
   NavBarEssentials copyWith({
     int? selectedIndex,
     int? previousIndex,
