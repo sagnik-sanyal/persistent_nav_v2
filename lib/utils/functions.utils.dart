@@ -1,29 +1,5 @@
 part of persistent_bottom_nav_bar_v2;
 
-BoxDecoration getNavBarDecoration({
-  bool showElevation = true,
-  NavBarDecoration? decoration = const NavBarDecoration(),
-  required double opacity,
-  bool showBorder = true,
-  Color? color = Colors.white,
-}) {
-  if (opacity < 1.0) {
-    return BoxDecoration(
-      border: showBorder ? decoration!.border : null,
-      borderRadius: decoration!.borderRadius,
-      color: color!.withOpacity(opacity),
-    );
-  } else {
-    return BoxDecoration(
-      border: showBorder ? decoration!.border : null,
-      borderRadius: decoration!.borderRadius,
-      color: color,
-      gradient: decoration.gradient,
-      boxShadow: decoration.boxShadow,
-    );
-  }
-}
-
 bool isColorOpaque(BuildContext context, Color? color) {
   final Color backgroundColor =
       color ?? CupertinoTheme.of(context).barBackgroundColor;

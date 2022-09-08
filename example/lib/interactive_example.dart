@@ -282,12 +282,23 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        navBarBuilder: (essentials) => BottomNavStyle17(
+        colorBehindNavBar: Colors.white,
+        navBarBuilder: (essentials) => BottomNavStyle11(
           navBarEssentials: essentials,
+          navBarDecoration: NavBarAppearance(
+            padding: EdgeInsets.all(0.0),
+            decoration: BoxDecoration(
+              color: Colors.pink,
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                color: Colors.black,
+                width: 0.0,
+              ),
+            ),
+          ),
         ),
         navBarOverlap: NavBarOverlap.none(),
         confineInSafeArea: _confineInSafeArea,
-        backgroundColor: Colors.white,
         handleAndroidBackButtonPress: _handleAndroidBackButtonPress,
         resizeToAvoidBottomInset: _resizeToAvoidBottomInset,
         stateManagement: _stateManagement,
@@ -314,10 +325,10 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           return false;
         },
         hideNavigationBar: _hideNavBar,
-        decoration: NavBarDecoration(
-          colorBehindNavBar: Colors.indigo,
-          borderRadius: BorderRadius.circular(20.0),
-        ),
+        decoration: NavBarAppearance(
+            // colorBehindNavBar: Colors.indigo,
+            // borderRadius: BorderRadius.circular(20.0),
+            ),
         popAllScreensOnTapOfSelectedTab: _popAllScreensOnTapOfSelectedTab,
         screenTransitionAnimation: ScreenTransitionAnimation(
           animateTabTransition: true,

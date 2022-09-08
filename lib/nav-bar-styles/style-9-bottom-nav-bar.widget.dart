@@ -2,7 +2,7 @@ part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle9 extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
-  final NavBarDecoration navBarDecoration;
+  final NavBarAppearance navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
@@ -10,7 +10,7 @@ class BottomNavStyle9 extends StatelessWidget {
   BottomNavStyle9({
     Key? key,
     required this.navBarEssentials,
-    this.navBarDecoration = const NavBarDecoration(),
+    this.navBarDecoration = const NavBarAppearance(),
     this.itemAnimationProperties = const ItemAnimationProperties(),
   });
 
@@ -63,51 +63,40 @@ class BottomNavStyle9 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedNavBar(
-      decoration: this.navBarDecoration,
+      appearance: this.navBarDecoration,
       filter: this
           .navBarEssentials
           .items![this.navBarEssentials.selectedIndex!]
           .filter,
-      color: this.navBarEssentials.backgroundColor,
+
       opacity: this
           .navBarEssentials
           .items![this.navBarEssentials.selectedIndex!]
           .opacity,
-      child: Container(
-        height: this.navBarEssentials.navBarHeight,
-        padding: EdgeInsets.only(
-            top: this.navBarEssentials.padding?.top ??
-                this.navBarEssentials.navBarHeight! * 0.15,
-            left: this.navBarEssentials.padding?.left ??
-                this.navBarEssentials.navBarHeight! * 0.15,
-            right: this.navBarEssentials.padding?.right ??
-                this.navBarEssentials.navBarHeight! * 0.15,
-            bottom: this.navBarEssentials.padding?.bottom ??
-                this.navBarEssentials.navBarHeight! * 0.15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: this.navBarEssentials.items!.map((item) {
-            int index = this.navBarEssentials.items!.indexOf(item);
-            return GestureDetector(
-              onTap: () {
-                if (this.navBarEssentials.items![index].onPressed != null) {
-                  this.navBarEssentials.items![index].onPressed!(
-                      this.navBarEssentials.selectedScreenBuildContext);
-                } else {
-                  this.navBarEssentials.onItemSelected!(index);
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: _buildItem(
-                    item,
-                    this.navBarEssentials.selectedIndex == index,
-                    this.navBarEssentials.navBarHeight),
-              ),
-            );
-          }).toList(),
-        ),
+      height: this.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: this.navBarEssentials.items!.map((item) {
+          int index = this.navBarEssentials.items!.indexOf(item);
+          return GestureDetector(
+            onTap: () {
+              if (this.navBarEssentials.items![index].onPressed != null) {
+                this.navBarEssentials.items![index].onPressed!(
+                    this.navBarEssentials.selectedScreenBuildContext);
+              } else {
+                this.navBarEssentials.onItemSelected!(index);
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: _buildItem(
+                  item,
+                  this.navBarEssentials.selectedIndex == index,
+                  this.navBarEssentials.navBarHeight),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

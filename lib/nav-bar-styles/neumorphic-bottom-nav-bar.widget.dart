@@ -3,13 +3,13 @@ part of persistent_bottom_nav_bar_v2;
 class NeumorphicBottomNavBar extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
   final NeumorphicProperties neumorphicProperties;
-  final NavBarDecoration navBarDecoration;
+  final NavBarAppearance navBarDecoration;
   final EdgeInsets defaultPadding;
 
   NeumorphicBottomNavBar({
     Key? key,
     required this.navBarEssentials,
-    this.navBarDecoration = const NavBarDecoration(),
+    this.navBarDecoration = const NavBarAppearance(),
     this.neumorphicProperties = const NeumorphicProperties(),
   })  : defaultPadding = EdgeInsets.symmetric(
           horizontal: navBarEssentials.navBarHeight! * 0.06,
@@ -54,13 +54,10 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   ) =>
       opaque(this.navBarEssentials.items!, this.navBarEssentials.selectedIndex)
           ? NeumorphicContainer(
-              decoration: NeumorphicDecoration(
-                borderRadius: BorderRadius.circular(
-                    this.neumorphicProperties.borderRadius),
-                color: this.navBarEssentials.backgroundColor,
-                border: this.neumorphicProperties.border,
-                shape: this.neumorphicProperties.shape,
-              ),
+              decoration: this.neumorphicProperties.decoration?.copyWith(
+                    color: this.neumorphicProperties.decoration?.color ??
+                        this.navBarDecoration.decoration?.color,
+                  ),
               bevel: this.neumorphicProperties.bevel,
               curveType: isSelected
                   ? CurveType.emboss
@@ -71,11 +68,12 @@ class NeumorphicBottomNavBar extends StatelessWidget {
             )
           : Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
+                borderRadius:
+                    this.neumorphicProperties.decoration?.borderRadius,
                 color: getBackgroundColor(
                     context,
                     this.navBarEssentials.items,
-                    this.navBarEssentials.backgroundColor,
+                    this.navBarDecoration.decoration?.color,
                     this.navBarEssentials.selectedIndex),
               ),
               padding: EdgeInsets.all(6.0),
@@ -86,50 +84,40 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedNavBar(
-      decoration: this.navBarDecoration,
+      appearance: this.navBarDecoration,
       filter: this
           .navBarEssentials
           .items![this.navBarEssentials.selectedIndex!]
           .filter,
-      color: this.navBarEssentials.backgroundColor,
       opacity: this
           .navBarEssentials
           .items![this.navBarEssentials.selectedIndex!]
           .opacity,
-      child: Container(
-        height: this.navBarEssentials.navBarHeight,
-        padding: EdgeInsets.only(
-          left: this.navBarEssentials.padding?.left ?? defaultPadding.left,
-          right: this.navBarEssentials.padding?.right ?? defaultPadding.right,
-          top: this.navBarEssentials.padding?.top ?? defaultPadding.top,
-          bottom:
-              this.navBarEssentials.padding?.bottom ?? defaultPadding.bottom,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: this.navBarEssentials.items!.map((item) {
-            int index = this.navBarEssentials.items!.indexOf(item);
-            return Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  if (item.onPressed != null) {
-                    item.onPressed!(
-                        this.navBarEssentials.selectedScreenBuildContext);
-                  } else {
-                    this.navBarEssentials.onItemSelected!(index);
-                  }
-                },
-                child: _buildItem(
-                  context,
-                  item,
-                  this.navBarEssentials.selectedIndex == index,
-                  // TODO: Navbarheight should not be nullable
-                ),
+      height: this.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: this.navBarEssentials.items!.map((item) {
+          int index = this.navBarEssentials.items!.indexOf(item);
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (item.onPressed != null) {
+                  item.onPressed!(
+                      this.navBarEssentials.selectedScreenBuildContext);
+                } else {
+                  this.navBarEssentials.onItemSelected!(index);
+                }
+              },
+              child: _buildItem(
+                context,
+                item,
+                this.navBarEssentials.selectedIndex == index,
+                // TODO: Navbarheight should not be nullable
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

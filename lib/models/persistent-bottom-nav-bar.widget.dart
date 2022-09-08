@@ -32,42 +32,47 @@ class PersistentBottomNavBar extends StatelessWidget {
   }
 }
 
-// TODO: Has to be integrated in every NavBarStyle
 class DecoratedNavBar extends StatelessWidget {
-  final NavBarDecoration decoration;
+  final NavBarAppearance appearance;
   final ImageFilter filter;
   final Widget child;
-  final Color? color;
   final double opacity;
+  final double height;
 
   DecoratedNavBar({
     Key? key,
-    this.decoration = const NavBarDecoration(),
+    this.appearance = const NavBarAppearance(),
     required this.child,
-    this.color,
     ImageFilter? filter,
     this.opacity = 1.0,
+    this.height = kBottomNavigationBarHeight,
   })  : filter = filter ?? ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: this.decoration.borderRadius,
+      borderRadius: this.appearance.decoration?.borderRadius as BorderRadius?,
       child: BackdropFilter(
         filter: this.filter,
         child: Container(
-          decoration: getNavBarDecoration(
-            decoration: decoration,
-            color: this.color,
-            opacity: this.opacity,
-          ),
+          decoration: this.appearance.decoration?.copyWith(
+                color: this
+                    .appearance
+                    .decoration
+                    ?.color
+                    ?.withOpacity(this.opacity),
+              ),
           child: SafeArea(
             top: false,
             right: false,
             left: false,
             bottom: true,
-            child: this.child,
+            child: Container(
+              padding: this.appearance.padding,
+              height: this.height - this.appearance.borderHeight(),
+              child: this.child,
+            ),
           ),
         ),
       ),

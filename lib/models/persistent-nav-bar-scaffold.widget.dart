@@ -44,7 +44,7 @@ class PersistentTabScaffold extends StatefulWidget {
     this.navBarHeight = kBottomNavigationBarHeight,
     this.itemCount,
     this.hideNavigationBar = false,
-    this.colorBehindNavBar = Colors.transparent,
+    this.colorBehindNavBar = Colors.white,
     this.navBarOverlap = const NavBarOverlap.full(),
   }) : super(key: key);
 

@@ -1253,7 +1253,7 @@ void main() {
             context,
             screens: [1, 2, 3].map((id) => defaultScreen(id)).toList(),
             items: items,
-            decoration: const NavBarDecoration(
+            decoration: const NavBarAppearance(
               border: Border(
                 top: BorderSide(
                   color: Colors.grey,

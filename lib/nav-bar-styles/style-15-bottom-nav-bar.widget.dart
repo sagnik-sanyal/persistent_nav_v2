@@ -2,12 +2,12 @@ part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle15 extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
-  final NavBarDecoration navBarDecoration;
+  final NavBarAppearance navBarDecoration;
 
   BottomNavStyle15({
     Key? key,
     required this.navBarEssentials,
-    this.navBarDecoration = const NavBarDecoration(),
+    this.navBarDecoration = const NavBarAppearance(),
   });
 
   Widget _buildItem(
@@ -49,7 +49,7 @@ class BottomNavStyle15 extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: item.activeColorPrimary,
-        boxShadow: this.navBarDecoration.boxShadow,
+        boxShadow: this.navBarDecoration.decoration?.boxShadow,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -100,46 +100,43 @@ class BottomNavStyle15 extends StatelessWidget {
               height: 23,
             ),
             DecoratedNavBar(
-              decoration: this.navBarDecoration,
+              appearance: this.navBarDecoration,
               filter: this
                   .navBarEssentials
                   .items![this.navBarEssentials.selectedIndex!]
                   .filter,
-              color: this.navBarEssentials.backgroundColor,
               opacity: this
                   .navBarEssentials
                   .items![this.navBarEssentials.selectedIndex!]
                   .opacity,
-              child: Container(
-                height: this.navBarEssentials.navBarHeight!,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: this.navBarEssentials.items!.map((item) {
-                    int index = this.navBarEssentials.items!.indexOf(item);
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          if (this.navBarEssentials.items![index].onPressed !=
-                              null) {
-                            this.navBarEssentials.items![index].onPressed!(this
-                                .navBarEssentials
-                                .selectedScreenBuildContext);
-                          } else {
-                            this.navBarEssentials.onItemSelected!(index);
-                          }
-                        },
-                        child: index == midIndex
-                            ? Container(width: 150, color: Colors.transparent)
-                            : _buildItem(
-                                context,
-                                item,
-                                this.navBarEssentials.selectedIndex == index,
-                              ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+              height: this.navBarEssentials.navBarHeight ??
+                  kBottomNavigationBarHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: this.navBarEssentials.items!.map((item) {
+                  int index = this.navBarEssentials.items!.indexOf(item);
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (this.navBarEssentials.items![index].onPressed !=
+                            null) {
+                          this.navBarEssentials.items![index].onPressed!(
+                              this.navBarEssentials.selectedScreenBuildContext);
+                        } else {
+                          this.navBarEssentials.onItemSelected!(index);
+                        }
+                      },
+                      child: index == midIndex
+                          ? Container(width: 150, color: Colors.transparent)
+                          : _buildItem(
+                              context,
+                              item,
+                              this.navBarEssentials.selectedIndex == index,
+                            ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ],

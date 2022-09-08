@@ -1,5 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
+// TODO: Remove
 enum NavBarStyle {
   style1,
   style2,
@@ -25,32 +26,32 @@ enum NavBarStyle {
 
 enum PopActionScreensType { once, all }
 
-// TODO: Convert to Boxdecoration?
-class NavBarDecoration {
-  /// Defines the curve radius of the corners of the NavBar.
-  final BorderRadius borderRadius;
+class NavBarAppearance {
+  final BoxDecoration? decoration;
 
-  /// Color for the container which holds the bottom NavBar.
+  /// `padding` for the persistent navigation bar content.
   ///
-  /// When you increase the `navBarCurveRadius`, the `bottomScreenPadding` will automatically adjust to avoid layout issues. But if you want a fixed `bottomScreenPadding`, then you might want to set the color of your choice to avoid black edges at the corners of the NavBar.
-  final Color colorBehindNavBar;
+  /// `USE WITH CAUTION, MAY CAUSE LAYOUT ISSUES`.
+  final EdgeInsets padding;
 
-  final Gradient? gradient;
-
-  final BoxBorder? border;
-
-  final List<BoxShadow>? boxShadow;
-
-  const NavBarDecoration({
-    this.border,
-    this.gradient,
-    this.borderRadius = BorderRadius.zero,
-    this.colorBehindNavBar = CupertinoColors.black,
-    this.boxShadow,
+  const NavBarAppearance({
+    this.decoration,
+    this.padding = const EdgeInsets.all(8),
   });
 
-  double exposedHeight() => this.borderRadius != BorderRadius.zero
-      ? max(this.borderRadius.topRight.y, this.borderRadius.topLeft.y) +
-          (this.border?.dimensions.vertical ?? 0.0)
-      : 0.0;
+  double borderHeight() {
+    return this.decoration!.border?.dimensions.vertical ?? 0.0;
+  }
+
+  double exposedHeight() {
+    if (this.decoration?.borderRadius != BorderRadius.zero &&
+        this.decoration?.borderRadius != null &&
+        this.decoration?.borderRadius is BorderRadius) {
+      BorderRadius radius = (this.decoration!.borderRadius! as BorderRadius);
+      return max(radius.topRight.y, radius.topLeft.y) +
+          this.borderHeight();
+    } else {
+      return 0;
+    }
+  }
 }

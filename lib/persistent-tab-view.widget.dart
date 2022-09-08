@@ -17,19 +17,13 @@ class PersistentTabView extends StatefulWidget {
   final PersistentTabController? controller;
 
   /// Background color of bottom navigation bar. `white` by default.
-  final Color backgroundColor;
+  final Color colorBehindNavBar;
 
   /// Callback when page or tab change is detected.
   final ValueChanged<int>? onItemSelected;
 
   /// Specifies the curve properties of the NavBar.
-  final NavBarDecoration? decoration;
-
-  /// `padding` for the persistent navigation bar content.
-  /// Accepts `NavBarPadding` instead of `EdgeInsets`.
-  ///
-  /// `USE WITH CAUTION, MAY CAUSE LAYOUT ISSUES`.
-  final NavBarPadding? padding;
+  final NavBarAppearance? decoration;
 
   /// Style the `neumorphic` navigation bar item.
   ///
@@ -127,12 +121,11 @@ class PersistentTabView extends StatefulWidget {
     this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.full(),
     this.margin = EdgeInsets.zero,
-    this.backgroundColor = CupertinoColors.white,
+    this.colorBehindNavBar = Colors.white,
     this.onItemSelected,
     this.neumorphicProperties,
     this.floatingActionButton,
-    this.padding = const NavBarPadding.all(null),
-    this.decoration = const NavBarDecoration(),
+    this.decoration = const NavBarAppearance(),
     this.resizeToAvoidBottomInset = true,
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
@@ -180,7 +173,7 @@ class PersistentTabView extends StatefulWidget {
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
-    this.backgroundColor = CupertinoColors.white,
+    this.colorBehindNavBar = Colors.white,
     this.routeAndNavigatorSettings =
         const CustomWidgetRouteAndNavigatorSettings(),
     this.confineInSafeArea = true,
@@ -197,13 +190,12 @@ class PersistentTabView extends StatefulWidget {
                     routeAndNavigatorSettings.navigatorKeys!.length !=
                         itemCount,
             "Number of 'Navigator Keys' must be equal to the number of bottom navigation tabs."),
-        this.decoration = NavBarDecoration(colorBehindNavBar: backgroundColor),
+        this.decoration = NavBarAppearance(),
         this.isCustomWidget = true,
         this.items = null,
         this.navBarHeight = null,
         this.neumorphicProperties = null,
         this.onItemSelected = null,
-        this.padding = null,
         this.popActionScreens = null,
         super(key: key);
 
@@ -288,7 +280,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             ),
           ),
           Positioned(
-            bottom: widget.decoration!.borderRadius != BorderRadius.zero
+            bottom: widget.decoration!.decoration?.borderRadius != BorderRadius.zero
                 ? 25.0
                 : 10.0,
             right: 10.0,
@@ -319,7 +311,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         backgroundColor: Colors.transparent,
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            padding: const EdgeInsets.only(bottom: 100), // TODO: Simulate gesture bar
+            padding: const EdgeInsets.only(
+                bottom: 100), // TODO: Simulate gesture bar
           ),
           child: PersistentTabScaffold(
             controller: _controller,
@@ -328,6 +321,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 ? widget.itemCount ?? 0
                 : widget.items!.length,
             stateManagement: widget.stateManagement,
+            colorBehindNavBar: widget.colorBehindNavBar,
             navBarOverlap: widget.navBarOverlap,
             opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
             navBarHeight: widget.navBarHeight ?? kBottomNavigationBarHeight,
@@ -335,14 +329,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
             tabBar: PersistentBottomNavBar(
               margin: widget.margin,
-              confineToSafeArea: widget.confineInSafeArea, // TODO: Name consistently
+              confineToSafeArea:
+                  widget.confineInSafeArea, // TODO: Name consistently
               child: widget.navBarBuilder(NavBarEssentials(
                 selectedIndex: _controller.index,
                 previousIndex: _previousIndex,
-                padding: widget.padding,
                 selectedScreenBuildContext: _contextList[_controller.index],
                 items: widget.items,
-                backgroundColor: widget.backgroundColor,
                 navBarHeight: _navBarHeight,
                 popScreensOnTapOfSelectedTab:
                     widget.popAllScreensOnTapOfSelectedTab,

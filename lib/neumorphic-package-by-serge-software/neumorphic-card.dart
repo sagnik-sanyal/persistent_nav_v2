@@ -183,4 +183,18 @@ class NeumorphicDecoration {
   final BorderRadiusGeometry? borderRadius;
   final BoxShape shape;
   final BoxBorder? border;
+
+  NeumorphicDecoration copyWith({
+    Color? color,
+    BorderRadiusGeometry? borderRadius,
+    BoxShape? shape,
+    BoxBorder? border,
+  }) {
+    return NeumorphicDecoration(
+      color: color ?? this.color,
+      borderRadius: borderRadius ?? this.borderRadius,
+      shape: shape ?? this.shape,
+      border: border ?? this.border,
+    );
+  }
 }

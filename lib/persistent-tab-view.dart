@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 part 'animations/animations.dart';
 part 'models/nav-bar-animation.model.dart';
 part 'models/nav-bar-essentials.model.dart';
-part 'models/nav-bar-padding.model.dart';
 part 'models/neumorphic-properties.widget.dart';
 part 'models/page-route-transitions.model.dart';
 part 'models/persistent-bottom-nav-item.widget.dart';

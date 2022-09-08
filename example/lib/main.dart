@@ -229,7 +229,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         items: _navBarsItems(),
         navBarOverlap: NavBarOverlap.none(),
         confineInSafeArea: true,
-        backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         stateManagement: true,
@@ -262,9 +261,10 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           return false;
         },
         hideNavigationBar: _hideNavBar,
-        decoration: NavBarDecoration(
-            colorBehindNavBar: Colors.indigo,
-            borderRadius: BorderRadius.circular(20.0)),
+        decoration: NavBarAppearance(
+          // colorBehindNavBar: Colors.indigo,
+          // borderRadius: BorderRadius.circular(20.0),
+        ),
         popAllScreensOnTapOfSelectedTab: true,
         screenTransitionAnimation: ScreenTransitionAnimation(
           animateTabTransition: true,
