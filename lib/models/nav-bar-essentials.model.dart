@@ -5,7 +5,7 @@ class NavBarEssentials {
   final int? previousIndex;
   final List<PersistentBottomNavBarItem>? items;
   final ValueChanged<int>? onItemSelected;
-  final double? navBarHeight;
+  final double navBarHeight;
   final bool? popScreensOnTapOfSelectedTab;
   final BuildContext? selectedScreenBuildContext;
 
@@ -14,7 +14,7 @@ class NavBarEssentials {
     this.previousIndex,
     required this.items,
     this.onItemSelected,
-    this.navBarHeight = 0.0,
+    this.navBarHeight = kBottomNavigationBarHeight,
     this.popScreensOnTapOfSelectedTab,
     this.selectedScreenBuildContext,
   });

@@ -121,7 +121,7 @@ class _BottomNavStyle8State extends State<BottomNavStyle8>
           .items![widget.navBarEssentials.selectedIndex!].filter,
       opacity: widget.navBarEssentials
           .items![widget.navBarEssentials.selectedIndex!].opacity,
-      height: widget.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      height: widget.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,8 +143,8 @@ class _BottomNavStyle8State extends State<BottomNavStyle8>
                   widget.navBarEssentials.onItemSelected!(index);
                 }
               },
-              child: _buildItem(item,
-                  widget.navBarEssentials.selectedIndex == index, index),
+              child: _buildItem(
+                  item, widget.navBarEssentials.selectedIndex == index, index),
             ),
           );
         }).toList(),

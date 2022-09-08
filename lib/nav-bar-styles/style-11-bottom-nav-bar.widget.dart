@@ -38,7 +38,7 @@ class _BottomNavStyle11State extends State<BottomNavStyle11>
       _animationControllerList.add(AnimationController(
           duration: widget.itemAnimationProperties.duration, vsync: this));
       _animationList.add(Tween(
-              begin: Offset(0, widget.navBarEssentials.navBarHeight!),
+              begin: Offset(0, widget.navBarEssentials.navBarHeight),
               end: Offset(0, 0.0))
           .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
           .animate(_animationControllerList[i]));
@@ -111,7 +111,7 @@ class _BottomNavStyle11State extends State<BottomNavStyle11>
         _animationControllerList.add(AnimationController(
             duration: widget.itemAnimationProperties.duration, vsync: this));
         _animationList.add(Tween(
-                begin: Offset(0, widget.navBarEssentials.navBarHeight!),
+                begin: Offset(0, widget.navBarEssentials.navBarHeight),
                 end: Offset(0, 0.0))
             .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
             .animate(_animationControllerList[i]));
@@ -129,8 +129,7 @@ class _BottomNavStyle11State extends State<BottomNavStyle11>
           .items![widget.navBarEssentials.selectedIndex!].filter,
       opacity: widget.navBarEssentials
           .items![widget.navBarEssentials.selectedIndex!].opacity,
-      height:
-          widget.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      height: widget.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,

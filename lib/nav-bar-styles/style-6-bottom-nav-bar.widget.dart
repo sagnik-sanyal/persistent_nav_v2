@@ -118,8 +118,7 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
           .items![widget.navBarEssentials.selectedIndex!].filter,
       opacity: widget.navBarEssentials
           .items![widget.navBarEssentials.selectedIndex!].opacity,
-      height:
-          widget.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      height: widget.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,

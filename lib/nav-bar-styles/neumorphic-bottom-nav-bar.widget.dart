@@ -12,8 +12,8 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     this.navBarDecoration = const NavBarAppearance(),
     this.neumorphicProperties = const NeumorphicProperties(),
   })  : defaultPadding = EdgeInsets.symmetric(
-          horizontal: navBarEssentials.navBarHeight! * 0.06,
-          vertical: navBarEssentials.navBarHeight! * 0.12,
+          horizontal: navBarEssentials.navBarHeight * 0.06,
+          vertical: navBarEssentials.navBarHeight * 0.12,
         ),
         super(key: key);
 
@@ -87,7 +87,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
       appearance: this.navBarDecoration,
       filter: this.navBarEssentials.currentItem.filter,
       opacity: this.navBarEssentials.currentItem.opacity,
-      height: this.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      height: this.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,

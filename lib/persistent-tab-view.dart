@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //Animations
-part 'animations/animations.dart';
 part 'models/nav-bar-animation.model.dart';
 part 'models/nav-bar-essentials.model.dart';
 part 'models/neumorphic-properties.widget.dart';

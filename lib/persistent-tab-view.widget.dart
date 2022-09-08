@@ -32,7 +32,7 @@ class PersistentTabView extends StatefulWidget {
   /// Specifies the navBarHeight
   ///
   /// Defaults to `kBottomNavigationBarHeight` which is `56.0`.
-  final double? navBarHeight;
+  final double navBarHeight;
 
   /// Specifies how much the navBar should float above
   /// the tab content. Defaults to [NavBarOverlap.full].
@@ -161,6 +161,7 @@ class PersistentTabView extends StatefulWidget {
     this.controller,
     this.margin = EdgeInsets.zero,
     this.floatingActionButton,
+    this.navBarHeight = kBottomNavigationBarHeight,
     this.floatingActionButtonOffset = const Offset(10, 10),
     required this.itemCount,
     required this.navBarBuilder,
@@ -188,7 +189,6 @@ class PersistentTabView extends StatefulWidget {
             "Number of 'Navigator Keys' must be equal to the number of bottom navigation tabs."),
         this.isCustomWidget = true,
         this.items = null,
-        this.navBarHeight = null,
         this.onItemSelected = null,
         this.popActionScreens = null,
         super(key: key);
@@ -200,7 +200,7 @@ class PersistentTabView extends StatefulWidget {
 class _PersistentTabViewState extends State<PersistentTabView> {
   late List<BuildContext?> _contextList;
   late PersistentTabController _controller;
-  double? _navBarHeight;
+  bool _hideNavBarDueToKeyboard = false;
   late int _previousIndex;
   late int _currentIndex;
   bool _sendScreenContext = false;
@@ -308,7 +308,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           ),
           child: PersistentTabScaffold(
             controller: _controller,
-            hideNavigationBar: widget.hideNavigationBar ?? false,
+            hideNavigationBar:
+                (widget.hideNavigationBar ?? false) || _hideNavBarDueToKeyboard,
             itemCount: widget.items == null
                 ? widget.itemCount ?? 0
                 : widget.items!.length,
@@ -316,7 +317,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             colorBehindNavBar: widget.colorBehindNavBar,
             navBarOverlap: widget.navBarOverlap,
             opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
-            navBarHeight: widget.navBarHeight ?? kBottomNavigationBarHeight,
+            navBarHeight: widget.navBarHeight,
             screenTransitionAnimation: widget.screenTransitionAnimation,
             resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
             tabBar: PersistentBottomNavBar(
@@ -328,7 +329,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 previousIndex: _previousIndex,
                 selectedScreenBuildContext: _contextList[_controller.index],
                 items: widget.items,
-                navBarHeight: _navBarHeight,
+                navBarHeight: widget.navBarHeight,
                 popScreensOnTapOfSelectedTab:
                     widget.popAllScreensOnTapOfSelectedTab,
                 onItemSelected: (int index) {
@@ -354,9 +355,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   @override
   Widget build(BuildContext context) {
     bool isKeyboardUp = MediaQuery.of(widget.context).viewInsets.bottom > 0;
-    _navBarHeight = (isKeyboardUp && widget.hideNavigationBarWhenKeyboardShows)
-        ? 0.0
-        : widget.navBarHeight ?? kBottomNavigationBarHeight;
+    _hideNavBarDueToKeyboard =
+        isKeyboardUp && widget.hideNavigationBarWhenKeyboardShows;
     if (_contextList.length != (widget.itemCount ?? widget.items!.length)) {
       _contextList = List<BuildContext?>.filled(
           (widget.items == null ? widget.itemCount ?? 0 : widget.items!.length),

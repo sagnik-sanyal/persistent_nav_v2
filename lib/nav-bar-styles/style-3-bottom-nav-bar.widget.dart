@@ -57,7 +57,7 @@ class BottomNavStyle3 extends StatelessWidget {
       appearance: this.navBarDecoration,
       filter: this.navBarEssentials.currentItem.filter,
       opacity: this.navBarEssentials.currentItem.opacity,
-      height: this.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      height: this.navBarEssentials.navBarHeight,
       child: Column(
         children: <Widget>[
           Row(

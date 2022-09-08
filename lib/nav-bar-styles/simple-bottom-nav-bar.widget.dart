@@ -52,7 +52,7 @@ class BottomNavSimple extends StatelessWidget {
       appearance: this.navBarDecoration,
       filter: this.navBarEssentials.currentItem.filter,
       opacity: this.navBarEssentials.currentItem.opacity,
-      height: this.navBarEssentials.navBarHeight ?? kBottomNavigationBarHeight,
+      height: this.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
