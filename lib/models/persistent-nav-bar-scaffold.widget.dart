@@ -116,44 +116,42 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
         MediaQuery(
           data: newMediaQuery,
           child: Container(
-            color: widget.colorBehindNavBar,
+            color: widget.backgroundColor,
             child: _TabSwitchingView(
-                key: Key("TabSwitchingView"),
-                currentTabIndex: widget.controller.index,
-                tabCount: widget.itemCount,
-                tabBuilder: (context, index) {
-                  double contentPadding = 0.0;
-                  double overlap = 0.0;
-                  bool isNotOpaque = index > widget.opacities.length
-                      ? false
-                      : widget.opacities[index] != 1.0;
-                  if (isNotOpaque &&
-                      widget.navBarOverlap.fullOverlapWhenNotOpaque) {
-                    overlap = double.infinity;
-                  } else {
-                    overlap = widget.navBarOverlap.overlap;
-                  }
+              key: Key("TabSwitchingView"),
+              currentTabIndex: widget.controller.index,
+              tabCount: widget.itemCount,
+              tabBuilder: (context, index) {
+                double contentPadding = 0.0;
+                double overlap = 0.0;
+                bool isNotOpaque = index > widget.opacities.length
+                    ? false
+                    : widget.opacities[index] != 1.0;
+                if (isNotOpaque &&
+                    widget.navBarOverlap.fullOverlapWhenNotOpaque) {
+                  overlap = double.infinity;
+                } else {
+                  overlap = widget.navBarOverlap.overlap;
+                }
 
-                  if (widget.hideNavigationBar) {
-                    contentPadding = 0.0;
-                  } else {
-                    contentPadding = max(0, widget.navBarHeight - overlap);
-                  }
-                  return PersistentTab(
-                    child: widget.tabBuilder(context, index),
-                    applySafeArea: isNotOpaque || widget.hideNavigationBar
-                        ? false
-                        : widget.confineInSafeArea &&
-                            widget.margin.bottom == 0 &&
-                            _navBarFullyShown,
-                    bottomMargin: _navBarFullyShown ? contentPadding : 0.0,
-                  );
-                },
-                stateManagement: widget.stateManagement,
-                screenTransitionAnimation: widget.screenTransitionAnimation,
-                backgroundColor: Colors
-                    .transparent // TODO: tabBar.navBarEssentials!.backgroundColor,
-                ),
+                if (widget.hideNavigationBar) {
+                  contentPadding = 0.0;
+                } else {
+                  contentPadding = max(0, widget.navBarHeight - overlap);
+                }
+                return PersistentTab(
+                  child: widget.tabBuilder(context, index),
+                  applySafeArea: isNotOpaque || widget.hideNavigationBar
+                      ? false
+                      : widget.confineInSafeArea &&
+                          widget.margin.bottom == 0 &&
+                          _navBarFullyShown,
+                  bottomMargin: _navBarFullyShown ? contentPadding : 0.0,
+                );
+              },
+              stateManagement: widget.stateManagement,
+              screenTransitionAnimation: widget.screenTransitionAnimation,
+            ),
           ),
         ),
         AnimatedPositioned(
@@ -164,12 +162,15 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
               : 0,
           right: 0,
           left: 0,
-          child: _reallyHideNavBar
-              ? Container()
-              : MediaQuery(
-                  data: existingMediaQuery.copyWith(textScaleFactor: 1),
-                  child: widget.tabBar,
-                ),
+          child: Container(
+            color: widget.colorBehindNavBar,
+            child: _reallyHideNavBar
+                ? Container()
+                : MediaQuery(
+                    data: existingMediaQuery.copyWith(textScaleFactor: 1),
+                    child: widget.tabBar,
+                  ),
+          ),
           onEnd: () {
             setState(() {
               _reallyHideNavBar = widget.hideNavigationBar;
@@ -216,7 +217,6 @@ class _TabSwitchingView extends StatefulWidget {
     required this.stateManagement,
     required this.tabBuilder,
     required this.screenTransitionAnimation,
-    required this.backgroundColor,
   })  : assert(tabCount != null && tabCount > 0),
         super(key: key);
 
@@ -225,7 +225,6 @@ class _TabSwitchingView extends StatefulWidget {
   final IndexedWidgetBuilder tabBuilder;
   final bool? stateManagement;
   final ScreenTransitionAnimation? screenTransitionAnimation;
-  final Color? backgroundColor;
 
   @override
   _TabSwitchingViewState createState() => _TabSwitchingViewState();
@@ -343,44 +342,39 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   Widget _buildScreens() {
-    return Container(
-      color: widget.backgroundColor,
-      child: Stack(
-        fit: StackFit.expand,
-        children: List<Widget>.generate(widget.tabCount!, (int index) {
-          final bool active = index == _currentTabIndex ||
-              (widget.screenTransitionAnimation!.animateTabTransition &&
-                  index == _previousTabIndex);
-          shouldBuildTab[index] = active || shouldBuildTab[index];
+    return Stack(
+      fit: StackFit.expand,
+      children: List<Widget>.generate(widget.tabCount!, (int index) {
+        final bool active = index == _currentTabIndex ||
+            (widget.screenTransitionAnimation!.animateTabTransition &&
+                index == _previousTabIndex);
+        shouldBuildTab[index] = active || shouldBuildTab[index];
 
-          return Offstage(
-            offstage: !active,
-            child: TickerMode(
-              enabled: active,
-              child: FocusScope(
-                node: tabFocusNodes[index],
-                child: Builder(
-                  builder: (BuildContext context) {
-                    return shouldBuildTab[index]
-                        ? (widget
-                                .screenTransitionAnimation!.animateTabTransition
-                            ? AnimatedBuilder(
-                                animation: _animations[index]!,
-                                builder: (context, child) =>
-                                    Transform.translate(
-                                  offset: Offset(_animations[index]!.value, 0),
-                                  child: widget.tabBuilder(context, index),
-                                ),
-                              )
-                            : widget.tabBuilder(context, index))
-                        : Container();
-                  },
-                ),
+        return Offstage(
+          offstage: !active,
+          child: TickerMode(
+            enabled: active,
+            child: FocusScope(
+              node: tabFocusNodes[index],
+              child: Builder(
+                builder: (BuildContext context) {
+                  return shouldBuildTab[index]
+                      ? (widget.screenTransitionAnimation!.animateTabTransition
+                          ? AnimatedBuilder(
+                              animation: _animations[index]!,
+                              builder: (context, child) => Transform.translate(
+                                offset: Offset(_animations[index]!.value, 0),
+                                child: widget.tabBuilder(context, index),
+                              ),
+                            )
+                          : widget.tabBuilder(context, index))
+                      : Container();
+                },
               ),
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 
@@ -440,14 +434,11 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       _showAnimation = widget.screenTransitionAnimation!.animateTabTransition;
       key = UniqueKey();
     }
-    return Container(
-      color: widget.backgroundColor,
-      child: widget.stateManagement!
-          ? _buildScreens()
-          : KeyedSubtree(
-              key: key,
-              child: _buildScreens(),
-            ),
-    );
+    return widget.stateManagement!
+        ? _buildScreens()
+        : KeyedSubtree(
+            key: key,
+            child: _buildScreens(),
+          );
   }
 }

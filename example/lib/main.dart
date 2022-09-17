@@ -69,7 +69,46 @@ class _MainMenuState extends State<MainMenu> {
               ),
             ),
           ),
+          SizedBox(height: 20.0),
+          Center(
+            child: ElevatedButton(
+              child: Text("Interactive Example"),
+              onPressed: () => pushNewScreen(
+                context,
+                screen: TestScaffold(),
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class TestScaffold extends StatelessWidget {
+  const TestScaffold({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+        padding: EdgeInsets.only(
+            bottom: 100,
+            top: MediaQuery.of(context)
+                .padding
+                .top), // TODO: Simulate gesture bar
+      ),
+      child: Scaffold(
+        appBar: AppBar(title: Text("Test Scaffold")),
+        body: MainScreen(),
+        bottomNavigationBar: Container(
+          color: Colors.green,
+          height: 50,
+        ),
+        bottomSheet: Container(
+          color: Colors.red,
+          height: 30,
+        ),
       ),
     );
   }

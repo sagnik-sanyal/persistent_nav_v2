@@ -51,6 +51,7 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
       PersistentBottomNavBarItem item, bool isSelected, int itemIndex) {
     return AnimatedBuilder(
       animation: _animationList[itemIndex],
+      // TODO: Change to ScaleTransition?
       builder: (context, child) => Transform.scale(
         scale: _animationList[itemIndex].value,
         child: Column(
