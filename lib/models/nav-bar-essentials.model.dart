@@ -1,5 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
+// TODO: Rename e.g. NavbarConfig or combine with tabcontroller?
 class NavBarEssentials {
   final int? selectedIndex;
   final int? previousIndex;

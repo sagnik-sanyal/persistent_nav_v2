@@ -17,7 +17,7 @@ class PersistentTabView extends StatefulWidget {
   final PersistentTabController? controller;
 
   /// Background color of bottom navigation bar. `white` by default.
-  final Color colorBehindNavBar;
+  final Color backgroundColor;
 
   /// Callback when page or tab change is detected.
   final ValueChanged<int>? onItemSelected;
@@ -117,7 +117,7 @@ class PersistentTabView extends StatefulWidget {
     this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.full(),
     this.margin = EdgeInsets.zero,
-    this.colorBehindNavBar = Colors.white,
+    this.backgroundColor = Colors.white,
     this.onItemSelected,
     this.floatingActionButton,
     this.floatingActionButtonOffset = const Offset(10, 10),
@@ -170,7 +170,7 @@ class PersistentTabView extends StatefulWidget {
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
-    this.colorBehindNavBar = Colors.white,
+    this.backgroundColor = Colors.white,
     this.routeAndNavigatorSettings =
         const CustomWidgetRouteAndNavigatorSettings(),
     this.confineInSafeArea = true,
@@ -298,57 +298,52 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     }
   }
 
-  Widget navigationBarWidget() => CupertinoPageScaffold(
-        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        backgroundColor: Colors.transparent,
-        child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            padding: const EdgeInsets.only(
-                bottom: 100), // TODO: Simulate gesture bar
+  Widget navigationBarWidget() => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top,
+              bottom: 100), // TODO: Simulate gesture bar
+        ),
+        child: PersistentTabScaffold(
+          controller: _controller,
+          hideNavigationBar: widget.hideNavigationBar,
+          itemCount: widget.items == null
+              ? widget.itemCount ?? 0
+              : widget.items!.length,
+          stateManagement: widget.stateManagement,
+          backgroundColor: widget.backgroundColor,
+          navBarOverlap: widget.navBarOverlap,
+          opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
+          screenTransitionAnimation: widget.screenTransitionAnimation,
+          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+          tabBar: PersistentBottomNavBar(
+            margin: widget.margin,
+            confineToSafeArea:
+                widget.confineInSafeArea, // TODO: Name consistently
+            child: widget.navBarBuilder(NavBarEssentials(
+              selectedIndex: _controller.index,
+              previousIndex: _previousIndex,
+              selectedScreenBuildContext: _contextList[_controller.index],
+              items: widget.items,
+              navBarHeight: widget.navBarHeight,
+              popScreensOnTapOfSelectedTab:
+                  widget.popAllScreensOnTapOfSelectedTab,
+              onItemSelected: (int index) {
+                if (_controller.index != _previousIndex) {
+                  _previousIndex = _controller.index;
+                }
+                if ((widget.popAllScreensOnTapOfSelectedTab) &&
+                    _previousIndex == index) {
+                  popAllScreens();
+                }
+                _controller.index = index;
+                widget.onItemSelected?.call(index);
+              },
+            )),
           ),
-          child: PersistentTabScaffold(
-            controller: _controller,
-            hideNavigationBar:
-                widget.hideNavigationBar || _hideNavBarDueToKeyboard,
-            itemCount: widget.items == null
-                ? widget.itemCount ?? 0
-                : widget.items!.length,
-            stateManagement: widget.stateManagement,
-            colorBehindNavBar: widget.colorBehindNavBar,
-            navBarOverlap: widget.navBarOverlap,
-            opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
-            navBarHeight: widget.navBarHeight,
-            screenTransitionAnimation: widget.screenTransitionAnimation,
-            resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-            tabBar: PersistentBottomNavBar(
-              margin: widget.margin,
-              confineToSafeArea:
-                  widget.confineInSafeArea, // TODO: Name consistently
-              child: widget.navBarBuilder(NavBarEssentials(
-                selectedIndex: _controller.index,
-                previousIndex: _previousIndex,
-                selectedScreenBuildContext: _contextList[_controller.index],
-                items: widget.items,
-                navBarHeight: widget.navBarHeight,
-                popScreensOnTapOfSelectedTab:
-                    widget.popAllScreensOnTapOfSelectedTab,
-                onItemSelected: (int index) {
-                  if (_controller.index != _previousIndex) {
-                    _previousIndex = _controller.index;
-                  }
-                  if ((widget.popAllScreensOnTapOfSelectedTab) &&
-                      _previousIndex == index) {
-                    popAllScreens();
-                  }
-                  _controller.index = index;
-                  widget.onItemSelected?.call(index);
-                },
-              )),
-            ),
-            tabBuilder: (BuildContext context, int index) {
-              return _buildScreen(index);
-            },
-          ),
+          tabBuilder: (BuildContext context, int index) {
+            return _buildScreen(index);
+          },
         ),
       );
 

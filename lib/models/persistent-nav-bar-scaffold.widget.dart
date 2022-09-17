@@ -41,10 +41,8 @@ class PersistentTabScaffold extends StatefulWidget {
     this.resizeToAvoidBottomInset = true,
     this.stateManagement,
     this.screenTransitionAnimation,
-    this.navBarHeight = kBottomNavigationBarHeight,
     this.itemCount,
     this.hideNavigationBar = false,
-    this.colorBehindNavBar = Colors.white,
     this.navBarOverlap = const NavBarOverlap.full(),
   }) : super(key: key);
 
@@ -60,8 +58,6 @@ class PersistentTabScaffold extends StatefulWidget {
 
   final int? itemCount;
 
-  final double navBarHeight;
-
   final bool confineInSafeArea;
 
   final EdgeInsets margin;
@@ -69,8 +65,6 @@ class PersistentTabScaffold extends StatefulWidget {
   final List<double> opacities;
 
   final bool hideNavigationBar;
-
-  final Color colorBehindNavBar;
 
   final bool? stateManagement;
 
@@ -82,103 +76,98 @@ class PersistentTabScaffold extends StatefulWidget {
   State<PersistentTabScaffold> createState() => _PersistentTabScaffoldState();
 }
 
-class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
-  late bool _reallyHideNavBar;
+class _PersistentTabScaffoldState extends State<PersistentTabScaffold>
+    with TickerProviderStateMixin {
   late bool _navBarFullyShown;
+  late final AnimationController _hideNavBarAnimationController =
+      AnimationController(
+    vsync: this,
+    duration: Duration(milliseconds: 500),
+  );
+  late final Animation<Offset> slideAnimation = Tween<Offset>(
+    begin: Offset.zero,
+    end: Offset(0, 1),
+  ).animate(CurvedAnimation(
+    parent: _hideNavBarAnimationController,
+    curve: Curves.ease,
+  ));
 
   initState() {
     super.initState();
-    _reallyHideNavBar = widget.hideNavigationBar;
     _navBarFullyShown = !widget.hideNavigationBar;
   }
 
   didUpdateWidget(PersistentTabScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.hideNavigationBar != oldWidget.hideNavigationBar) {
-      if (!widget.hideNavigationBar)
+      if (widget.hideNavigationBar) {
+        _hideNavBarAnimationController.forward();
         setState(() {
-          _reallyHideNavBar = false;
+          _navBarFullyShown = false;
         });
+      } else {
+        _hideNavBarAnimationController.reverse().whenComplete(() {
+          setState(() {
+            _navBarFullyShown = true;
+          });
+        });
+      }
     }
   }
 
   @override
+  void dispose() {
+    _hideNavBarAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final MediaQueryData existingMediaQuery = MediaQuery.of(context);
-    MediaQueryData newMediaQuery = MediaQuery.of(context);
+    return Scaffold(
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+      backgroundColor: widget.backgroundColor,
+      extendBody: true,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Builder(builder: (context) {
+        return _TabSwitchingView(
+          key: Key("TabSwitchingView"),
+          currentTabIndex: widget.controller.index,
+          tabCount: widget.itemCount,
+          tabBuilder: (context, index) {
+            double overlap = 0.0;
+            bool isNotOpaque = index > widget.opacities.length
+                ? false
+                : widget.opacities[index] != 1.0;
+            if ((isNotOpaque &&
+                    widget.navBarOverlap.fullOverlapWhenNotOpaque) ||
+                !_navBarFullyShown ||
+                widget.margin.bottom != 0) {
+              overlap = double.infinity;
+            } else {
+              overlap = widget.navBarOverlap.overlap;
+            }
 
-    if (widget.resizeToAvoidBottomInset) {
-      newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
-    }
-
-    return Stack(
-      children: <Widget>[
-        MediaQuery(
-          data: newMediaQuery,
-          child: Container(
-            color: widget.backgroundColor,
-            child: _TabSwitchingView(
-              key: Key("TabSwitchingView"),
-              currentTabIndex: widget.controller.index,
-              tabCount: widget.itemCount,
-              tabBuilder: (context, index) {
-                double contentPadding = 0.0;
-                double overlap = 0.0;
-                bool isNotOpaque = index > widget.opacities.length
-                    ? false
-                    : widget.opacities[index] != 1.0;
-                if (isNotOpaque &&
-                    widget.navBarOverlap.fullOverlapWhenNotOpaque) {
-                  overlap = double.infinity;
-                } else {
-                  overlap = widget.navBarOverlap.overlap;
-                }
-
-                if (widget.hideNavigationBar) {
-                  contentPadding = 0.0;
-                } else {
-                  contentPadding = max(0, widget.navBarHeight - overlap);
-                }
-                return PersistentTab(
-                  child: widget.tabBuilder(context, index),
-                  applySafeArea: isNotOpaque || widget.hideNavigationBar
-                      ? false
-                      : widget.confineInSafeArea &&
-                          widget.margin.bottom == 0 &&
-                          _navBarFullyShown,
-                  bottomMargin: _navBarFullyShown ? contentPadding : 0.0,
-                );
-              },
-              stateManagement: widget.stateManagement,
-              screenTransitionAnimation: widget.screenTransitionAnimation,
-            ),
-          ),
-        ),
-        AnimatedPositioned(
-          duration: Duration(milliseconds: 500),
-          curve: Curves.ease,
-          bottom: widget.hideNavigationBar
-              ? -(widget.navBarHeight + MediaQuery.of(context).padding.bottom)
-              : 0,
-          right: 0,
-          left: 0,
-          child: Container(
-            color: widget.colorBehindNavBar,
-            child: _reallyHideNavBar
-                ? Container()
-                : MediaQuery(
-                    data: existingMediaQuery.copyWith(textScaleFactor: 1),
-                    child: widget.tabBar,
-                  ),
-          ),
-          onEnd: () {
-            setState(() {
-              _reallyHideNavBar = widget.hideNavigationBar;
-              _navBarFullyShown = !widget.hideNavigationBar;
-            });
+            return PersistentTab(
+              child: widget.tabBuilder(context, index),
+              bottomMargin:
+                  max(0, MediaQuery.of(context).padding.bottom - overlap),
+            );
           },
+          stateManagement: widget.stateManagement,
+          screenTransitionAnimation: widget.screenTransitionAnimation,
+        );
+      }),
+      bottomNavigationBar: SlideTransition(
+        position: slideAnimation,
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+          child: widget.tabBar,
         ),
-      ],
+      ),
     );
   }
 }
@@ -186,25 +175,17 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold> {
 class PersistentTab extends StatelessWidget {
   final Widget? child;
   final double bottomMargin;
-  final bool applySafeArea;
 
   PersistentTab({
     this.child,
     this.bottomMargin = 0.0,
-    this.applySafeArea = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      right: false,
-      left: false,
-      bottom: applySafeArea,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: bottomMargin),
-        child: child,
-      ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomMargin),
+      child: child,
     );
   }
 }
