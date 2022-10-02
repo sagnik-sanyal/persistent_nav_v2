@@ -285,8 +285,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         Navigator.popUntil(
             _contextList[_controller.index]!,
             ModalRoute.withName(widget.tabs[_controller.index]
-                    .routeAndNavigatorSettings?.initialRoute ??
-                '/9f580fc5-c252-45d0-af25-9429992db112'));
+                    .routeAndNavigatorSettings.initialRoute ?? Navigator.defaultRouteName));
       }
     }
   }

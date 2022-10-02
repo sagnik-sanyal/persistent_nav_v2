@@ -73,7 +73,7 @@ class PersistentTabConfig {
 
   final ItemConfig item;
 
-  final RouteAndNavigatorSettings? routeAndNavigatorSettings;
+  final RouteAndNavigatorSettings routeAndNavigatorSettings;
 
   /// If you want custom behavior on a press of a NavBar item like display a modal screen, you can declare your logic here.
   ///
@@ -88,14 +88,14 @@ class PersistentTabConfig {
   PersistentTabConfig({
     required this.screen,
     required this.item,
-    this.routeAndNavigatorSettings,
+    this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
     this.onSelectedTabPressWhenNoScreensPushed,
   }) : onPressed = null;
 
   PersistentTabConfig.noScreen({
     required this.item,
     required this.onPressed,
-    this.routeAndNavigatorSettings,
+    this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
     this.onSelectedTabPressWhenNoScreensPushed,
   }) : screen = Container();
 }

@@ -12,9 +12,8 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
     return MaterialApp(
       title: 'Persistent Bottom Navigation Bar Demo',
       home: MainMenu(),
-      initialRoute: '/',
       routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
+        // When navigating to the "/first" route, build the FirstScreen widget.
         '/first': (context) => MainScreen2(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/second': (context) => MainScreen3(),
@@ -23,14 +22,9 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
   }
 }
 
-class MainMenu extends StatefulWidget {
+class MainMenu extends StatelessWidget {
   MainMenu({Key key}) : super(key: key);
 
-  @override
-  _MainMenuState createState() => _MainMenuState();
-}
-
-class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,13 +152,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           activeColorPrimary: Colors.teal,
           inactiveColorPrimary: Colors.grey,
         ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          initialRoute: '/',
-          routes: {
-            '/first': (context) => MainScreen2(),
-            '/second': (context) => MainScreen3(),
-          },
-        ),
       ),
       PersistentTabConfig.noScreen(
         item: ItemConfig(
@@ -173,13 +160,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           activeColorPrimary: Colors.blueAccent,
           activeColorSecondary: Colors.green,
           inactiveColorPrimary: Colors.grey,
-        ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          initialRoute: '/',
-          routes: {
-            '/first': (context) => MainScreen2(),
-            '/second': (context) => MainScreen3(),
-          },
         ),
         onPressed: (context) {
           pushDynamicScreen(context,
@@ -201,13 +181,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           activeColorPrimary: Colors.deepOrange,
           inactiveColorPrimary: Colors.grey,
         ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          initialRoute: '/',
-          routes: {
-            '/first': (context) => MainScreen2(),
-            '/second': (context) => MainScreen3(),
-          },
-        ),
       ),
       PersistentTabConfig(
         screen: MainScreen(
@@ -223,13 +196,6 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           title: "Settings",
           activeColorPrimary: Colors.indigo,
           inactiveColorPrimary: Colors.grey,
-        ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          initialRoute: '/',
-          routes: {
-            '/first': (context) => MainScreen2(),
-            '/second': (context) => MainScreen3(),
-          },
         ),
       ),
     ];
