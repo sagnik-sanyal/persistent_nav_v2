@@ -1,6 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
-class RouteAndNavigatorSettings {
+class NavigatorConfig {
   final String? defaultTitle;
 
   final Map<String, WidgetBuilder> routes;
@@ -15,7 +15,7 @@ class RouteAndNavigatorSettings {
 
   final GlobalKey<NavigatorState>? navigatorKey;
 
-  const RouteAndNavigatorSettings({
+  const NavigatorConfig({
     this.defaultTitle,
     this.routes = const {},
     this.onGenerateRoute,
@@ -25,7 +25,7 @@ class RouteAndNavigatorSettings {
     this.navigatorKey,
   });
 
-  RouteAndNavigatorSettings copyWith({
+  NavigatorConfig copyWith({
     String? defaultTitle,
     Map<String, WidgetBuilder>? routes,
     RouteFactory? onGenerateRoute,
@@ -34,7 +34,7 @@ class RouteAndNavigatorSettings {
     List<NavigatorObserver>? navigatorObservers,
     GlobalKey<NavigatorState>? navigatorKeys,
   }) {
-    return RouteAndNavigatorSettings(
+    return NavigatorConfig(
       defaultTitle: defaultTitle ?? this.defaultTitle,
       routes: routes ?? this.routes,
       onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,

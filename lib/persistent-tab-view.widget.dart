@@ -161,7 +161,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
   Widget _buildScreen(int index) {
     return CustomTabView(
-      routeAndNavigatorSettings: widget.tabs[index].routeAndNavigatorSettings,
+      navigatorConfig: widget.tabs[index].navigatorConfig,
       builder: (BuildContext screenContext) {
         _contextList[index] = screenContext;
         if (_sendScreenContext) {
@@ -284,8 +284,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       } else {
         Navigator.popUntil(
             _contextList[_controller.index]!,
-            ModalRoute.withName(widget.tabs[_controller.index]
-                    .routeAndNavigatorSettings.initialRoute ?? Navigator.defaultRouteName));
+            ModalRoute.withName(
+                widget.tabs[_controller.index].navigatorConfig.initialRoute ??
+                    Navigator.defaultRouteName));
       }
     }
   }

@@ -60,7 +60,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           activeColorPrimary: Colors.teal,
           inactiveColorPrimary: Colors.grey,
         ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+        navigatorConfig: NavigatorConfig(
           initialRoute: '/',
           routes: {
             '/first': (context) => MainScreen2(),
@@ -75,7 +75,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           activeColorPrimary: Colors.blueAccent,
           inactiveColorPrimary: Colors.grey,
         ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+        navigatorConfig: NavigatorConfig(
           initialRoute: '/',
           routes: {
             '/first': (context) => MainScreen2(),
@@ -102,7 +102,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           activeColorPrimary: Colors.deepOrange,
           inactiveColorPrimary: Colors.grey,
         ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+        navigatorConfig: NavigatorConfig(
           initialRoute: '/',
           routes: {
             '/first': (context) => MainScreen2(),
@@ -125,7 +125,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           activeColorPrimary: Colors.indigo,
           inactiveColorPrimary: Colors.grey,
         ),
-        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+        navigatorConfig: NavigatorConfig(
           initialRoute: '/',
           routes: {
             '/first': (context) => MainScreen2(),
