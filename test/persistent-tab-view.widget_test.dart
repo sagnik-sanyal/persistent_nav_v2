@@ -303,7 +303,7 @@ void main() {
             screens: [1, 2, 3].map((id) => defaultScreen(id)).toList(),
             items: items,
             navBarStyle: NavBarStyle.style3,
-            onItemSelected: (index) => count++,
+            onTabChanged: (index) => count++,
           ),
         ),
       );
@@ -1334,7 +1334,7 @@ class _CustomViewState extends State<CustomView> {
                           onTap: () {
                             setState(() {
                               navBarEssentials
-                                  .onItemSelected!(items.indexOf(item));
+                                  .onTabChanged!(items.indexOf(item));
                             });
                           },
                           child: Column(

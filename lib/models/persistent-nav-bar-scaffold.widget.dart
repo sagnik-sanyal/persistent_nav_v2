@@ -9,12 +9,15 @@ class PersistentTabController extends ChangeNotifier {
   int get index => _index;
   int _index;
 
+  ValueChanged<int>? onIndexChanged;
+
   set index(int value) {
     assert(value >= 0);
     if (_index == value) {
       return;
     }
     _index = value;
+    this.onIndexChanged?.call(value);
     notifyListeners();
   }
 
@@ -24,6 +27,7 @@ class PersistentTabController extends ChangeNotifier {
       return;
     }
     _index = value;
+    this.onIndexChanged?.call(value);
     notifyListeners();
   }
 }

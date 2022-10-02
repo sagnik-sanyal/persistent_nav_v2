@@ -16,8 +16,8 @@ class PersistentTabView extends StatefulWidget {
   /// Background color of bottom navigation bar. `Colors.white` by default.
   final Color backgroundColor;
 
-  /// Callback when page or tab change is detected.
-  final ValueChanged<int>? onItemSelected;
+  /// Callback when the tab changed. The index of the new tab is passed as a parameter.
+  final ValueChanged<int>? onTabChanged;
 
   /// A button displayed floating above the screens content.
   /// The position can be changed using [floatingActionButtonLocation].
@@ -103,7 +103,7 @@ class PersistentTabView extends StatefulWidget {
     this.navBarOverlap = const NavBarOverlap.full(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
-    this.onItemSelected,
+    this.onTabChanged,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
@@ -135,6 +135,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     super.initState();
 
     _controller = widget.controller ?? PersistentTabController(initialIndex: 0);
+    _controller.onIndexChanged = widget.onTabChanged;
 
     _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
 
@@ -209,7 +210,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
               onItemSelected: (int index) {
                 if (widget.tabs[index].onPressed != null) {
                   widget.tabs[index].onPressed!(context);
-                  widget.onItemSelected?.call(index);
                   return false;
                 } else {
                   _previousIndex = _controller.index;
@@ -219,7 +219,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                   }
                   _controller.index = index;
                 }
-                widget.onItemSelected?.call(index);
                 return true;
               },
             ),
@@ -252,9 +251,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                       if (Navigator.canPop(_contextList[_controller.index]!)) {
                         Navigator.pop(_contextList[_controller.index]!);
                       } else {
-                        if (widget.onItemSelected != null) {
-                          widget.onItemSelected!(0);
-                        }
                         _controller.index = 0;
                       }
                       return false;

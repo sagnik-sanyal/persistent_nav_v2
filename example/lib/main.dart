@@ -215,6 +215,9 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
       hideNavigationBarWhenKeyboardShows: true,
       margin: EdgeInsets.all(0.0),
       popActionScreens: PopActionScreensType.all,
+      onTabChanged: (i) {
+        print("Switched to tab $i");
+      },
       floatingActionButton: IconButton(
           onPressed: () {},
           icon: Icon(
