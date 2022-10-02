@@ -44,6 +44,8 @@ class PersistentTabScaffold extends StatefulWidget {
     this.itemCount,
     this.hideNavigationBar = false,
     this.navBarOverlap = const NavBarOverlap.full(),
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
   }) : super(key: key);
 
   final Widget tabBar;
@@ -71,6 +73,10 @@ class PersistentTabScaffold extends StatefulWidget {
   final NavBarOverlap navBarOverlap;
 
   final ScreenTransitionAnimation? screenTransitionAnimation;
+
+  final Widget? floatingActionButton;
+
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   @override
   State<PersistentTabScaffold> createState() => _PersistentTabScaffoldState();
@@ -127,11 +133,8 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold>
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
       extendBody: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation,
       body: Builder(builder: (context) {
         return _TabSwitchingView(
           key: Key("TabSwitchingView"),

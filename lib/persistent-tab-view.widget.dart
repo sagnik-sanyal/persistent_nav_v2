@@ -22,12 +22,17 @@ class PersistentTabView extends StatefulWidget {
   /// Callback when page or tab change is detected.
   final ValueChanged<int>? onItemSelected;
 
-  /// A custom widget which is displayed at the bottom right of the display at all times.
+  /// A button displayed floating above the screens content.
+  /// The position can be changed using [floatingActionButtonLocation].
+  /// The button will be displayed on all screens equally.
+  ///
+  /// Typically a [FloatingActionButton].
   final Widget? floatingActionButton;
 
-  /// Position of the floating action button from the bottom right corner.
-  /// `Offset(10, 10)` by default.
-  final Offset floatingActionButtonOffset;
+  /// Responsible for determining where the [floatingActionButton] should go.
+  ///
+  /// Defaults to [FloatingActionButtonLocation.endFloat].
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   /// Specifies the navBarHeight
   ///
@@ -107,7 +112,7 @@ class PersistentTabView extends StatefulWidget {
     this.backgroundColor = Colors.white,
     this.onItemSelected,
     this.floatingActionButton,
-    this.floatingActionButtonOffset = const Offset(10, 10),
+    this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
     this.selectedTabScreenContext,
     this.hideNavigationBarWhenKeyboardShows = true,
@@ -144,8 +149,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
     _controller = widget.controller ?? PersistentTabController(initialIndex: 0);
 
-    _contextList = List<BuildContext?>.filled(
-        widget.items.length, null);
+    _contextList = List<BuildContext?>.filled(widget.items.length, null);
 
     _previousIndex = _controller.index;
     _currentIndex = _controller.index;
@@ -169,49 +173,21 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   Widget _buildScreen(int index) {
-    if (widget.floatingActionButton != null) {
-      return Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          SizedBox.expand(
-            child: CustomTabView(
-              routeAndNavigatorSettings:
-                  widget.items[index].routeAndNavigatorSettings,
-              builder: (BuildContext screenContext) {
-                _contextList[index] = screenContext;
-                if (_sendScreenContext) {
-                  _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(
-                      _contextList[_controller.index]);
-                }
-                return Material(elevation: 0, child: widget.screens[index]);
-              },
-            ),
-          ),
-          Positioned(
-            bottom: widget.floatingActionButtonOffset.dy,
-            right: widget.floatingActionButtonOffset.dx,
-            child: widget.floatingActionButton!,
-          ),
-        ],
-      );
-    } else {
-      return CustomTabView(
-          routeAndNavigatorSettings:
-              widget.items[index].routeAndNavigatorSettings,
-          builder: (BuildContext screenContext) {
-            _contextList[index] = screenContext;
-            if (_sendScreenContext) {
-              _sendScreenContext = false;
-              widget.selectedTabScreenContext!(_contextList[_controller.index]);
-            }
-            return Material(
-              elevation: 0,
-              child: widget.screens[index],
-              type: MaterialType.transparency,
-            );
-          });
-    }
+    return CustomTabView(
+      routeAndNavigatorSettings: widget.items[index].routeAndNavigatorSettings,
+      builder: (BuildContext screenContext) {
+        _contextList[index] = screenContext;
+        if (_sendScreenContext) {
+          _sendScreenContext = false;
+          widget.selectedTabScreenContext!(_contextList[_controller.index]);
+        }
+        return Material(
+          elevation: 0,
+          child: widget.screens[index],
+          type: MaterialType.transparency,
+        );
+      },
+    );
   }
 
   Widget navigationBarWidget() => MediaQuery(
@@ -232,6 +208,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
           avoidBottomPadding: widget.avoidBottomPadding,
           margin: widget.margin,
+          floatingActionButton: widget.floatingActionButton,
+          floatingActionButtonLocation: widget.floatingActionButtonLocation,
           tabBar: widget.navBarBuilder(
             NavBarEssentials(
               selectedIndex: _controller.index,
@@ -263,8 +241,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   @override
   Widget build(BuildContext context) {
     if (_contextList.length != widget.items.length) {
-      _contextList = List<BuildContext?>.filled(
-          widget.items.length, null);
+      _contextList = List<BuildContext?>.filled(widget.items.length, null);
     }
     if (widget.handleAndroidBackButtonPress || widget.onWillPop != null) {
       return WillPopScope(
