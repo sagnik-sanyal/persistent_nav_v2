@@ -13,7 +13,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   }) : super(key: key);
 
   Widget _getNavItem(
-    PersistentBottomNavBarItem item,
+    ItemConfig item,
     bool isSelected,
   ) =>
       Column(
@@ -44,10 +44,10 @@ class NeumorphicBottomNavBar extends StatelessWidget {
 
   Widget _buildItem(
     BuildContext context,
-    PersistentBottomNavBarItem item,
+    ItemConfig item,
     bool isSelected,
   ) =>
-      opaque(this.navBarEssentials.items!, this.navBarEssentials.selectedIndex)
+      item.opacity == 1.0
           ? NeumorphicContainer(
               decoration: this.neumorphicProperties.decoration?.copyWith(
                     color: this.neumorphicProperties.decoration?.color ??
@@ -86,17 +86,13 @@ class NeumorphicBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials.items!.map((item) {
-          int index = this.navBarEssentials.items!.indexOf(item);
+        children: this.navBarEssentials.items.map((item) {
+          int index = this.navBarEssentials.items.indexOf(item);
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                if (item.onPressed != null) {
-                  item.onPressed!(
-                      this.navBarEssentials.selectedScreenBuildContext);
-                } else {
                   this.navBarEssentials.onItemSelected!(index);
-                }
+
               },
               child: _buildItem(
                 context,

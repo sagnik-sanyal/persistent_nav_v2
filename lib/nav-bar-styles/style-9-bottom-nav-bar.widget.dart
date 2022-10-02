@@ -14,8 +14,7 @@ class BottomNavStyle9 extends StatelessWidget {
     this.itemAnimationProperties = const ItemAnimationProperties(),
   });
 
-  Widget _buildItem(
-      PersistentBottomNavBarItem item, bool isSelected, double? height) {
+  Widget _buildItem(ItemConfig item, bool isSelected) {
     return AnimatedContainer(
       width: isSelected ? 120 : 50,
       duration: this.itemAnimationProperties.duration,
@@ -70,23 +69,15 @@ class BottomNavStyle9 extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials.items!.map((item) {
-          int index = this.navBarEssentials.items!.indexOf(item);
+        children: this.navBarEssentials.items.map((item) {
+          int index = this.navBarEssentials.items.indexOf(item);
           return GestureDetector(
             onTap: () {
-              if (this.navBarEssentials.items![index].onPressed != null) {
-                this.navBarEssentials.items![index].onPressed!(
-                    this.navBarEssentials.selectedScreenBuildContext);
-              } else {
-                this.navBarEssentials.onItemSelected!(index);
-              }
+              this.navBarEssentials.onItemSelected!(index);
             },
-            child: Container(
-              color: Colors.transparent,
-              child: _buildItem(
-                  item,
-                  this.navBarEssentials.selectedIndex == index,
-                  this.navBarEssentials.navBarHeight),
+            child: _buildItem(
+              item,
+              this.navBarEssentials.selectedIndex == index,
             ),
           );
         }).toList(),

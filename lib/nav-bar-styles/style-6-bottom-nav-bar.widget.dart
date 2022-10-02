@@ -34,7 +34,7 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
     _animationControllerList = List<AnimationController>.empty(growable: true);
     _animationList = List<Animation<double>>.empty(growable: true);
 
-    for (int i = 0; i < widget.navBarEssentials.items!.length; ++i) {
+    for (int i = 0; i < widget.navBarEssentials.items.length; ++i) {
       _animationControllerList.add(AnimationController(
           duration: widget.itemAnimationProperties.duration, vsync: this));
       _animationList.add(Tween(begin: 0.95, end: 1.18)
@@ -47,8 +47,7 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
     });
   }
 
-  Widget _buildItem(
-      PersistentBottomNavBarItem item, bool isSelected, int itemIndex) {
+  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) {
     return AnimatedBuilder(
       animation: _animationList[itemIndex],
       // TODO: Change to ScaleTransition?
@@ -85,7 +84,7 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
 
   @override
   void dispose() {
-    for (int i = 0; i < widget.navBarEssentials.items!.length; ++i) {
+    for (int i = 0; i < widget.navBarEssentials.items.length; ++i) {
       _animationControllerList[i].dispose();
     }
     super.dispose();
@@ -93,13 +92,13 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.navBarEssentials.items!.length !=
+    if (widget.navBarEssentials.items.length !=
         _animationControllerList.length) {
       _animationControllerList =
           List<AnimationController>.empty(growable: true);
       _animationList = List<Animation<double>>.empty(growable: true);
 
-      for (int i = 0; i < widget.navBarEssentials.items!.length; ++i) {
+      for (int i = 0; i < widget.navBarEssentials.items.length; ++i) {
         _animationControllerList.add(AnimationController(
             duration: widget.itemAnimationProperties.duration, vsync: this));
         _animationList.add(Tween(begin: 0.95, end: 1.18)
@@ -116,29 +115,27 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
     return DecoratedNavBar(
       appearance: widget.navBarDecoration,
       filter: widget.navBarEssentials
-          .items![widget.navBarEssentials.selectedIndex!].filter,
+          .items[widget.navBarEssentials.selectedIndex!].filter,
       opacity: widget.navBarEssentials
-          .items![widget.navBarEssentials.selectedIndex!].opacity,
+          .items[widget.navBarEssentials.selectedIndex!].opacity,
       height: widget.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: widget.navBarEssentials.items!.map((item) {
-          int index = widget.navBarEssentials.items!.indexOf(item);
+        children: widget.navBarEssentials.items.map((item) {
+          int index = widget.navBarEssentials.items.indexOf(item);
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                if (widget.navBarEssentials.items![index].onPressed != null) {
-                  widget.navBarEssentials.items![index].onPressed!(
-                      widget.navBarEssentials.selectedScreenBuildContext);
-                } else {
+                bool didSwitchTab =
+                    widget.navBarEssentials.onItemSelected!(index);
+                if (didSwitchTab) {
                   if (index != _selectedIndex) {
                     _lastSelectedIndex = _selectedIndex;
                     _selectedIndex = index;
                     _animationControllerList[_selectedIndex!].forward();
                     _animationControllerList[_lastSelectedIndex!].reverse();
                   }
-                  widget.navBarEssentials.onItemSelected!(index);
                 }
               },
               child: _buildItem(

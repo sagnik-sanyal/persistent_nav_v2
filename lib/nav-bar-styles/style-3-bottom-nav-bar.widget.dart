@@ -14,8 +14,7 @@ class BottomNavStyle3 extends StatelessWidget {
     this.itemAnimationProperties = const ItemAnimationProperties(),
   });
 
-  Widget _buildItem(
-      PersistentBottomNavBarItem item, bool isSelected, double? height) {
+  Widget _buildItem(ItemConfig item, bool isSelected) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +51,7 @@ class BottomNavStyle3 extends StatelessWidget {
         this.navBarEssentials.currentItem.activeColorPrimary;
     double itemWidth = ((MediaQuery.of(context).size.width -
             this.navBarDecoration.padding.horizontal) /
-        this.navBarEssentials.items!.length);
+        this.navBarEssentials.items.length);
     return DecoratedNavBar(
       appearance: this.navBarDecoration,
       filter: this.navBarEssentials.currentItem.filter,
@@ -90,24 +89,16 @@ class BottomNavStyle3 extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: this.navBarEssentials.items!.map((item) {
-                int index = this.navBarEssentials.items!.indexOf(item);
-                return Expanded(
-                  child: GestureDetector(
+              children: this.navBarEssentials.items.map((item) {
+                int index = this.navBarEssentials.items.indexOf(item);
+                return Flexible(
+                  child: InkWell(
                     onTap: () {
-                      if (this.navBarEssentials.items![index].onPressed !=
-                          null) {
-                        this.navBarEssentials.items![index].onPressed!(
-                            this.navBarEssentials.selectedScreenBuildContext);
-                      } else {
-                        this.navBarEssentials.onItemSelected!(index);
-                      }
+                      this.navBarEssentials.onItemSelected!(index);
                     },
-                    child: Container(
-                      child: _buildItem(
-                          item,
-                          this.navBarEssentials.selectedIndex == index,
-                          this.navBarEssentials.navBarHeight),
+                    child: _buildItem(
+                      item,
+                      this.navBarEssentials.selectedIndex == index,
                     ),
                   ),
                 );

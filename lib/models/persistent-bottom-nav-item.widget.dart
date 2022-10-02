@@ -1,7 +1,9 @@
 part of persistent_bottom_nav_bar_v2;
 
-/// An item widget for the `PersistentTabView`.
-class PersistentBottomNavBarItem {
+/// Configuration for an individual Item in the navbar.
+/// Styling depends on the styling of the navigation bar.
+/// Needs to be passed to the [PersistentTabView] widget via [PersistentTabConfig].
+class ItemConfig {
   /// Icon for the bar item.
   final Widget icon;
 
@@ -33,16 +35,6 @@ class PersistentBottomNavBarItem {
   /// `Warning: Screen will cover the entire extent of the display`
   final double opacity;
 
-  /// If you want custom behavior on a press of a NavBar item like display a modal screen, you can declare your logic here.
-  ///
-  /// NOTE: This will override the default tab switiching behavior for this particular item.
-  final Function(BuildContext?)? onPressed;
-
-  /// Use it when you want to run some code when user presses the NavBar when on the initial screen of that respective tab. The inspiration was taken from the native iOS navigation bar behavior where when performing similar operation, you taken to the top of the list.
-  ///
-  /// NOTE: This feature is experimental at the moment and might not work as intended for some.
-  final Function? onSelectedTabPressWhenNoScreensPushed;
-
   /// Filter used when `opacity < 1.0`. Can be used to create 'frosted glass' effect.
   ///
   /// By default -> `ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0)`.
@@ -53,9 +45,7 @@ class PersistentBottomNavBarItem {
 
   final double iconSize;
 
-  final RouteAndNavigatorSettings routeAndNavigatorSettings;
-
-  PersistentBottomNavBarItem({
+  ItemConfig({
     required this.icon,
     Icon? inactiveIcon,
     this.title,
@@ -72,11 +62,40 @@ class PersistentBottomNavBarItem {
       fontSize: 12.0,
     ),
     this.iconSize = 26.0,
-    this.onSelectedTabPressWhenNoScreensPushed,
-    this.routeAndNavigatorSettings = const RouteAndNavigatorSettings(),
-    this.onPressed,
   })  : inactiveIcon = inactiveIcon ?? icon,
         activeColorSecondary =
             activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
         assert(opacity >= 0 && opacity <= 1.0);
+}
+
+class PersistentTabConfig {
+  final Widget screen;
+
+  final ItemConfig item;
+
+  final RouteAndNavigatorSettings? routeAndNavigatorSettings;
+
+  /// If you want custom behavior on a press of a NavBar item like display a modal screen, you can declare your logic here.
+  ///
+  /// NOTE: This will override the default tab switiching behavior for this particular item.
+  final void Function(BuildContext)? onPressed;
+
+  /// Use it when you want to run some code when user presses the NavBar when on the initial screen of that respective tab. The inspiration was taken from the native iOS navigation bar behavior where when performing similar operation, you taken to the top of the list.
+  ///
+  /// NOTE: This feature is experimental at the moment and might not work as intended for some.
+  final Function? onSelectedTabPressWhenNoScreensPushed;
+
+  PersistentTabConfig({
+    required this.screen,
+    required this.item,
+    this.routeAndNavigatorSettings,
+    this.onSelectedTabPressWhenNoScreensPushed,
+  }) : onPressed = null;
+
+  PersistentTabConfig.noScreen({
+    required this.item,
+    required this.onPressed,
+    this.routeAndNavigatorSettings,
+    this.onSelectedTabPressWhenNoScreensPushed,
+  }) : screen = Container();
 }

@@ -10,7 +10,7 @@ class BottomNavStyle5 extends StatelessWidget {
     this.navBarDecoration = const NavBarAppearance(),
   });
 
-  Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected) {
+  Widget _buildItem(ItemConfig item, bool isSelected) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,18 +46,13 @@ class BottomNavStyle5 extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials.items!.map((item) {
-          int index = this.navBarEssentials.items!.indexOf(item);
+        children: this.navBarEssentials.items.map((item) {
+          int index = this.navBarEssentials.items.indexOf(item);
           return Expanded(
             child: InkWell(
               splashFactory: NoSplash.splashFactory,
               onTap: () {
-                if (this.navBarEssentials.items![index].onPressed != null) {
-                  this.navBarEssentials.items![index].onPressed!(
-                      this.navBarEssentials.selectedScreenBuildContext);
-                } else {
-                  this.navBarEssentials.onItemSelected!(index);
-                }
+                this.navBarEssentials.onItemSelected!(index);
               },
               child: _buildItem(
                 item,

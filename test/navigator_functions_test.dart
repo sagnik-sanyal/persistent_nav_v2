@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
-List<PersistentBottomNavBarItem> items = [
-  PersistentBottomNavBarItem(title: "Item1", icon: Icon(Icons.add)),
-  PersistentBottomNavBarItem(title: "Item2", icon: Icon(Icons.add)),
-  PersistentBottomNavBarItem(title: "Item3", icon: Icon(Icons.add)),
+List<ItemConfig> items = [
+  ItemConfig(title: "Item1", icon: Icon(Icons.add)),
+  ItemConfig(title: "Item2", icon: Icon(Icons.add)),
+  ItemConfig(title: "Item3", icon: Icon(Icons.add)),
 ];
 
 Widget defaultScreen(int id) => Container(child: Text("Screen$id"));

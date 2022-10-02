@@ -1,13 +1,17 @@
 part of persistent_bottom_nav_bar_v2;
 
 class CustomTabView extends StatefulWidget {
+  final RouteAndNavigatorSettings? routeAndNavigatorSettings;
+
+  final WidgetBuilder? builder;
+
   const CustomTabView({
     Key? key,
     this.builder,
-    this.routeAndNavigatorSettings,
-  }) : super(key: key);
-  final WidgetBuilder? builder;
-  final RouteAndNavigatorSettings? routeAndNavigatorSettings;
+    RouteAndNavigatorSettings? routeAndNavigatorSettings,
+  })  : routeAndNavigatorSettings =
+            routeAndNavigatorSettings ?? const RouteAndNavigatorSettings(),
+        super(key: key);
 
   @override
   _CustomTabViewState createState() {

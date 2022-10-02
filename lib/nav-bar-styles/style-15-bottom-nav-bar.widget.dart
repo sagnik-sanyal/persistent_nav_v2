@@ -8,10 +8,11 @@ class BottomNavStyle15 extends StatelessWidget {
     Key? key,
     required this.navBarEssentials,
     this.navBarDecoration = const NavBarAppearance(),
-  });
+  })  : assert(navBarEssentials.items.length % 2 == 1,
+            "The number of items must be odd for this style"),
+        super(key: key);
 
-  Widget _buildItem(
-      BuildContext context, PersistentBottomNavBarItem item, bool isSelected) {
+  Widget _buildItem(BuildContext context, ItemConfig item, bool isSelected) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,8 +42,7 @@ class BottomNavStyle15 extends StatelessWidget {
     );
   }
 
-  Widget _buildMiddleItem(
-      PersistentBottomNavBarItem item, bool isSelected, double? height) {
+  Widget _buildMiddleItem(ItemConfig item, bool isSelected, double? height) {
     return Container(
       width: 150.0,
       height: height,
@@ -89,7 +89,7 @@ class BottomNavStyle15 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final midIndex = (this.navBarEssentials.items!.length / 2).floor();
+    final midIndex = (this.navBarEssentials.items.length / 2).floor();
     return Stack(
       alignment: Alignment.bottomCenter,
       children: <Widget>[
@@ -107,18 +107,12 @@ class BottomNavStyle15 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: this.navBarEssentials.items!.map((item) {
-                  int index = this.navBarEssentials.items!.indexOf(item);
+                children: this.navBarEssentials.items.map((item) {
+                  int index = this.navBarEssentials.items.indexOf(item);
                   return Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        if (this.navBarEssentials.items![index].onPressed !=
-                            null) {
-                          this.navBarEssentials.items![index].onPressed!(
-                              this.navBarEssentials.selectedScreenBuildContext);
-                        } else {
-                          this.navBarEssentials.onItemSelected!(index);
-                        }
+                        this.navBarEssentials.onItemSelected!(index);
                       },
                       child: index == midIndex
                           ? Container(width: 150, color: Colors.transparent)
@@ -139,16 +133,10 @@ class BottomNavStyle15 extends StatelessWidget {
           child: Center(
             child: GestureDetector(
                 onTap: () {
-                  if (this.navBarEssentials.items![midIndex].onPressed !=
-                      null) {
-                    this.navBarEssentials.items![midIndex].onPressed!(
-                        this.navBarEssentials.selectedScreenBuildContext);
-                  } else {
-                    this.navBarEssentials.onItemSelected!(midIndex);
-                  }
+                  this.navBarEssentials.onItemSelected!(midIndex);
                 },
                 child: _buildMiddleItem(
-                    this.navBarEssentials.items![midIndex],
+                    this.navBarEssentials.items[midIndex],
                     this.navBarEssentials.selectedIndex == midIndex,
                     this.navBarEssentials.navBarHeight)),
           ),

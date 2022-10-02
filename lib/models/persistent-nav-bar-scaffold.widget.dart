@@ -34,6 +34,7 @@ class PersistentTabScaffold extends StatefulWidget {
     required this.tabBar,
     required this.tabBuilder,
     required this.controller,
+    required this.tabCount,
     this.opacities = const [],
     this.backgroundColor,
     this.avoidBottomPadding = true,
@@ -41,7 +42,6 @@ class PersistentTabScaffold extends StatefulWidget {
     this.resizeToAvoidBottomInset = true,
     this.stateManagement,
     this.screenTransitionAnimation,
-    this.itemCount,
     this.hideNavigationBar = false,
     this.navBarOverlap = const NavBarOverlap.full(),
     this.floatingActionButton,
@@ -58,7 +58,7 @@ class PersistentTabScaffold extends StatefulWidget {
 
   final bool resizeToAvoidBottomInset;
 
-  final int? itemCount;
+  final int tabCount;
 
   final bool avoidBottomPadding;
 
@@ -139,7 +139,7 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold>
         return _TabSwitchingView(
           key: Key("TabSwitchingView"),
           currentTabIndex: widget.controller.index,
-          tabCount: widget.itemCount,
+          tabCount: widget.tabCount,
           tabBuilder: (context, index) {
             double overlap = 0.0;
             bool isNotOpaque = index > widget.opacities.length

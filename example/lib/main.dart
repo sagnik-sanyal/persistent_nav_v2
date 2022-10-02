@@ -124,65 +124,40 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
     _hideNavBar = false;
   }
 
-  List<Widget> _buildScreens() {
+  List<PersistentTabConfig> _tabs() {
     return [
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.home),
+          title: "Home",
+          activeColorPrimary: Colors.blue,
+          inactiveColorPrimary: Colors.grey,
+          inactiveColorSecondary: Colors.purple,
+        ),
       ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-    ];
-  }
-
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
-        inactiveColorSecondary: Colors.purple,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.search),
-        title: "Search",
-        activeColorPrimary: Colors.teal,
-        inactiveColorPrimary: Colors.grey,
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.search),
+          title: "Search",
+          activeColorPrimary: Colors.teal,
+          inactiveColorPrimary: Colors.grey,
+        ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
           routes: {
@@ -191,28 +166,41 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           },
         ),
       ),
-      PersistentBottomNavBarItem(
+      PersistentTabConfig.noScreen(
+        item: ItemConfig(
           icon: Icon(Icons.add),
           title: "Add",
           activeColorPrimary: Colors.blueAccent,
-          activeColorSecondary: Colors.white,
-          inactiveColorPrimary: Colors.white,
-          routeAndNavigatorSettings: RouteAndNavigatorSettings(
-            initialRoute: '/',
-            routes: {
-              '/first': (context) => MainScreen2(),
-              '/second': (context) => MainScreen3(),
-            },
-          ),
-          onPressed: (context) {
-            pushDynamicScreen(context,
-                screen: SampleModalScreen(), withNavBar: true);
-          }),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.message),
-        title: "Messages",
-        activeColorPrimary: Colors.deepOrange,
-        inactiveColorPrimary: Colors.grey,
+          activeColorSecondary: Colors.green,
+          inactiveColorPrimary: Colors.grey,
+        ),
+        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+          initialRoute: '/',
+          routes: {
+            '/first': (context) => MainScreen2(),
+            '/second': (context) => MainScreen3(),
+          },
+        ),
+        onPressed: (context) {
+          pushDynamicScreen(context,
+              screen: SampleModalScreen(), withNavBar: true);
+        },
+      ),
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.message),
+          title: "Messages",
+          activeColorPrimary: Colors.deepOrange,
+          inactiveColorPrimary: Colors.grey,
+        ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
           routes: {
@@ -221,11 +209,21 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
           },
         ),
       ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: "Settings",
-        activeColorPrimary: Colors.indigo,
-        inactiveColorPrimary: Colors.grey,
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.settings),
+          title: "Settings",
+          activeColorPrimary: Colors.indigo,
+          inactiveColorPrimary: Colors.grey,
+        ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
           routes: {
@@ -240,10 +238,8 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
-      context,
       controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
+      tabs: _tabs(),
       navBarOverlap: NavBarOverlap.none(),
       avoidBottomPadding: true,
       handleAndroidBackButtonPress: true,
@@ -297,7 +293,7 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
 
 class CustomNavBarWidget extends StatelessWidget {
   final int selectedIndex;
-  final List<PersistentBottomNavBarItem> items;
+  final List<ItemConfig> items;
   final ValueChanged<int> onItemSelected;
 
   CustomNavBarWidget({
@@ -307,7 +303,7 @@ class CustomNavBarWidget extends StatelessWidget {
     this.onItemSelected,
   });
 
-  Widget _buildItem(PersistentBottomNavBarItem item, bool isSelected) {
+  Widget _buildItem(ItemConfig item, bool isSelected) {
     return Container(
       alignment: Alignment.center,
       height: kBottomNavigationBarHeight,

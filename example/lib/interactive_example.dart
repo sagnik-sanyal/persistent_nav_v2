@@ -26,65 +26,40 @@ class _InteractiveExampleState extends State<InteractiveExample> {
     _controller = PersistentTabController(initialIndex: 0);
   }
 
-  List<Widget> _buildScreens() {
+  List<PersistentTabConfig> _tabs() {
     return [
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.home),
+          title: "Home",
+          activeColorPrimary: Colors.blue,
+          inactiveColorPrimary: Colors.grey,
+          inactiveColorSecondary: Colors.purple,
+        ),
       ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      MainScreen(
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-    ];
-  }
-
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey,
-        inactiveColorSecondary: Colors.purple,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.search),
-        title: "Search",
-        activeColorPrimary: Colors.teal,
-        inactiveColorPrimary: Colors.grey,
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.search),
+          title: "Search",
+          activeColorPrimary: Colors.teal,
+          inactiveColorPrimary: Colors.grey,
+        ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
           routes: {
@@ -93,27 +68,40 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           },
         ),
       ),
-      PersistentBottomNavBarItem(
+      PersistentTabConfig.noScreen(
+        item: ItemConfig(
           icon: Icon(Icons.add),
           title: "Add",
           activeColorPrimary: Colors.blueAccent,
           inactiveColorPrimary: Colors.grey,
-          routeAndNavigatorSettings: RouteAndNavigatorSettings(
-            initialRoute: '/',
-            routes: {
-              '/first': (context) => MainScreen2(),
-              '/second': (context) => MainScreen3(),
-            },
-          ),
-          onPressed: (context) {
-            pushDynamicScreen(context,
-                screen: SampleModalScreen(), withNavBar: true);
-          }),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.message),
-        title: "Messages",
-        activeColorPrimary: Colors.deepOrange,
-        inactiveColorPrimary: Colors.grey,
+        ),
+        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+          initialRoute: '/',
+          routes: {
+            '/first': (context) => MainScreen2(),
+            '/second': (context) => MainScreen3(),
+          },
+        ),
+        onPressed: (context) {
+          pushDynamicScreen(context,
+              screen: SampleModalScreen(), withNavBar: true);
+        },
+      ),
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.message),
+          title: "Messages",
+          activeColorPrimary: Colors.deepOrange,
+          inactiveColorPrimary: Colors.grey,
+        ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
           routes: {
@@ -122,11 +110,21 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           },
         ),
       ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: "Settings",
-        activeColorPrimary: Colors.indigo,
-        inactiveColorPrimary: Colors.grey,
+      PersistentTabConfig(
+        screen: MainScreen(
+          hideStatus: _hideNavBar,
+          onScreenHideButtonPressed: () {
+            setState(() {
+              _hideNavBar = !_hideNavBar;
+            });
+          },
+        ),
+        item: ItemConfig(
+          icon: Icon(Icons.settings),
+          title: "Settings",
+          activeColorPrimary: Colors.indigo,
+          inactiveColorPrimary: Colors.grey,
+        ),
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
           routes: {
@@ -280,10 +278,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
-      context,
       controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
+      tabs: _tabs(),
       navBarBuilder: (essentials) => BottomNavStyle11(
         navBarEssentials: essentials,
         navBarDecoration: NavBarAppearance(
@@ -291,10 +287,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           decoration: BoxDecoration(
             color: Colors.pink,
             borderRadius: BorderRadius.circular(10.0),
-            border: Border.all(
-              color: Colors.black,
-              width: 0.0,
-            ),
           ),
         ),
       ),

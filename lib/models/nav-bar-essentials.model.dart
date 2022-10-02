@@ -4,8 +4,8 @@ part of persistent_bottom_nav_bar_v2;
 class NavBarEssentials {
   final int? selectedIndex;
   final int? previousIndex;
-  final List<PersistentBottomNavBarItem>? items;
-  final ValueChanged<int>? onItemSelected;
+  final List<ItemConfig> items;
+  final bool Function(int)? onItemSelected;
   final double navBarHeight;
   final bool? popScreensOnTapOfSelectedTab;
   final BuildContext? selectedScreenBuildContext;
@@ -20,13 +20,13 @@ class NavBarEssentials {
     this.selectedScreenBuildContext,
   });
 
-  PersistentBottomNavBarItem get currentItem => this.items![this.selectedIndex!];
+  ItemConfig get currentItem => this.items[this.selectedIndex!];
 
   NavBarEssentials copyWith({
     int? selectedIndex,
     int? previousIndex,
-    List<PersistentBottomNavBarItem>? items,
-    ValueChanged<int>? onItemSelected,
+    List<ItemConfig>? items,
+    bool Function(int)? onItemSelected,
     double? navBarHeight,
     bool? popScreensOnTapOfSelectedTab,
   }) {
