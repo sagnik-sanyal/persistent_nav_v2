@@ -40,7 +40,7 @@ class NavBarAppearance {
   });
 
   double borderHeight() {
-    return this.decoration!.border?.dimensions.vertical ?? 0.0;
+    return this.decoration?.border?.dimensions.vertical ?? 0.0;
   }
 
   double exposedHeight() {
