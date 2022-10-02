@@ -19,7 +19,7 @@ class BottomNavStyle9 extends StatelessWidget {
       width: isSelected ? 120 : 50,
       duration: this.itemAnimationProperties.duration,
       curve: this.itemAnimationProperties.curve,
-      padding: EdgeInsets.all(item.contentPadding),
+      padding: item.padding,
       decoration: BoxDecoration(
         color: isSelected
             ? item.activeColorSecondary

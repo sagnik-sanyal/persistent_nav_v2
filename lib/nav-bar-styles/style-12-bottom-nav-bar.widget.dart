@@ -122,9 +122,9 @@ class _BottomNavStyle12State extends State<BottomNavStyle12>
     return DecoratedNavBar(
       appearance: widget.navBarDecoration,
       filter: widget.navBarEssentials
-          .items[widget.navBarEssentials.selectedIndex!].filter,
+          .items[widget.navBarEssentials.selectedIndex].filter,
       opacity: widget.navBarEssentials
-          .items[widget.navBarEssentials.selectedIndex!].opacity,
+          .items[widget.navBarEssentials.selectedIndex].opacity,
       height: widget.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

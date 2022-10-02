@@ -19,8 +19,7 @@ class BottomNavStyle1 extends StatelessWidget {
       width: isSelected ? 120 : 50,
       duration: this.itemAnimationProperties.duration,
       curve: this.itemAnimationProperties.curve,
-      // TODO: is this contentPadding needed / respected in every style?
-      padding: EdgeInsets.all(item.contentPadding),
+      padding: item.padding,
       decoration: BoxDecoration(
         color: isSelected
             ? item.activeColorSecondary
