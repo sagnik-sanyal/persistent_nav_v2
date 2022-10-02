@@ -36,7 +36,7 @@ class PersistentTabScaffold extends StatefulWidget {
     required this.controller,
     this.opacities = const [],
     this.backgroundColor,
-    this.confineInSafeArea = true,
+    this.avoidBottomPadding = true,
     this.margin = EdgeInsets.zero,
     this.resizeToAvoidBottomInset = true,
     this.stateManagement,
@@ -58,7 +58,7 @@ class PersistentTabScaffold extends StatefulWidget {
 
   final int? itemCount;
 
-  final bool confineInSafeArea;
+  final bool avoidBottomPadding;
 
   final EdgeInsets margin;
 
@@ -165,7 +165,21 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold>
         position: slideAnimation,
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-          child: widget.tabBar,
+          child: Padding(
+            padding: widget.margin,
+            child: MediaQuery.removePadding(
+              context: context,
+              // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
+              removeBottom: !widget.avoidBottomPadding,
+              child: SafeArea(
+                top: false,
+                right: false,
+                left: false,
+                bottom: widget.avoidBottomPadding && widget.margin.bottom != 0,
+                child: widget.tabBar,
+              ),
+            ),
+          ),
         ),
       ),
     );

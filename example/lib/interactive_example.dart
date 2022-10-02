@@ -18,7 +18,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
   bool _stateManagement = true;
   bool _handleAndroidBackButtonPress = true;
   bool _popAllScreensOnTapOfSelectedTab = true;
-  bool _confineInSafeArea = true;
+  bool _avoidBottomPadding = true;
 
   @override
   void initState() {
@@ -263,14 +263,14 @@ class _InteractiveExampleState extends State<InteractiveExample> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Switch(
-                    value: _confineInSafeArea,
+                    value: _avoidBottomPadding,
                     onChanged: (value) {
                       setState(() {
-                        _confineInSafeArea = value;
+                        _avoidBottomPadding = value;
                       });
                     },
                   ),
-                  Text("Confine in Safe Area"),
+                  Text("Avoid bottom padding"),
                 ],
               ),
             ],
@@ -282,7 +282,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        colorBehindNavBar: Colors.white,
         navBarBuilder: (essentials) => BottomNavStyle11(
           navBarEssentials: essentials,
           navBarDecoration: NavBarAppearance(
@@ -297,14 +296,15 @@ class _InteractiveExampleState extends State<InteractiveExample> {
             ),
           ),
         ),
-        navBarOverlap: NavBarOverlap.none(),
-        confineInSafeArea: _confineInSafeArea,
+        backgroundColor: Colors.green,
+        margin: EdgeInsets.all(4.0),
+        navBarOverlap: NavBarOverlap.full(),
+        avoidBottomPadding: _avoidBottomPadding,
         handleAndroidBackButtonPress: _handleAndroidBackButtonPress,
         resizeToAvoidBottomInset: _resizeToAvoidBottomInset,
         stateManagement: _stateManagement,
         navBarHeight: kBottomNavigationBarHeight,
         hideNavigationBarWhenKeyboardShows: _hideNavigationBarWhenKeyboardShows,
-        margin: EdgeInsets.zero,
         popActionScreens: PopActionScreensType.all,
         onWillPop: (context) async {
           await showDialog(

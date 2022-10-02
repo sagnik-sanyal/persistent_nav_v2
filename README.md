@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        confineInSafeArea: true,
+        avoidBottomPadding: true,
         backgroundColor: Colors.white, // Default is Colors.white.
         handleAndroidBackButtonPress: true, // Default is true.
         resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
@@ -345,7 +345,7 @@ If you want to have your own style for the navigation bar, follow these steps:
                 controller: _controller,
                 itemCount: items.length, // This is required in case of custom style! Pass the number of items for the nav bar.
                 screens: _buildScreens(),
-                confineInSafeArea: true,
+                avoidBottomPadding: true,
                 handleAndroidBackButtonPress: true,
                 onItemSelected: (int) {
                     setState(() {}); // This is required to update the nav bar if Android back button is pressed

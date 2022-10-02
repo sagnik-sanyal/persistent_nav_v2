@@ -50,8 +50,8 @@ class PersistentTabView extends StatefulWidget {
   /// If using `custom` navBarStyle, define this instead of the `items` property
   final int? itemCount;
 
-  /// Will confine the NavBar's items in the safe area defined by the device.
-  final bool confineInSafeArea;
+  /// If `true`, the navBar will be positioned so the content does not overlap with the bottom padding caused by system elements. If ``false``, the navBar will be positioned at the bottom of the screen. Defaults to `true`.
+  final bool avoidBottomPadding;
 
   /// Handles android back button actions. Defaults to `true`.
   ///
@@ -126,7 +126,7 @@ class PersistentTabView extends StatefulWidget {
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
     this.popActionScreens = PopActionScreensType.all,
-    this.confineInSafeArea = true,
+    this.avoidBottomPadding = true,
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -173,7 +173,7 @@ class PersistentTabView extends StatefulWidget {
     this.backgroundColor = Colors.white,
     this.routeAndNavigatorSettings =
         const CustomWidgetRouteAndNavigatorSettings(),
-    this.confineInSafeArea = true,
+    this.avoidBottomPadding = true,
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -316,11 +316,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           opacities: widget.items?.map((e) => e.opacity).toList() ?? [],
           screenTransitionAnimation: widget.screenTransitionAnimation,
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          tabBar: PersistentBottomNavBar(
-            margin: widget.margin,
-            confineToSafeArea:
-                widget.confineInSafeArea, // TODO: Name consistently
-            child: widget.navBarBuilder(NavBarEssentials(
+          avoidBottomPadding: widget.avoidBottomPadding,
+          margin: widget.margin,
+          tabBar: widget.navBarBuilder(
+            NavBarEssentials(
               selectedIndex: _controller.index,
               previousIndex: _previousIndex,
               selectedScreenBuildContext: _contextList[_controller.index],
@@ -339,7 +338,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                 _controller.index = index;
                 widget.onItemSelected?.call(index);
               },
-            )),
+            ),
           ),
           tabBuilder: (BuildContext context, int index) {
             return _buildScreen(index);
