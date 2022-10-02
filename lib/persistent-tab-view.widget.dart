@@ -75,10 +75,10 @@ class PersistentTabView extends StatefulWidget {
 
   /// If you want to perform a custom action on Android when exiting the app,
   /// you can write your logic here. Returns context of the selected screen.
-  final Future<bool> Function(BuildContext?)? onWillPop;
+  final Future<bool> Function(BuildContext)? onWillPop;
 
   /// Returns the context of the selected tab.
-  final Function(BuildContext?)? selectedTabScreenContext;
+  final Function(BuildContext)? selectedTabContext;
 
   /// Screen transition animation properties when switching tabs.
   final ScreenTransitionAnimation screenTransitionAnimation;
@@ -107,7 +107,7 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
-    this.selectedTabScreenContext,
+    this.selectedTabContext,
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
     this.popActionScreens = PopActionScreensType.all,
@@ -126,8 +126,6 @@ class PersistentTabView extends StatefulWidget {
 class _PersistentTabViewState extends State<PersistentTabView> {
   late List<BuildContext?> _contextList;
   late PersistentTabController _controller;
-  late int _previousIndex;
-  late int _currentIndex;
   bool _sendScreenContext = false;
 
   @override
@@ -139,23 +137,16 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
     _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
 
-    _previousIndex = _controller.index;
-    _currentIndex = _controller.index;
-
     _controller.addListener(() {
-      if (_controller.index != _currentIndex) {
-        if (widget.selectedTabScreenContext != null) {
-          _sendScreenContext = true;
-        }
-        if (mounted)
-          setState(
-            () => _currentIndex = _controller.index,
-          );
+      if (widget.selectedTabContext != null) {
+        _sendScreenContext = true;
       }
+      if (mounted) setState(() {});
     });
-    if (widget.selectedTabScreenContext != null) {
+
+    if (widget.selectedTabContext != null) {
       _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-        widget.selectedTabScreenContext!(_contextList[_controller.index]);
+        widget.selectedTabContext!(_contextList[_controller.index]!);
       });
     }
   }
@@ -167,7 +158,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         _contextList[index] = screenContext;
         if (_sendScreenContext) {
           _sendScreenContext = false;
-          widget.selectedTabScreenContext!(_contextList[_controller.index]);
+          widget.selectedTabContext!(_contextList[_controller.index]!);
         }
         return Material(
           elevation: 0,
@@ -201,20 +192,16 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           tabBar: widget.navBarBuilder(
             NavBarEssentials(
               selectedIndex: _controller.index,
-              previousIndex: _previousIndex,
               selectedScreenBuildContext: _contextList[_controller.index],
               items: widget.tabs.map((e) => e.item).toList(),
               navBarHeight: widget.navBarHeight,
-              popScreensOnTapOfSelectedTab:
-                  widget.popAllScreensOnTapOfSelectedTab,
               onItemSelected: (int index) {
                 if (widget.tabs[index].onPressed != null) {
                   widget.tabs[index].onPressed!(context);
                   return false;
                 } else {
-                  _previousIndex = _controller.index;
                   if (widget.popAllScreensOnTapOfSelectedTab &&
-                      _previousIndex == index) {
+                      _controller.index == index) {
                     popAllScreens();
                   }
                   _controller.index = index;
@@ -238,13 +225,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       return WillPopScope(
         onWillPop:
             !widget.handleAndroidBackButtonPress && widget.onWillPop != null
-                ? () => widget.onWillPop!(_contextList[_controller.index])
+                ? () => widget.onWillPop!(_contextList[_controller.index]!)
                 : () async {
                     if (_controller.index == 0 &&
                         !Navigator.canPop(_contextList.first!)) {
                       if (widget.handleAndroidBackButtonPress &&
                           widget.onWillPop != null) {
-                        return widget.onWillPop!(_contextList.first);
+                        return widget.onWillPop!(_contextList.first!);
                       }
                       return true;
                     } else {

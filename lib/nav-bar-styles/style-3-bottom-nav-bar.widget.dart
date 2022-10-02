@@ -48,14 +48,14 @@ class BottomNavStyle3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color selectedItemActiveColor =
-        this.navBarEssentials.currentItem.activeColorPrimary;
+        this.navBarEssentials.selectedItem.activeColorPrimary;
     double itemWidth = ((MediaQuery.of(context).size.width -
             this.navBarDecoration.padding.horizontal) /
         this.navBarEssentials.items.length);
     return DecoratedNavBar(
       appearance: this.navBarDecoration,
-      filter: this.navBarEssentials.currentItem.filter,
-      opacity: this.navBarEssentials.currentItem.opacity,
+      filter: this.navBarEssentials.selectedItem.filter,
+      opacity: this.navBarEssentials.selectedItem.opacity,
       height: this.navBarEssentials.navBarHeight,
       child: Column(
         children: <Widget>[

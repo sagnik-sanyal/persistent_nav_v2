@@ -574,7 +574,7 @@ void main() {
             screens: [1, 2, 3].map((id) => defaultScreen(id)).toList(),
             items: items,
             navBarStyle: NavBarStyle.style3,
-            selectedTabScreenContext: (context) => screenContext = context,
+            selectedTabContext: (context) => screenContext = context,
           ),
         ),
       );

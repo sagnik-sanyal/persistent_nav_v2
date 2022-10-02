@@ -50,8 +50,8 @@ class BottomNavSimple extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedNavBar(
       appearance: this.navBarDecoration,
-      filter: this.navBarEssentials.currentItem.filter,
-      opacity: this.navBarEssentials.currentItem.opacity,
+      filter: this.navBarEssentials.selectedItem.filter,
+      opacity: this.navBarEssentials.selectedItem.opacity,
       height: this.navBarEssentials.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
