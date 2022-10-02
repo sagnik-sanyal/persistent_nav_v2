@@ -138,199 +138,202 @@ class _InteractiveExampleState extends State<InteractiveExample> {
     ];
   }
 
+  void showSettings(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _hideNavBar,
+                  onChanged: (value) {
+                    setState(() {
+                      _hideNavBar = value;
+                    });
+                  },
+                ),
+                Text("Hide Navigation Bar"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DropdownButton<NavBarStyle>(
+                  value: _navBarStyle,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (NavBarStyle newStyle) {
+                    setState(() {
+                      _navBarStyle = newStyle;
+                    });
+                  },
+                  items: NavBarStyle.values
+                      .map<DropdownMenuItem<NavBarStyle>>((NavBarStyle style) {
+                    return DropdownMenuItem<NavBarStyle>(
+                      value: style,
+                      child: Text(style.toString()),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _hideNavigationBarWhenKeyboardShows,
+                  onChanged: (value) {
+                    setState(() {
+                      _hideNavigationBarWhenKeyboardShows = value;
+                    });
+                  },
+                ),
+                Text("Hide Navigation Bar\nWhen Keyboard Shows"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _resizeToAvoidBottomInset,
+                  onChanged: (value) {
+                    setState(() {
+                      _resizeToAvoidBottomInset = value;
+                    });
+                  },
+                ),
+                Text("Resize to avoid bottom inset"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _stateManagement,
+                  onChanged: (value) {
+                    setState(() {
+                      _stateManagement = value;
+                    });
+                  },
+                ),
+                Text("State Management"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _handleAndroidBackButtonPress,
+                  onChanged: (value) {
+                    setState(() {
+                      _handleAndroidBackButtonPress = value;
+                    });
+                  },
+                ),
+                Text("Handle Android Back Button Press"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _popAllScreensOnTapOfSelectedTab,
+                  onChanged: (value) {
+                    setState(() {
+                      _popAllScreensOnTapOfSelectedTab = value;
+                    });
+                  },
+                ),
+                Text("Pop all screens when\ntapping current tab"),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Switch(
+                  value: _avoidBottomPadding,
+                  onChanged: (value) {
+                    setState(() {
+                      _avoidBottomPadding = value;
+                    });
+                  },
+                ),
+                Text("Avoid bottom padding"),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Navigation Bar Demo')),
-      drawer: Drawer(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _hideNavBar,
-                    onChanged: (value) {
-                      setState(() {
-                        _hideNavBar = value;
-                      });
-                    },
-                  ),
-                  Text("Hide Navigation Bar"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DropdownButton<NavBarStyle>(
-                    value: _navBarStyle,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    onChanged: (NavBarStyle newStyle) {
-                      setState(() {
-                        _navBarStyle = newStyle;
-                      });
-                    },
-                    items: NavBarStyle.values
-                        .map<DropdownMenuItem<NavBarStyle>>(
-                            (NavBarStyle style) {
-                      return DropdownMenuItem<NavBarStyle>(
-                        value: style,
-                        child: Text(style.toString()),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _hideNavigationBarWhenKeyboardShows,
-                    onChanged: (value) {
-                      setState(() {
-                        _hideNavigationBarWhenKeyboardShows = value;
-                      });
-                    },
-                  ),
-                  Text("Hide Navigation Bar\nWhen Keyboard Shows"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _resizeToAvoidBottomInset,
-                    onChanged: (value) {
-                      setState(() {
-                        _resizeToAvoidBottomInset = value;
-                      });
-                    },
-                  ),
-                  Text("Resize to avoid bottom inset"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _stateManagement,
-                    onChanged: (value) {
-                      setState(() {
-                        _stateManagement = value;
-                      });
-                    },
-                  ),
-                  Text("State Management"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _handleAndroidBackButtonPress,
-                    onChanged: (value) {
-                      setState(() {
-                        _handleAndroidBackButtonPress = value;
-                      });
-                    },
-                  ),
-                  Text("Handle Android Back Button Press"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _popAllScreensOnTapOfSelectedTab,
-                    onChanged: (value) {
-                      setState(() {
-                        _popAllScreensOnTapOfSelectedTab = value;
-                      });
-                    },
-                  ),
-                  Text("Pop all screens when\ntapping current tab"),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: _avoidBottomPadding,
-                    onChanged: (value) {
-                      setState(() {
-                        _avoidBottomPadding = value;
-                      });
-                    },
-                  ),
-                  Text("Avoid bottom padding"),
-                ],
-              ),
-            ],
+    return PersistentTabView(
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      navBarBuilder: (essentials) => BottomNavStyle11(
+        navBarEssentials: essentials,
+        navBarDecoration: NavBarAppearance(
+          padding: EdgeInsets.all(0.0),
+          decoration: BoxDecoration(
+            color: Colors.pink,
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+              color: Colors.black,
+              width: 0.0,
+            ),
           ),
         ),
       ),
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        navBarBuilder: (essentials) => BottomNavStyle11(
-          navBarEssentials: essentials,
-          navBarDecoration: NavBarAppearance(
-            padding: EdgeInsets.all(0.0),
-            decoration: BoxDecoration(
-              color: Colors.pink,
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: Colors.black,
-                width: 0.0,
-              ),
+      floatingActionButton: IconButton(
+          onPressed: () => showSettings(context), icon: Icon(Icons.settings)),
+      backgroundColor: Colors.green,
+      margin: EdgeInsets.all(4.0),
+      navBarOverlap: NavBarOverlap.full(),
+      avoidBottomPadding: _avoidBottomPadding,
+      handleAndroidBackButtonPress: _handleAndroidBackButtonPress,
+      resizeToAvoidBottomInset: _resizeToAvoidBottomInset,
+      stateManagement: _stateManagement,
+      navBarHeight: kBottomNavigationBarHeight,
+      hideNavigationBarWhenKeyboardShows: _hideNavigationBarWhenKeyboardShows,
+      popActionScreens: PopActionScreensType.all,
+      onWillPop: (context) async {
+        await showDialog(
+          context: context,
+          useSafeArea: true,
+          builder: (context) => Container(
+            height: 50.0,
+            width: 50.0,
+            color: Colors.white,
+            child: ElevatedButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
           ),
-        ),
-        backgroundColor: Colors.green,
-        margin: EdgeInsets.all(4.0),
-        navBarOverlap: NavBarOverlap.full(),
-        avoidBottomPadding: _avoidBottomPadding,
-        handleAndroidBackButtonPress: _handleAndroidBackButtonPress,
-        resizeToAvoidBottomInset: _resizeToAvoidBottomInset,
-        stateManagement: _stateManagement,
-        navBarHeight: kBottomNavigationBarHeight,
-        hideNavigationBarWhenKeyboardShows: _hideNavigationBarWhenKeyboardShows,
-        popActionScreens: PopActionScreensType.all,
-        onWillPop: (context) async {
-          await showDialog(
-            context: context,
-            useSafeArea: true,
-            builder: (context) => Container(
-              height: 50.0,
-              width: 50.0,
-              color: Colors.white,
-              child: ElevatedButton(
-                child: Text("Close"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          );
-          return false;
-        },
-        hideNavigationBar: _hideNavBar,
-        popAllScreensOnTapOfSelectedTab: _popAllScreensOnTapOfSelectedTab,
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
+        );
+        return false;
+      },
+      hideNavigationBar: _hideNavBar,
+      popAllScreensOnTapOfSelectedTab: _popAllScreensOnTapOfSelectedTab,
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
       ),
     );
   }

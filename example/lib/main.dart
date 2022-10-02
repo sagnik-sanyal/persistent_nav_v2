@@ -239,71 +239,58 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Navigation Bar Demo')),
-      drawer: Drawer(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text('This is the Drawer'),
-            ],
-          ),
-        ),
-      ),
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        navBarOverlap: NavBarOverlap.none(),
-        avoidBottomPadding: true,
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        stateManagement: true,
-        navBarHeight: kBottomNavigationBarHeight,
-        hideNavigationBarWhenKeyboardShows: true,
-        margin: EdgeInsets.all(0.0),
-        popActionScreens: PopActionScreensType.all,
-        floatingActionButton: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.ac_unit,
-              size: 40,
-            )),
-        onWillPop: (context) async {
-          await showDialog(
-            context: context,
-            useSafeArea: true,
-            builder: (context) => Container(
-              height: 50.0,
-              width: 50.0,
-              color: Colors.white,
-              child: ElevatedButton(
-                child: Text("Close"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+    return PersistentTabView(
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      navBarOverlap: NavBarOverlap.none(),
+      avoidBottomPadding: true,
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: true,
+      navBarHeight: kBottomNavigationBarHeight,
+      hideNavigationBarWhenKeyboardShows: true,
+      margin: EdgeInsets.all(0.0),
+      popActionScreens: PopActionScreensType.all,
+      floatingActionButton: IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.ac_unit,
+            size: 40,
+          )),
+      onWillPop: (context) async {
+        await showDialog(
+          context: context,
+          useSafeArea: true,
+          builder: (context) => Container(
+            height: 50.0,
+            width: 50.0,
+            color: Colors.white,
+            child: ElevatedButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-          );
-          return false;
-        },
-        hideNavigationBar: _hideNavBar,
-        popAllScreensOnTapOfSelectedTab: true,
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarBuilder: (navBarEssentials) => BottomNavStyle1(
-          navBarEssentials: navBarEssentials,
-          itemAnimationProperties: ItemAnimationProperties(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.ease,
           ),
-        ), // Choose the nav bar widget with this property
+        );
+        return false;
+      },
+      hideNavigationBar: _hideNavBar,
+      popAllScreensOnTapOfSelectedTab: true,
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
       ),
+      navBarBuilder: (navBarEssentials) => BottomNavStyle1(
+        navBarEssentials: navBarEssentials,
+        itemAnimationProperties: ItemAnimationProperties(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.ease,
+        ),
+      ), // Choose the nav bar widget with this property
     );
   }
 }
