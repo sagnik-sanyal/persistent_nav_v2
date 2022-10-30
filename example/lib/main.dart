@@ -249,7 +249,7 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarBuilder: (navBarEssentials) => BottomNavStyle1(
+      navBarBuilder: (navBarEssentials) => BottomNavStyle9(
         navBarEssentials: navBarEssentials,
         itemAnimationProperties: ItemAnimationProperties(
           duration: Duration(milliseconds: 400),
