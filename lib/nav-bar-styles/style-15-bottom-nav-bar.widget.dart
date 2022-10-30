@@ -42,21 +42,21 @@ class BottomNavStyle15 extends StatelessWidget {
     );
   }
 
-  Widget _buildMiddleItem(ItemConfig item, bool isSelected, double? height) {
-    return Container(
-      width: 150.0,
-      height: height,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: item.activeColorPrimary,
-        boxShadow: this.navBarDecoration.decoration?.boxShadow,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
+  Widget _buildMiddleItem(ItemConfig item, bool isSelected) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: 150.0,
+          height: this.navBarEssentials.navBarHeight,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: item.activeColorPrimary,
+            boxShadow: this.navBarDecoration.decoration?.boxShadow,
+          ),
+          child: Center(
             child: IconTheme(
               data: IconThemeData(
                 size: item.iconSize,
@@ -65,25 +65,24 @@ class BottomNavStyle15 extends StatelessWidget {
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
           ),
-          // TODO: Title should be below raised button
-          if (item.title != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
-                        color: isSelected
-                            ? item.activeColorPrimary
-                            : item.inactiveColorPrimary),
-                  ),
+        ),
+        if (item.title != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 2.0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FittedBox(
+                child: Text(
+                  item.title!,
+                  style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary),
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 
@@ -132,13 +131,14 @@ class BottomNavStyle15 extends StatelessWidget {
           top: 0,
           child: Center(
             child: GestureDetector(
-                onTap: () {
-                  this.navBarEssentials.onItemSelected!(midIndex);
-                },
-                child: _buildMiddleItem(
-                    this.navBarEssentials.items[midIndex],
-                    this.navBarEssentials.selectedIndex == midIndex,
-                    this.navBarEssentials.navBarHeight)),
+              onTap: () {
+                this.navBarEssentials.onItemSelected!(midIndex);
+              },
+              child: _buildMiddleItem(
+                this.navBarEssentials.items[midIndex],
+                this.navBarEssentials.selectedIndex == midIndex,
+              ),
+            ),
           ),
         ),
       ],

@@ -12,7 +12,6 @@ class InteractiveExample extends StatefulWidget {
 class _InteractiveExampleState extends State<InteractiveExample> {
   PersistentTabController _controller;
   bool _hideNavBar = false;
-  NavBarStyle _navBarStyle = NavBarStyle.style15;
   bool _hideNavigationBarWhenKeyboardShows = true;
   bool _resizeToAvoidBottomInset = true;
   bool _stateManagement = true;
@@ -156,33 +155,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
                   },
                 ),
                 Text("Hide Navigation Bar"),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButton<NavBarStyle>(
-                  value: _navBarStyle,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (NavBarStyle newStyle) {
-                    setState(() {
-                      _navBarStyle = newStyle;
-                    });
-                  },
-                  items: NavBarStyle.values
-                      .map<DropdownMenuItem<NavBarStyle>>((NavBarStyle style) {
-                    return DropdownMenuItem<NavBarStyle>(
-                      value: style,
-                      child: Text(style.toString()),
-                    );
-                  }).toList(),
-                ),
               ],
             ),
             Row(

@@ -36,7 +36,7 @@ class MainMenu extends StatelessWidget {
         children: <Widget>[
           Center(
             child: ElevatedButton(
-              child: Text("Built-in style example"),
+              child: Text("Example"),
               onPressed: () => pushNewScreen(
                 context,
                 screen: ProvidedStyleExample(),
@@ -53,46 +53,7 @@ class MainMenu extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 20.0),
-          Center(
-            child: ElevatedButton(
-              child: Text("Interactive Example"),
-              onPressed: () => pushNewScreen(
-                context,
-                screen: TestScaffold(),
-              ),
-            ),
-          ),
         ],
-      ),
-    );
-  }
-}
-
-class TestScaffold extends StatelessWidget {
-  const TestScaffold({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        padding: EdgeInsets.only(
-            bottom: 100,
-            top: MediaQuery.of(context)
-                .padding
-                .top), // TODO: Simulate gesture bar
-      ),
-      child: Scaffold(
-        appBar: AppBar(title: Text("Test Scaffold")),
-        body: MainScreen(),
-        bottomNavigationBar: Container(
-          color: Colors.green,
-          height: 50,
-        ),
-        bottomSheet: Container(
-          color: Colors.red,
-          height: 30,
-        ),
       ),
     );
   }
@@ -219,11 +180,12 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         print("Switched to tab $i");
       },
       floatingActionButton: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.ac_unit,
-            size: 40,
-          )),
+        onPressed: () {},
+        icon: Icon(
+          Icons.ac_unit,
+          size: 40,
+        ),
+      ),
       onWillPop: (context) async {
         await showDialog(
           context: context,
@@ -249,12 +211,12 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarBuilder: (navBarEssentials) => BottomNavStyle9(
+      navBarBuilder: (navBarEssentials) => BottomNavStyle15(
         navBarEssentials: navBarEssentials,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
-        ),
+        // itemAnimationProperties: ItemAnimationProperties(
+        //   duration: Duration(milliseconds: 400),
+        //   curve: Curves.ease,
+        // ),
       ), // Choose the nav bar widget with this property
     );
   }

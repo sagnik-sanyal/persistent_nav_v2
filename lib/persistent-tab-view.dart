@@ -18,6 +18,7 @@ part 'models/persistent-bottom-nav-bar.widget.dart';
 part 'models/persistent-nav-bar-scaffold.widget.dart';
 part 'models/route-settings.model.dart';
 part 'models/tab-view.widget.dart';
+part 'models/navbar_overlap.dart';
 part 'nav-bar-styles/neumorphic-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/simple-bottom-nav-bar.widget.dart';
 //Styles
