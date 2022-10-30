@@ -66,7 +66,7 @@ class BottomNavStyle3 extends StatelessWidget {
                 curve: this.itemAnimationProperties.curve,
                 width: this.navBarEssentials.selectedIndex == 0
                     ? 0.0
-                    : itemWidth * this.navBarEssentials.selectedIndex!,
+                    : itemWidth * this.navBarEssentials.selectedIndex,
                 height: 4.0,
               ),
               Flexible(
