@@ -41,5 +41,6 @@ part 'neumorphic-package-by-serge-software/neumorphic-card.dart';
 //Main TabView Widget
 part 'persistent-tab-view.widget.dart';
 //Utils
+part 'utils/nav_bar_overlap.dart';
 part 'utils/functions.utils.dart';
 part 'utils/navigator-functions.utils.dart';

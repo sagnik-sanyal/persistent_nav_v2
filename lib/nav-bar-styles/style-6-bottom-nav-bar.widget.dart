@@ -50,7 +50,6 @@ class _BottomNavStyle6State extends State<BottomNavStyle6>
   Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) {
     return AnimatedBuilder(
       animation: _animationList[itemIndex],
-      // TODO: Change to ScaleTransition?
       builder: (context, child) => Transform.scale(
         scale: _animationList[itemIndex].value,
         child: Column(

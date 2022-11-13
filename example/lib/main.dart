@@ -206,7 +206,7 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
     return PersistentTabView(
       controller: _controller,
       tabs: _tabs(),
-      navBarOverlap: NavBarOverlap.none(),
+      navBarOverlap: NavBarOverlap.full(),
       avoidBottomPadding: true,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
@@ -249,12 +249,14 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarBuilder: (navBarEssentials) => BottomNavStyle1(
+      navBarBuilder: (navBarEssentials) => BottomNavStyle15(
         navBarEssentials: navBarEssentials,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
-        ),
+        navBarDecoration:
+            NavBarAppearance(decoration: BoxDecoration(color: Colors.white)),
+        // itemAnimationProperties: ItemAnimationProperties(
+        //   duration: Duration(milliseconds: 400),
+        //   curve: Curves.ease,
+        // ),
       ), // Choose the nav bar widget with this property
     );
   }
