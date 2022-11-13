@@ -169,52 +169,45 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     );
   }
 
-  Widget navigationBarWidget() => MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top,
-              bottom: 100), // TODO: Simulate gesture bar
-        ),
-        child: PersistentTabScaffold(
-          controller: _controller,
-          hideNavigationBar: widget.hideNavigationBar,
-          tabCount: widget.tabs.length,
-          stateManagement: widget.stateManagement,
-          backgroundColor: widget.backgroundColor,
-          navBarOverlap: widget.navBarOverlap,
-          opacities: widget.tabs.map((e) => e.item.opacity).toList(),
-          screenTransitionAnimation: widget.screenTransitionAnimation,
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          avoidBottomPadding: widget.avoidBottomPadding,
-          margin: widget.margin,
-          floatingActionButton: widget.floatingActionButton,
-          floatingActionButtonLocation: widget.floatingActionButtonLocation,
-          tabBar: widget.navBarBuilder(
-            NavBarEssentials(
-              selectedIndex: _controller.index,
-              selectedScreenBuildContext: _contextList[_controller.index],
-              items: widget.tabs.map((e) => e.item).toList(),
-              navBarHeight: widget.navBarHeight,
-              onItemSelected: (int index) {
-                if (widget.tabs[index].onPressed != null) {
-                  widget.tabs[index].onPressed!(context);
-                  return false;
-                } else {
-                  if (widget.popAllScreensOnTapOfSelectedTab &&
-                      _controller.index == index) {
-                    popAllScreens();
-                  }
-                  _controller.index = index;
-                }
-                return true;
-              },
-            ),
-          ),
-          tabBuilder: (BuildContext context, int index) {
-            return _buildScreen(index);
-          },
-        ),
-      );
+  Widget navigationBarWidget() => PersistentTabScaffold(
+    controller: _controller,
+    hideNavigationBar: widget.hideNavigationBar,
+    tabCount: widget.tabs.length,
+    stateManagement: widget.stateManagement,
+    backgroundColor: widget.backgroundColor,
+    navBarOverlap: widget.navBarOverlap,
+    opacities: widget.tabs.map((e) => e.item.opacity).toList(),
+    screenTransitionAnimation: widget.screenTransitionAnimation,
+    resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+    avoidBottomPadding: widget.avoidBottomPadding,
+    margin: widget.margin,
+    floatingActionButton: widget.floatingActionButton,
+    floatingActionButtonLocation: widget.floatingActionButtonLocation,
+    tabBar: widget.navBarBuilder(
+      NavBarEssentials(
+        selectedIndex: _controller.index,
+        selectedScreenBuildContext: _contextList[_controller.index],
+        items: widget.tabs.map((e) => e.item).toList(),
+        navBarHeight: widget.navBarHeight,
+        onItemSelected: (int index) {
+          if (widget.tabs[index].onPressed != null) {
+            widget.tabs[index].onPressed!(context);
+            return false;
+          } else {
+            if (widget.popAllScreensOnTapOfSelectedTab &&
+                _controller.index == index) {
+              popAllScreens();
+            }
+            _controller.index = index;
+          }
+          return true;
+        },
+      ),
+    ),
+    tabBuilder: (BuildContext context, int index) {
+      return _buildScreen(index);
+    },
+  );
 
   @override
   Widget build(BuildContext context) {

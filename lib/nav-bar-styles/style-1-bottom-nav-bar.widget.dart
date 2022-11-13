@@ -3,6 +3,7 @@ part of persistent_bottom_nav_bar_v2;
 class BottomNavStyle1 extends StatelessWidget {
   final NavBarEssentials navBarEssentials;
   final NavBarAppearance navBarDecoration;
+  final EdgeInsets itemPadding;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
@@ -12,6 +13,7 @@ class BottomNavStyle1 extends StatelessWidget {
     required this.navBarEssentials,
     this.navBarDecoration = const NavBarAppearance(),
     this.itemAnimationProperties = const ItemAnimationProperties(),
+    this.itemPadding = const EdgeInsets.all(5.0),
   });
 
   Widget _buildItem(ItemConfig item, bool isSelected) {
@@ -19,7 +21,7 @@ class BottomNavStyle1 extends StatelessWidget {
       width: isSelected ? 120 : 50,
       duration: this.itemAnimationProperties.duration,
       curve: this.itemAnimationProperties.curve,
-      padding: item.padding,
+      padding: itemPadding,
       decoration: BoxDecoration(
         color: isSelected
             ? item.activeColorSecondary

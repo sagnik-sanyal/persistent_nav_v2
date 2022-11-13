@@ -25,10 +25,6 @@ class ItemConfig {
   /// Color for the item background if unselected. Defaults to `Colors.transparent`
   final Color inactiveColorSecondary;
 
-  /// Padding of the navigation bar item. Applies on all sides.
-  /// Defaults to `EdgeInsets.all(5.0)`.
-  final EdgeInsets padding;
-
   /// Enables and controls the transparency effect of the entire NavBar when this tab is selected.
   ///
   /// `Warning: Screen will cover the entire extent of the display`
@@ -48,7 +44,6 @@ class ItemConfig {
     required this.icon,
     Icon? inactiveIcon,
     this.title,
-    this.padding = const EdgeInsets.all(5.0),
     this.activeColorPrimary = CupertinoColors.activeBlue,
     this.inactiveColorPrimary = CupertinoColors.systemGrey,
     Color? activeColorSecondary,

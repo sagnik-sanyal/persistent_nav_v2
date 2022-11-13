@@ -132,13 +132,15 @@ class BottomNavStyle16 extends StatelessWidget {
           top: 0,
           child: Center(
             child: GestureDetector(
-                onTap: () {
-                  this.navBarEssentials.onItemSelected!(midIndex);
-                },
-                child: _buildMiddleItem(
-                    context,
-                    this.navBarEssentials.items[midIndex],
-                    this.navBarEssentials.selectedIndex == midIndex)),
+              onTap: () {
+                this.navBarEssentials.onItemSelected!(midIndex);
+              },
+              child: _buildMiddleItem(
+                context,
+                this.navBarEssentials.items[midIndex],
+                this.navBarEssentials.selectedIndex == midIndex,
+              ),
+            ),
           ),
         ),
       ],
