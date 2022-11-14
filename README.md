@@ -15,29 +15,29 @@ NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.
 
 ## Styles
 
-| Style15  | Style16 |
-| ------------- | ------------- |
-| ![style1](gifs/style-15.gif)  | ![style10](gifs/style-16.gif)  |
+| Style15                      | Style16                       |
+| ---------------------------- | ----------------------------- |
+| ![style1](gifs/style-15.gif) | ![style10](gifs/style-16.gif) |
 
-| Style1  | Style9 |
-| ------------- | ------------- |
-| ![style1](gifs/style-1.gif)  | ![style10](gifs/style-9.gif)  |
+| Style1                      | Style9                       |
+| --------------------------- | ---------------------------- |
+| ![style1](gifs/style-1.gif) | ![style10](gifs/style-9.gif) |
 
-| Style7  | Style10 |
-| ------------- | ------------- |
-| ![style3](gifs/style-7.gif)  | ![style5](gifs/style-10.gif)  |
+| Style7                      | Style10                      |
+| --------------------------- | ---------------------------- |
+| ![style3](gifs/style-7.gif) | ![style5](gifs/style-10.gif) |
 
-| Style12  | Style13 |
-| ------------- | ------------- |
-| ![style6](gifs/style-12.gif)  | ![style8](gifs/style-13.gif)  |
+| Style12                      | Style13                      |
+| ---------------------------- | ---------------------------- |
+| ![style6](gifs/style-12.gif) | ![style8](gifs/style-13.gif) |
 
-| Style3 | Style6 |
-| ------------- | ------------- |
-| ![style6](gifs/style-3.gif)  | ![style8](gifs/style-6.gif)  |
+| Style3                      | Style6                      |
+| --------------------------- | --------------------------- |
+| ![style6](gifs/style-3.gif) | ![style8](gifs/style-6.gif) |
 
-| Neumorphic  | Neumorphic without subtitle |
-| ------------- | ------------- |
-| ![neumorphic1](gifs/neumorphic.gif)  | ![neumorphic2](gifs/neumorphic-nosubs.gif)  |
+| Neumorphic                          | Neumorphic without subtitle                |
+| ----------------------------------- | ------------------------------------------ |
+| ![neumorphic1](gifs/neumorphic.gif) | ![neumorphic2](gifs/neumorphic-nosubs.gif) |
 
 ### Note: These do not include all style variations
 
@@ -350,7 +350,7 @@ If you want to have your own style for the navigation bar, follow these steps:
                 onItemSelected: (int) {
                     setState(() {}); // This is required to update the nav bar if Android back button is pressed
                 },
-                customWidget: (navBarEssentials) =>CustomNavBarWidget( // Your custom widget goes here
+                customWidget: (navBarConfig) =>CustomNavBarWidget( // Your custom widget goes here
                     items: _navBarsItems(),
                     selectedIndex: _controller.index,
                     onItemSelected: (index) {

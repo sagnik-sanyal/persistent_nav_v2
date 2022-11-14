@@ -1253,7 +1253,7 @@ void main() {
             context,
             screens: [1, 2, 3].map((id) => defaultScreen(id)).toList(),
             items: items,
-            decoration: const NavBarAppearance(
+            decoration: const NavBarDecoration(
               border: Border(
                 top: BorderSide(
                   color: Colors.grey,
@@ -1322,7 +1322,7 @@ class _CustomViewState extends State<CustomView> {
         popAllScreensOnTapOfSelectedTab: widget.popAllScreensOnTapOfSelectedTab,
         stateManagement: widget.stateManagement,
         floatingActionButton: widget.floatingActionButton,
-        customWidget: (navBarEssentials) => Container(
+        customWidget: (navBarConfig) => Container(
           key: Key("customNavBar"),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1333,8 +1333,7 @@ class _CustomViewState extends State<CustomView> {
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              navBarEssentials
-                                  .onTabChanged!(items.indexOf(item));
+                              navBarConfig.onTabChanged!(items.indexOf(item));
                             });
                           },
                           child: Column(

@@ -3,11 +3,11 @@ part of persistent_bottom_nav_bar_v2;
 class CustomTabView extends StatefulWidget {
   final NavigatorConfig navigatorConfig;
 
-  final WidgetBuilder? builder;
+  final WidgetBuilder? home;
 
   const CustomTabView({
     Key? key,
-    this.builder,
+    this.home,
     required this.navigatorConfig,
   }) : super(key: key);
 
@@ -55,8 +55,8 @@ class _CustomTabViewState extends State<CustomTabView> {
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     final String? name = settings.name;
     final WidgetBuilder? pageContentBuilder =
-        name == Navigator.defaultRouteName && widget.builder != null
-            ? widget.builder // TODO: rename to home
+        name == Navigator.defaultRouteName && widget.home != null
+            ? widget.home
             : widget.navigatorConfig.routes[name];
 
     if (pageContentBuilder != null) {

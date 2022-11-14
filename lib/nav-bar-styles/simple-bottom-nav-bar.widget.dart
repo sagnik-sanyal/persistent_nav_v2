@@ -1,13 +1,13 @@
 part of persistent_bottom_nav_bar_v2;
 
 class BottomNavSimple extends StatelessWidget {
-  final NavBarEssentials navBarEssentials;
-  final NavBarAppearance navBarDecoration;
+  final NavBarConfig navBarConfig;
+  final NavBarDecoration navBarDecoration;
 
   BottomNavSimple({
     Key? key,
-    required this.navBarEssentials,
-    this.navBarDecoration = const NavBarAppearance(),
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
   });
 
   Widget _buildItem(ItemConfig item, bool isSelected) {
@@ -49,23 +49,23 @@ class BottomNavSimple extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedNavBar(
-      appearance: this.navBarDecoration,
-      filter: this.navBarEssentials.selectedItem.filter,
-      opacity: this.navBarEssentials.selectedItem.opacity,
-      height: this.navBarEssentials.navBarHeight,
+      decoration: this.navBarDecoration,
+      filter: this.navBarConfig.selectedItem.filter,
+      opacity: this.navBarConfig.selectedItem.opacity,
+      height: this.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials.items.map((item) {
-          int index = this.navBarEssentials.items.indexOf(item);
+        children: this.navBarConfig.items.map((item) {
+          int index = this.navBarConfig.items.indexOf(item);
           return Flexible(
             child: InkWell(
               onTap: () {
-                this.navBarEssentials.onItemSelected(index);
+                this.navBarConfig.onItemSelected(index);
               },
               child: _buildItem(
                 item,
-                this.navBarEssentials.selectedIndex == index,
+                this.navBarConfig.selectedIndex == index,
               ),
             ),
           );

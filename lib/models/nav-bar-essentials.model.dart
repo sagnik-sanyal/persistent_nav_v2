@@ -1,30 +1,27 @@
 part of persistent_bottom_nav_bar_v2;
 
-// TODO: Rename e.g. NavbarConfig or combine with tabcontroller?
-class NavBarEssentials {
+class NavBarConfig {
   final int selectedIndex;
   final List<ItemConfig> items;
   final void Function(int) onItemSelected;
   final double navBarHeight;
-  final BuildContext? selectedScreenBuildContext;
 
-  const NavBarEssentials({
+  const NavBarConfig({
     required this.selectedIndex,
     required this.items,
     required this.onItemSelected,
     this.navBarHeight = kBottomNavigationBarHeight,
-    this.selectedScreenBuildContext,
   });
 
   ItemConfig get selectedItem => this.items[this.selectedIndex];
 
-  NavBarEssentials copyWith({
+  NavBarConfig copyWith({
     int? selectedIndex,
     List<ItemConfig>? items,
     bool Function(int)? onItemSelected,
     double? navBarHeight,
   }) {
-    return NavBarEssentials(
+    return NavBarConfig(
       selectedIndex: selectedIndex ?? this.selectedIndex,
       items: items ?? this.items,
       onItemSelected: onItemSelected ?? this.onItemSelected,

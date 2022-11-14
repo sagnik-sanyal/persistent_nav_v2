@@ -2,7 +2,7 @@ part of persistent_bottom_nav_bar_v2;
 
 enum PopActionScreensType { once, all }
 
-class NavBarAppearance {
+class NavBarDecoration {
   final BoxDecoration? decoration;
 
   /// `padding` for the persistent navigation bar content.
@@ -10,7 +10,7 @@ class NavBarAppearance {
   /// `USE WITH CAUTION, MAY CAUSE LAYOUT ISSUES`.
   final EdgeInsets padding;
 
-  const NavBarAppearance({
+  const NavBarDecoration({
     this.decoration,
     this.padding = const EdgeInsets.all(8),
   });
@@ -24,8 +24,7 @@ class NavBarAppearance {
         this.decoration?.borderRadius != null &&
         this.decoration?.borderRadius is BorderRadius) {
       BorderRadius radius = (this.decoration!.borderRadius! as BorderRadius);
-      return max(radius.topRight.y, radius.topLeft.y) +
-          this.borderHeight();
+      return max(radius.topRight.y, radius.topLeft.y) + this.borderHeight();
     } else {
       return 0;
     }

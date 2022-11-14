@@ -1,14 +1,14 @@
 part of persistent_bottom_nav_bar_v2;
 
 class NeumorphicBottomNavBar extends StatelessWidget {
-  final NavBarEssentials navBarEssentials;
+  final NavBarConfig navBarConfig;
   final NeumorphicProperties neumorphicProperties;
-  final NavBarAppearance navBarDecoration;
+  final NavBarDecoration navBarDecoration;
 
   NeumorphicBottomNavBar({
     Key? key,
-    required this.navBarEssentials,
-    this.navBarDecoration = const NavBarAppearance(),
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
     this.neumorphicProperties = const NeumorphicProperties(),
   }) : super(key: key);
 
@@ -67,9 +67,9 @@ class NeumorphicBottomNavBar extends StatelessWidget {
                     this.neumorphicProperties.decoration?.borderRadius,
                 color: getBackgroundColor(
                     context,
-                    this.navBarEssentials.items,
+                    this.navBarConfig.items,
                     this.navBarDecoration.decoration?.color,
-                    this.navBarEssentials.selectedIndex),
+                    this.navBarConfig.selectedIndex),
               ),
               padding: EdgeInsets.all(6.0),
               margin: EdgeInsets.symmetric(horizontal: 4.0),
@@ -79,24 +79,24 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedNavBar(
-      appearance: this.navBarDecoration,
-      filter: this.navBarEssentials.selectedItem.filter,
-      opacity: this.navBarEssentials.selectedItem.opacity,
-      height: this.navBarEssentials.navBarHeight,
+      decoration: this.navBarDecoration,
+      filter: this.navBarConfig.selectedItem.filter,
+      opacity: this.navBarConfig.selectedItem.opacity,
+      height: this.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials.items.map((item) {
-          int index = this.navBarEssentials.items.indexOf(item);
+        children: this.navBarConfig.items.map((item) {
+          int index = this.navBarConfig.items.indexOf(item);
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                this.navBarEssentials.onItemSelected(index);
+                this.navBarConfig.onItemSelected(index);
               },
               child: _buildItem(
                 context,
                 item,
-                this.navBarEssentials.selectedIndex == index,
+                this.navBarConfig.selectedIndex == index,
               ),
             ),
           );

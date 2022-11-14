@@ -1,16 +1,16 @@
 part of persistent_bottom_nav_bar_v2;
 
 class BottomNavStyle3 extends StatelessWidget {
-  final NavBarEssentials navBarEssentials;
-  final NavBarAppearance navBarDecoration;
+  final NavBarConfig navBarConfig;
+  final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
 
   BottomNavStyle3({
     Key? key,
-    required this.navBarEssentials,
-    this.navBarDecoration = const NavBarAppearance(),
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimationProperties(),
   });
 
@@ -48,15 +48,15 @@ class BottomNavStyle3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color selectedItemActiveColor =
-        this.navBarEssentials.selectedItem.activeColorPrimary;
+        this.navBarConfig.selectedItem.activeColorPrimary;
     double itemWidth = ((MediaQuery.of(context).size.width -
             this.navBarDecoration.padding.horizontal) /
-        this.navBarEssentials.items.length);
+        this.navBarConfig.items.length);
     return DecoratedNavBar(
-      appearance: this.navBarDecoration,
-      filter: this.navBarEssentials.selectedItem.filter,
-      opacity: this.navBarEssentials.selectedItem.opacity,
-      height: this.navBarEssentials.navBarHeight,
+      decoration: this.navBarDecoration,
+      filter: this.navBarConfig.selectedItem.filter,
+      opacity: this.navBarConfig.selectedItem.opacity,
+      height: this.navBarConfig.navBarHeight,
       child: Column(
         children: <Widget>[
           Row(
@@ -64,9 +64,9 @@ class BottomNavStyle3 extends StatelessWidget {
               AnimatedContainer(
                 duration: this.itemAnimationProperties.duration,
                 curve: this.itemAnimationProperties.curve,
-                width: this.navBarEssentials.selectedIndex == 0
+                width: this.navBarConfig.selectedIndex == 0
                     ? 0.0
-                    : itemWidth * this.navBarEssentials.selectedIndex,
+                    : itemWidth * this.navBarConfig.selectedIndex,
                 height: 4.0,
               ),
               Flexible(
@@ -89,16 +89,16 @@ class BottomNavStyle3 extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: this.navBarEssentials.items.map((item) {
-                int index = this.navBarEssentials.items.indexOf(item);
+              children: this.navBarConfig.items.map((item) {
+                int index = this.navBarConfig.items.indexOf(item);
                 return Flexible(
                   child: InkWell(
                     onTap: () {
-                      this.navBarEssentials.onItemSelected(index);
+                      this.navBarConfig.onItemSelected(index);
                     },
                     child: _buildItem(
                       item,
-                      this.navBarEssentials.selectedIndex == index,
+                      this.navBarConfig.selectedIndex == index,
                     ),
                   ),
                 );

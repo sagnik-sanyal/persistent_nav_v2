@@ -1,7 +1,7 @@
 part of persistent_bottom_nav_bar_v2;
 
 class DecoratedNavBar extends StatelessWidget {
-  final NavBarAppearance appearance;
+  final NavBarDecoration decoration;
   final ImageFilter filter;
   final Widget child;
   final double opacity;
@@ -9,7 +9,7 @@ class DecoratedNavBar extends StatelessWidget {
 
   DecoratedNavBar({
     Key? key,
-    this.appearance = const NavBarAppearance(),
+    this.decoration = const NavBarDecoration(),
     required this.child,
     ImageFilter? filter,
     this.opacity = 1.0,
@@ -20,13 +20,14 @@ class DecoratedNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: this.appearance.decoration?.borderRadius as BorderRadius? ?? BorderRadius.zero,
+      borderRadius: this.decoration.decoration?.borderRadius as BorderRadius? ??
+          BorderRadius.zero,
       child: BackdropFilter(
         filter: this.filter,
         child: Container(
-          decoration: this.appearance.decoration?.copyWith(
+          decoration: this.decoration.decoration?.copyWith(
                 color: this
-                    .appearance
+                    .decoration
                     .decoration
                     ?.color
                     ?.withOpacity(this.opacity),
@@ -37,8 +38,8 @@ class DecoratedNavBar extends StatelessWidget {
             left: false,
             bottom: true,
             child: Container(
-              padding: this.appearance.padding,
-              height: this.height - this.appearance.borderHeight(),
+              padding: this.decoration.padding,
+              height: this.height - this.decoration.borderHeight(),
               child: this.child,
             ),
           ),

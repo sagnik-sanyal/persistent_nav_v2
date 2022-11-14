@@ -45,9 +45,9 @@ class PersistentTabView extends StatefulWidget {
 
   /// TODO update doc:
   /// Builder for the Navigation Bar Widget. This also exposes
-  /// [NavBarEssentials] for further control. You can either pass a custom
+  /// [NavBarConfig] for further control. You can either pass a custom
   /// Widget or choose one of the predefined Navigation Bars.
-  final Widget Function(NavBarEssentials) navBarBuilder;
+  final Widget Function(NavBarConfig) navBarBuilder;
 
   /// If `true`, the navBar will be positioned so the content does not overlap with the bottom padding caused by system elements. If ``false``, the navBar will be positioned at the bottom of the screen. Defaults to `true`.
   final bool avoidBottomPadding;
@@ -154,7 +154,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   Widget _buildScreen(int index) {
     return CustomTabView(
       navigatorConfig: widget.tabs[index].navigatorConfig,
-      builder: (BuildContext screenContext) {
+      home: (BuildContext screenContext) {
         _contextList[index] = screenContext;
         if (_sendScreenContext) {
           _sendScreenContext = false;
@@ -184,9 +184,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         tabBar: widget.navBarBuilder(
-          NavBarEssentials(
+          NavBarConfig(
             selectedIndex: _controller.index,
-            selectedScreenBuildContext: _contextList[_controller.index],
             items: widget.tabs.map((e) => e.item).toList(),
             navBarHeight: widget.navBarHeight,
             onItemSelected: (int index) {

@@ -253,8 +253,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       controller: _controller,
       tabs: _tabs(),
       navBarBuilder: (essentials) => BottomNavStyle11(
-        navBarEssentials: essentials,
-        navBarDecoration: NavBarAppearance(
+        navBarConfig: essentials,
+        navBarDecoration: NavBarDecoration(
           padding: EdgeInsets.all(0.0),
           decoration: BoxDecoration(
             color: Colors.pink,
