@@ -54,7 +54,7 @@ class BottomNavStyle2 extends StatelessWidget {
           return Expanded(
             child: InkWell(
               onTap: () {
-                this.navBarEssentials.onItemSelected!(index);
+                this.navBarEssentials.onItemSelected(index);
               },
               child: _buildItem(
                 item,

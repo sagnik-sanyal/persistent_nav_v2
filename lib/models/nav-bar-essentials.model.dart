@@ -4,14 +4,14 @@ part of persistent_bottom_nav_bar_v2;
 class NavBarEssentials {
   final int selectedIndex;
   final List<ItemConfig> items;
-  final bool Function(int)? onItemSelected;
+  final void Function(int) onItemSelected;
   final double navBarHeight;
   final BuildContext? selectedScreenBuildContext;
 
   const NavBarEssentials({
     required this.selectedIndex,
     required this.items,
-    this.onItemSelected,
+    required this.onItemSelected,
     this.navBarHeight = kBottomNavigationBarHeight,
     this.selectedScreenBuildContext,
   });

@@ -52,7 +52,7 @@ class BottomNavStyle5 extends StatelessWidget {
             child: InkWell(
               splashFactory: NoSplash.splashFactory,
               onTap: () {
-                this.navBarEssentials.onItemSelected!(index);
+                this.navBarEssentials.onItemSelected(index);
               },
               child: _buildItem(
                 item,

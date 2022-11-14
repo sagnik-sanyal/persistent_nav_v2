@@ -88,7 +88,7 @@ class BottomNavStyle17 extends StatelessWidget {
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                this.navBarEssentials.onItemSelected!(index);
+                this.navBarEssentials.onItemSelected(index);
               },
               child: index == midIndex
                   ? _buildMiddleItem(

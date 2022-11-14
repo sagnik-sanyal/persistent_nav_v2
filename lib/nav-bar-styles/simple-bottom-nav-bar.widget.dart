@@ -61,7 +61,7 @@ class BottomNavSimple extends StatelessWidget {
           return Flexible(
             child: InkWell(
               onTap: () {
-                this.navBarEssentials.onItemSelected!(index);
+                this.navBarEssentials.onItemSelected(index);
               },
               child: _buildItem(
                 item,

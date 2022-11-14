@@ -9,26 +9,20 @@ import 'package:flutter/material.dart';
 //Animations
 part 'models/nav-bar-animation.model.dart';
 part 'models/nav-bar-essentials.model.dart';
+part 'models/navbar_overlap.dart';
 part 'models/neumorphic-properties.widget.dart';
 part 'models/page-route-transitions.model.dart';
-part 'models/persistent-bottom-nav-item.widget.dart';
 part 'models/persistent-bottom-nav-bar-styles.widget.dart';
 part 'models/persistent-bottom-nav-bar.widget.dart';
+part 'models/persistent-bottom-nav-item.widget.dart';
 //Models
 part 'models/persistent-nav-bar-scaffold.widget.dart';
 part 'models/route-settings.model.dart';
 part 'models/tab-view.widget.dart';
-part 'models/navbar_overlap.dart';
 part 'nav-bar-styles/neumorphic-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/simple-bottom-nav-bar.widget.dart';
 //Styles
 part 'nav-bar-styles/style-1-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-2-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-3-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-5-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-6-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-8-bottom-nav-bar.widget.dart';
-part 'nav-bar-styles/style-9-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-11-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-12-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-13-bottom-nav-bar.widget.dart';
@@ -37,6 +31,12 @@ part 'nav-bar-styles/style-15-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-16-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-17-bottom-nav-bar.widget.dart';
 part 'nav-bar-styles/style-18-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-2-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-3-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-5-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-6-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-8-bottom-nav-bar.widget.dart';
+part 'nav-bar-styles/style-9-bottom-nav-bar.widget.dart';
 //Neuomorphic-Card
 part 'neumorphic-package-by-serge-software/neumorphic-card.dart';
 //Main TabView Widget
@@ -44,3 +44,4 @@ part 'persistent-tab-view.widget.dart';
 //Utils
 part 'utils/functions.utils.dart';
 part 'utils/navigator-functions.utils.dart';
+part 'utils/persistent_tab_controller.dart';

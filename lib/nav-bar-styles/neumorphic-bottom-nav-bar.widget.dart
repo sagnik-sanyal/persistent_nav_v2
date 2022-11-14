@@ -91,7 +91,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                this.navBarEssentials.onItemSelected!(index);
+                this.navBarEssentials.onItemSelected(index);
               },
               child: _buildItem(
                 context,

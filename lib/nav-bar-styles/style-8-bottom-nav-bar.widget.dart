@@ -23,14 +23,12 @@ class _BottomNavStyle8State extends State<BottomNavStyle8>
   late List<AnimationController> _animationControllerList;
   late List<Animation<double>> _animationList;
 
-  int? _lastSelectedIndex;
-  int? _selectedIndex;
+  late int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    _lastSelectedIndex = 0;
-    _selectedIndex = 0;
+    _selectedIndex = widget.navBarEssentials.selectedIndex;
     _animationControllerList = List<AnimationController>.empty(growable: true);
     _animationList = List<Animation<double>>.empty(growable: true);
 
@@ -43,7 +41,7 @@ class _BottomNavStyle8State extends State<BottomNavStyle8>
     }
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-      _animationControllerList[_selectedIndex!].forward();
+      _animationControllerList[_selectedIndex].forward();
     });
   }
 
@@ -94,25 +92,10 @@ class _BottomNavStyle8State extends State<BottomNavStyle8>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.navBarEssentials.items.length !=
-        _animationControllerList.length) {
-      _animationControllerList =
-          List<AnimationController>.empty(growable: true);
-      _animationList = List<Animation<double>>.empty(growable: true);
-
-      for (int i = 0; i < widget.navBarEssentials.items.length; ++i) {
-        _animationControllerList.add(AnimationController(
-            duration: widget.itemAnimationProperties.duration, vsync: this));
-        _animationList.add(Tween(begin: 0.95, end: 1.18)
-            .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
-            .animate(_animationControllerList[i]));
-      }
-    }
     if (widget.navBarEssentials.selectedIndex != _selectedIndex) {
-      _lastSelectedIndex = _selectedIndex;
+      _animationControllerList[_selectedIndex].reverse();
       _selectedIndex = widget.navBarEssentials.selectedIndex;
-      _animationControllerList[_selectedIndex!].forward();
-      _animationControllerList[_lastSelectedIndex!].reverse();
+      _animationControllerList[_selectedIndex].forward();
     }
     return DecoratedNavBar(
       appearance: widget.navBarDecoration,
@@ -129,16 +112,7 @@ class _BottomNavStyle8State extends State<BottomNavStyle8>
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                bool didSwitchTab =
-                    widget.navBarEssentials.onItemSelected!(index);
-                if (didSwitchTab) {
-                  if (index != _selectedIndex) {
-                    _lastSelectedIndex = _selectedIndex;
-                    _selectedIndex = index;
-                    _animationControllerList[_selectedIndex!].forward();
-                    _animationControllerList[_lastSelectedIndex!].reverse();
-                  }
-                }
+                widget.navBarEssentials.onItemSelected(index);
               },
               child: _buildItem(
                 item,

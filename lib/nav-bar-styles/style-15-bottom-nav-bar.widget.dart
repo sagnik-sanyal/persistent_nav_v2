@@ -111,7 +111,7 @@ class BottomNavStyle15 extends StatelessWidget {
                   return Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        this.navBarEssentials.onItemSelected!(index);
+                        this.navBarEssentials.onItemSelected(index);
                       },
                       child: index == midIndex
                           ? Container(width: 150, color: Colors.transparent)
@@ -132,7 +132,7 @@ class BottomNavStyle15 extends StatelessWidget {
           child: Center(
             child: GestureDetector(
               onTap: () {
-                this.navBarEssentials.onItemSelected!(midIndex);
+                this.navBarEssentials.onItemSelected(midIndex);
               },
               child: _buildMiddleItem(
                 this.navBarEssentials.items[midIndex],
