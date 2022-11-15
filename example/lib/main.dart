@@ -56,6 +56,11 @@ class MinimalExample extends StatelessWidget {
       tabs: _tabs(),
       navBarBuilder: (navBarConfig) => Style1BottomNavBar(
         navBarConfig: navBarConfig,
+        navBarDecoration: NavBarDecoration(
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

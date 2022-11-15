@@ -7,17 +7,36 @@
 [![GitHub issues](https://badgen.net/github/issues/jb3rndt/PersistentBottomNavBarV2/)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/issues/)
 [![GitHub stars](https://img.shields.io/github/stars/jb3rndt/PersistentBottomNavBarV2?logo=github&colorB=dargreen)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/stargazers/)
 
-A persistent/static bottom navigation bar for Flutter.
+A highly customizable bottom navigation bar for Flutter. It is shipped with 17 prebuilt styles you can choose from (see below), but can also be used with your very own style without sacrificing any features.
 
-NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.dev/packages/persistent_bottom_nav_bar) which currently is not continued.
+NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.dev/packages/persistent_bottom_nav_bar).
 
-![Persistent Behavior](gifs/persistent.gif)
+<p align="center">
+<img src="gifs/persistent.gif" alt="Preview" style="height:400px;"/>
+</p>
+
+<details>
+  <summary><h2>Table of Contents</h2></summary>
+
+- [Styles](#styles)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [1. Install the package](#1-install-the-package)
+  - [2. Import the package](#2-import-the-package)
+  - [3. Use the `PersistentTabView`](#3-use-the-persistenttabview)
+- [Styling](#styling)
+- [Using a custom Navigation Bar](#using-a-custom-navigation-bar)
+- [Controlling the Navigation Bar programmatically](#controlling-the-navigation-bar-programmatically)
+- [Navigation](#navigation)
+- [Useful Tips](#useful-tips)
+
+</details>
 
 ## Styles
 
-| Style15                      | Style16                       |
-| ---------------------------- | ----------------------------- |
-| ![style1](gifs/style-15.gif) | ![style10](gifs/style-16.gif) |
+| Style15                      | Style16                       | Style9                       |
+| ---------------------------- | ----------------------------- | ---------------------------- |
+| ![style1](gifs/style-15.gif) | ![style10](gifs/style-16.gif) | ![style10](gifs/style-9.gif) |
 
 | Style1                      | Style9                       |
 | --------------------------- | ---------------------------- |
@@ -39,334 +58,283 @@ NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.
 | ----------------------------------- | ------------------------------------------ |
 | ![neumorphic1](gifs/neumorphic.gif) | ![neumorphic2](gifs/neumorphic-nosubs.gif) |
 
-### Note: These do not include all style variations
+Note: These do not include all style variations
 
 ## Features
 
-- Highly customizable `persistent` bottom navigation bar.
-- Ability to push new screens with or without bottom navigation bar.
-- 20 styles for the bottom navigation bar.
-- Includes functions for pushing screen with or without the bottom navigation bar i.e. pushNewScreen() and pushNewScreenWithRouteSettings().
-- Based on flutter's Cupertino(iOS) bottom navigation bar.
-- Can be `translucent` for a particular tab.
-- Custom styling for the navigation bar. Click [here](#custom-navigation-bar-styling) for more information.
+- New pages can be pushed below or above the navigation bar.
+- 17 prebuilt navigation bar styles ready to use.
+- Each style is fully customizable ([see below](#styling))
+- Supports custom navigation bars
+- Persistent Tabs -> Navigation Stack is not discarded when switching to another tab
+- Supports transparency and blur effects
 - Handles hardware/software Android back button.
 
 ## Getting Started
 
-In your flutter project add the dependency:
+### 1. Install the package
 
 ```yaml
 dependencies:
   persistent_bottom_nav_bar_v2: any
 ```
 
-Import the package:
+### 2. Import the package
 
 ```dart
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 ```
 
-Persistent bottom navigation bar uses `PersistentTabController` as its controller. Here is how to declare it:
+### 3. Use the `PersistentTabView`
+
+The `PersistentTabView` is your top level container that will hold both your navigation bar and all the pages (just like a `Scaffold`). Thats why it is not recommended, to wrap the `PersistentTabView` inside a `Scaffold.body`, because it does all of that for you. So just create the config for each tab and insert the `PersistentTabView` like this and you are good to go:
 
 ```dart
-PersistentTabController _controller;
+import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-_controller = PersistentTabController(initialIndex: 0);
+void main() => runApp(PersistenBottomNavBarDemo());
 
-```
-
-The main widget then to be declared is `PersistentTabView`. NOTE: This widget includes SCAFFOLD (based on `CupertinoTabScaffold`), so no need to declare it. Following is an example for demonstration purposes:
-
-```dart
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
-
+class PersistenBottomNavBarDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        avoidBottomPadding: true,
-        backgroundColor: Colors.white, // Default is Colors.white.
-        handleAndroidBackButtonPress: true, // Default is true.
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-        stateManagement: true, // Default is true.
-        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-        decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          colorBehindNavBar: Colors.white,
+    return MaterialApp(
+      title: 'Persistent Bottom Navigation Bar Demo',
+      home: PersistentTabView(
+        tabs: [
+          PersistentTabConfig(
+            screen: YourFirstScreen(),
+            item: ItemConfig(
+              icon: Icon(Icons.home),
+              title: "Home",
+            ),
+          ),
+          PersistentTabConfig(
+            screen: YourSecondScreen(),
+            item: ItemConfig(
+              icon: Icon(Icons.message),
+              title: "Messages",
+            ),
+          ),
+          PersistentTabConfig(
+            screen: YourThirdScreen(),
+            item: ItemConfig(
+              icon: Icon(Icons.settings),
+              title: "Settings",
+            ),
+          ),
+        ],
+        navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+          navBarConfig: navBarConfig,
+          navBarDecoration: NavBarDecoration(
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+          ),
         ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style1, // Choose the nav bar style with this property.
+      ),
     );
   }
 }
-
 ```
 
-```dart
+## Styling
 
-    List<Widget> _buildScreens() {
-        return [
-          MainScreen(),
-          SettingsScreen()
-        ];
-    }
+You can customize the Navigation Bar with all the parameters, each style allows. Here, for example, you could set a different border radius by passing `BorderRadius.circular(8)` to the `BoxDecoration`. Styles that include animations also allow you to adjust the timings and interpolation curves.
 
-```
+## Using a custom Navigation Bar
+
+You can replace the `Style1BottomNavBar` widget with your own custom widget. As you can see, the `navBarBuilder` gives you a `navBarConfig`, which should be everything you need to build your custom navigation bar. Here is an example:
 
 ```dart
+class CustomNavBar extends StatelessWidget {
+  final NavBarConfig navBarConfig;
+  final NavBarDecoration navBarDecoration;
 
-    List<PersistentBottomNavBarItem> _navBarsItems() {
-        return [
-            PersistentBottomNavBarItem(
-                icon: Icon(CupertinoIcons.home),
-                title: "Home",
-                activeColorPrimary: CupertinoColors.activeBlue,
-                inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-                icon: Icon(CupertinoIcons.settings),
-                title: "Settings",
-                activeColorPrimary: CupertinoColors.activeBlue,
-                inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-        ];
-    }
+  CustomNavBar({
+    Key key,
+    @required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
+  }) : super(key: key);
 
-```
-
-If you need e.g. notification counters on the icons in the navBar, you can use the [badges](https://pub.dev/packages/badges) package like so: (see [Issue 11](https://github.com/jb3rndt/PersistentBottomNavBarV2/issues/11))
-
-```dart
-PersistentBottomNavBarItem(
-    icon: Badge(
-        animationType: BadgeAnimationType.scale,
-        badgeContent: UnreadIndicator(),
-        child: const Icon(
-            Icons.chat_rounded,
+  Widget _buildItem(ItemConfig item, bool isSelected) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: IconTheme(
+            data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary),
+            child: isSelected ? item.icon : item.inactiveIcon,
+          ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0),
+          child: Material(
+            type: MaterialType.transparency,
+            child: FittedBox(
+              child: Text(
+                item.title,
+                style: item.textStyle.apply(
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedNavBar(
+      decoration: this.navBarDecoration,
+      filter: this.navBarConfig.selectedItem.filter,
+      opacity: this.navBarConfig.selectedItem.opacity,
+      height: this.navBarConfig.navBarHeight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: this.navBarConfig.items.map((item) {
+          int index = this.navBarConfig.items.indexOf(item);
+          return Expanded(
+            child: InkWell(
+              onTap: () {
+                this.navBarConfig.onItemSelected(index); // This is the most important part. Without this, nothing would happen if you tap on an item.
+              },
+              child: _buildItem(
+                item,
+                this.navBarConfig.selectedIndex == index,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+```
+
+In your `PersistentTabView`, you can use it just like the predefined style:
+
+```dart
+PersistentTabView(
+  tabs: ...,
+  navBarBuilder: (navBarConfig) => CustomNavBar(
+    navBarConfig: navBarConfig,
+    navBarDecoration: NavBarDecoration(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
     ),
-    title: "Chat",
+  ),
 ),
 ```
 
-## Navigator Functions
+The most important thing is that you call the `navBarConfig.onItemSelected` function with the index of the tapped item, otherwise the `PersistentTabView` will not react to anything.
 
-**Note: You still can use regular Navigator functions like 'pushNamed' but be sure to check the argument `routeAndNavigatorSettings` your `PersistentBottomNavBarItem` for route settings and some other navigator related properties**
-To push a new screen, use the following functions to control the `visibility` of bottom navigation bar on a particular screen. You can use your own logic to implement `platform-specific` behavior. One of the solutions could be to use the property `withNavBar` and toggle it according to the Platform.
+You dont need to use either the `DecoratedNavBar` widget, nor the `NavBarDecoration`, it is just a helper for you. You can do whatever you want in that custom navigation bar widget, as long as you remember to invoke the `onItemSelected` callback.
 
-In `platform-specific` behavior, while pushing a new screen, on `Android` it will push the screen WITHOUT the bottom navigation bar but on `iOS` it will persist the bottom navigation bar. This is the default behavior specified by each platform.
+## Controlling the Navigation Bar programmatically
+
+Internally, the `PersistentTabView` uses a `PersistentTabController`. So you can pass a controller to the `PersistentTabView` to use it later for changing the tab programmatically:
 
 ```dart
+PersistentTabController _controller = PersistentTabController(initialIndex: 0);
 
-    pushNewScreen(
-        context,
-        screen: MainScreen(),
-        withNavBar: true, // OPTIONAL VALUE. True by default.
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    );
+PersistentTabView(
+  controller: _controller,
+  ...
+);
+
+_controller.jumpToTab(2);
 
 ```
 
-```dart
+## Navigation
 
-    pushNewScreenWithRouteSettings(
-        context,
-        settings: RouteSettings(name: MainScreen.routeName),
-        screen: MainScreen(),
-        withNavBar: true,
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    );
+Each of your Tabs will get its own Navigator, so they dont interfere with eachother. That means there will now be a difference between calling `Navigator.of(context).push()` (which will push a new screen inside the current tab) and `Navigator.of(context, rootNavigator: true).push()` (which will push a new screen above the whole `PersistentTabView`, ultimately hiding your navigation bar).
 
-```
-
-If you are pushing a new `modal` screen, use the following function:
+The package includes the following utility functions for expressive navigation.
 
 ```dart
-
-    pushDynamicScreen(
-        context,
-        screen: HomeModalScreen(),
-        withNavBar: true,
-    );
-
+pushScreen(
+  context,
+  screen: MainScreen(),
+  withNavBar: true/false,
+);
 ```
 
-### Some Useful Tips
+```dart
+pushWithNavBar(
+  context,
+  MaterialPageRoute(builder: (context) => ...)
+);
+```
+
+```dart
+pushWithoutNavBar(
+  context,
+  MaterialPageRoute(builder: (context) => ...)
+);
+```
+
+By default, each of the tabs navigators will inherit all the settings of the root navigator. So every configuration you do to the named routes (etc.) of the root navigator, will work just the same in each tab. If you want specific settings for each navigator (like additional routes, `NavigatorObservers` etc.), you can do so by passing a `NavigatorConfig` to the respective `PersistentTabConfig`.
+
+The `PersistentTabView` has the ability to remember the navigation stack for each tab, so when you switch back to it you will see the exact same content when you left. This behavior can be toggled with the `PersistentTabView.stateManagement` parameter.
+
+## Useful Tips
+
+- Try the [interactive example project](https://github.com/jb3rndt/PersistentBottomNavBarV2/tree/master/example) in the official git repo to get a better feeling for the package
 
 - Pop to any screen in the navigation graph for a given tab:
 
     ```dart
-        Navigator.of(context).popUntil((route) {
-            return route.settings.name == "ScreenToPopBackTo";
-        });
+    Navigator.of(context).popUntil((route) {
+        return route.settings.name == "ScreenToPopBackTo";
+    });
     ```
 
 - Pop back to first screen in the navigation graph for a given tab:
 
     ```dart
-        Navigator.of(context).popUntil(ModalRoute.withName("/"));
+    Navigator.of(context).popUntil(ModalRoute.withName("/"));
     ```
 
     ```dart
-        Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(
-            builder: (BuildContext context) {
-              return FirstScreen();
-            },
-          ),
-          (_) => false,
-        );
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+        builder: (BuildContext context) {
+            return FirstScreen();
+        },
+        ),
+        (_) => false,
+    );
     ```
 
 - To push bottom sheet on top of the Navigation Bar, use showModalBottomScreen and set it's property `useRootNavigator` to true. See example project for an illustration.
 
-## Custom Navigation Bar Styling
-
-If you want to have your own style for the navigation bar, follow these steps:
-
-1. Declare your custom widget. Please keep in mind that you will have to handle the function `onSelectedItem` and the integer `selectedIndex` yourself to maintain full functionality. Also please note that you can define your own model for the navigation bar item instead of the provided `PersistentBottomNavBarItem`. See this example below for better understanding:
+- If you need e.g. notification counters on the icons in the navBar, you can use the [badges package](https://pub.dev/packages/badges) like so: (see [Issue 11](https://github.com/jb3rndt/PersistentBottomNavBarV2/issues/11))
 
     ```dart
-
-        class CustomNavBarWidget extends StatelessWidget {
-            final int selectedIndex;
-            final List<PersistentBottomNavBarItem> items; // NOTE: You CAN declare your own model here instead of `PersistentBottomNavBarItem`.
-            final ValueChanged<int> onItemSelected;
-
-            CustomNavBarWidget(
-                {Key key,
-                this.selectedIndex,
-                @required this.items,
-                this.onItemSelected,});
-
-            Widget _buildItem(
-                PersistentBottomNavBarItem item, bool isSelected) {
-                return Container(
-                alignment: Alignment.center,
-                height: 60.0,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                    Flexible(
-                        child: IconTheme(
-                        data: IconThemeData(
-                            size: 26.0,
-                            color: isSelected
-                                ? (item.activeColorSecondary == null
-                                    ? item.activeColorPrimary
-                                    : item.activeColorSecondary)
-                                : item.inactiveColorPrimary == null
-                                    ? item.activeColorPrimary
-                                    : item.inactiveColorPrimary),
-                        child: item.icon,
-                        ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Material(
-                        type: MaterialType.transparency,
-                        child: FittedBox(
-                            child: Text(
-                            item.title,
-                            style: TextStyle(
-                                color: isSelected
-                                    ? (item.activeColorSecondary == null
-                                        ? item.activeColorPrimary
-                                        : item.activeColorSecondary)
-                                    : item.inactiveColorPrimary,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.0),
-                        )),
-                        ),
-                    )
-                    ],
+    PersistentTabConfig(
+        screen: ...,
+        item: ItemConfig(
+            icon: Badge(
+                animationType: BadgeAnimationType.scale,
+                badgeContent: UnreadIndicator(),
+                child: const Icon(
+                    Icons.chat_rounded,
                 ),
-                );
-            }
-
-            @override
-            Widget build(BuildContext context) {
-                return Container(
-                color: Colors.white,
-                child: Container(
-                    width: double.infinity,
-                    height: 60.0,
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: items.map((item) {
-                        int index = items.indexOf(item);
-                        return Flexible(
-                        child: GestureDetector(
-                            onTap: () {
-                            this.onItemSelected(index);
-                            },
-                            child: _buildItem(
-                                item, selectedIndex == index),
-                        ),
-                        );
-                    }).toList(),
-                    ),
-                ),
-                );
-            }
-        }
-
+            ),
+            title: "Chat",
+        ),
+    ),
     ```
-
-2. In the main `PersistentTabView` widget, set the `navBarStyle` property as `NavBarStyle.custom` and pass on the custom widget you just created in the `customWidget` property like this:
-
-    ```dart
-
-    class MyApp extends StatelessWidget {
-        const MyApp({Key key}) : super(key: key);
-
-        @override
-        Widget build(BuildContext context) {
-            return PersistentTabView.custom(
-                context,
-                controller: _controller,
-                itemCount: items.length, // This is required in case of custom style! Pass the number of items for the nav bar.
-                screens: _buildScreens(),
-                avoidBottomPadding: true,
-                handleAndroidBackButtonPress: true,
-                onItemSelected: (int) {
-                    setState(() {}); // This is required to update the nav bar if Android back button is pressed
-                },
-                customWidget: (navBarConfig) =>CustomNavBarWidget( // Your custom widget goes here
-                    items: _navBarsItems(),
-                    selectedIndex: _controller.index,
-                    onItemSelected: (index) {
-                        setState(() {
-                            _controller.index = index; // NOTE: THIS IS CRITICAL!! Don't miss it!
-                        });
-                    },
-                ),
-            );
-        }
-    }
-
-    ```
-
-    `NOTE: In the 'onSelected' function of the customWidget, don't forgot to change the index of the controller`
-
-3. Done! As we can see, some of the other properties like `iconSize`, `items` are not required here so you can skip those properties. To control the **bottom padding** of the screen, use `bottomScreenPadding`. If you give too much `bottomScreenPadding` but less height in the custom widget or vice versa, layout issues might appear.
-
-For better understanding, refer to the [example project](https://github.com/jb3rndt/PersistentBottomNavBarV2/tree/master/example) in the official git repo.
