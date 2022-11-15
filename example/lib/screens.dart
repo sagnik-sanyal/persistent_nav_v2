@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
-
-import 'modal_screen.dart';
+import 'package:persistent_bottom_nav_bar_v2_example_project/modal_screen.dart';
 
 class MainScreen extends StatelessWidget {
-  final Function onScreenHideButtonPressed;
-  final bool hideStatus;
-
-  const MainScreen({
-    Key key,
-    this.onScreenHideButtonPressed,
-    this.hideStatus = false,
-  }) : super(key: key);
+  const MainScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tab Screen')),
+      appBar: AppBar(title: const Text('Tab Main Screen')),
       backgroundColor: Colors.indigo,
       body: ListView(
         children: <Widget>[
@@ -107,30 +99,6 @@ class MainScreen extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                this.onScreenHideButtonPressed();
-              },
-              child: Text(
-                this.hideStatus
-                    ? "Unhide Navigation Bar"
-                    : "Hide Navigation Bar",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-              child: Text(
-                "<- Main Menu",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
           SizedBox(
             height: 60.0,
           ),
@@ -146,6 +114,7 @@ class MainScreen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Secondary Screen')),
       backgroundColor: Colors.teal,
       body: ListView(
         children: <Widget>[
@@ -179,6 +148,7 @@ class MainScreen3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Tertiary Screen')),
       backgroundColor: Colors.deepOrangeAccent,
       body: Container(
         child: Center(

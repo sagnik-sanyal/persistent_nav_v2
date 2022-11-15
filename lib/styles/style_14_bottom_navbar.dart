@@ -14,6 +14,7 @@ class Style14BottomNavBar extends StatelessWidget {
 
   Widget _buildItem(ItemConfig item, bool isSelected) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -55,17 +56,16 @@ class Style14BottomNavBar extends StatelessWidget {
         boxShadow: this.navBarDecoration.decoration?.boxShadow,
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: item.activeColorPrimary,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: item.activeColorPrimary,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             Padding(
