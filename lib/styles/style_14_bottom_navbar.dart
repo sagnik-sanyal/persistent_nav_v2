@@ -111,12 +111,12 @@ class Style14BottomNavBar extends StatelessWidget {
                 children: this.navBarConfig.items.map((item) {
                   int index = this.navBarConfig.items.indexOf(item);
                   return Expanded(
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         this.navBarConfig.onItemSelected(index);
                       },
                       child: index == midIndex
-                          ? Container(width: 150, color: Colors.transparent)
+                          ? Container()
                           : _buildItem(
                               item,
                               this.navBarConfig.selectedIndex == index,

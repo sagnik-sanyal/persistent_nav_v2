@@ -58,7 +58,7 @@ class Style1BottomNavBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: this.navBarConfig.items.map((item) {
           int index = this.navBarConfig.items.indexOf(item);
-          return Flexible(
+          return Expanded(
             child: InkWell(
               onTap: () {
                 this.navBarConfig.onItemSelected(index);

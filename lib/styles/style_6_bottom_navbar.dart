@@ -107,7 +107,7 @@ class _Style6BottomNavBarState extends State<Style6BottomNavBar>
         children: widget.navBarConfig.items.map((item) {
           int index = widget.navBarConfig.items.indexOf(item);
           return Expanded(
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {
                 widget.navBarConfig.onItemSelected(index);
               },
