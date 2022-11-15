@@ -23,7 +23,7 @@ class MainScreen extends StatelessWidget {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                pushNewScreenWithRouteSettings(
+                pushScreen(
                   context,
                   settings: RouteSettings(name: '/home'),
                   screen: MainScreen2(),
@@ -91,8 +91,7 @@ class MainScreen extends StatelessWidget {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                pushDynamicScreen(context,
-                    screen: SampleModalScreen(), withNavBar: true);
+                pushWithNavBar(context, SampleModalScreen());
               },
               child: Text(
                 "Push Dynamic/Modal Screen",
@@ -120,7 +119,7 @@ class MainScreen2 extends StatelessWidget {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                pushNewScreen(context, screen: MainScreen3());
+                pushScreen(context, screen: MainScreen3());
               },
               child: Text(
                 "Go to Third Screen",

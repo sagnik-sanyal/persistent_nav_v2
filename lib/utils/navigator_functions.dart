@@ -1,47 +1,30 @@
 part of persistent_bottom_nav_bar_v2;
 
-Future<T?> pushNewScreen<T>(
+@optionalTypeArgs
+Future<T?> pushScreen<T extends Object?>(
   BuildContext context, {
   required Widget screen,
-  bool? withNavBar,
+  bool withNavBar = true,
   PageTransitionAnimation pageTransitionAnimation =
       PageTransitionAnimation.cupertino,
   PageRoute? customPageRoute,
+  RouteSettings? settings,
 }) {
-  if (withNavBar == null) {
-    withNavBar = true;
-  }
-  return Navigator.of(context, rootNavigator: !withNavBar).push<T>(
-      customPageRoute as Route<T>? ??
-          getPageRoute(pageTransitionAnimation, enterPage: screen));
+  return Navigator.of(context, rootNavigator: !withNavBar)
+      .push<T>(customPageRoute as Route<T>? ??
+          getPageRoute(
+            pageTransitionAnimation,
+            enterPage: screen,
+            settings: settings,
+          ));
 }
 
-Future<T?> pushDynamicScreen<T>(
-  BuildContext context, {
-  required dynamic screen,
-  bool? withNavBar,
-}) {
-  if (withNavBar == null) {
-    withNavBar = true;
-  }
-  return Navigator.of(context, rootNavigator: !withNavBar).push<T>(screen);
+@optionalTypeArgs
+Future<T?> pushWithNavBar<T>(BuildContext context, Route<T> route) {
+  return Navigator.of(context, rootNavigator: false).push<T>(route);
 }
 
-Future<T?> pushNewScreenWithRouteSettings<T>(
-  BuildContext context, {
-  required Widget screen,
-  required RouteSettings settings,
-  bool? withNavBar,
-  PageTransitionAnimation pageTransitionAnimation =
-      PageTransitionAnimation.cupertino,
-  PageRoute? customPageRoute,
-}) {
-  if (withNavBar == null) {
-    withNavBar = true;
-  }
-
-  return Navigator.of(context, rootNavigator: !withNavBar).push<T>(
-      customPageRoute as Route<T>? ??
-          getPageRoute(pageTransitionAnimation,
-              enterPage: screen, settings: settings));
+@optionalTypeArgs
+Future<T?> pushWithoutNavBar<T>(BuildContext context, Route<T> route) {
+  return Navigator.of(context, rootNavigator: false).push<T>(route);
 }

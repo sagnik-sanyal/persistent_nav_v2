@@ -43,8 +43,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           inactiveColorPrimary: Colors.grey,
         ),
         onPressed: (context) {
-          pushDynamicScreen(context,
-              screen: SampleModalScreen(), withNavBar: true);
+          pushWithNavBar(context, SampleModalScreen());
         },
       ),
       PersistentTabConfig(
