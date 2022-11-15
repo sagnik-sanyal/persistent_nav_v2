@@ -1,13 +1,13 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle12 extends StatefulWidget {
+class Style10BottomNavBar extends StatefulWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
 
-  BottomNavStyle12({
+  Style10BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -15,10 +15,10 @@ class BottomNavStyle12 extends StatefulWidget {
   });
 
   @override
-  _BottomNavStyle12State createState() => _BottomNavStyle12State();
+  _Style10BottomNavBarState createState() => _Style10BottomNavBarState();
 }
 
-class _BottomNavStyle12State extends State<BottomNavStyle12>
+class _Style10BottomNavBarState extends State<Style10BottomNavBar>
     with TickerProviderStateMixin {
   late List<AnimationController> _animationControllerList;
   late List<Animation<Offset>> _animationList;

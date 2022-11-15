@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-import 'modal-screen.dart';
+import 'modal_screen.dart';
 import 'screens.dart';
 
 class InteractiveExample extends StatefulWidget {
@@ -252,7 +252,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
     return PersistentTabView(
       controller: _controller,
       tabs: _tabs(),
-      navBarBuilder: (essentials) => BottomNavStyle11(
+      navBarBuilder: (essentials) => Style9BottomNavBar(
         navBarConfig: essentials,
         navBarDecoration: NavBarDecoration(
           padding: EdgeInsets.all(0.0),

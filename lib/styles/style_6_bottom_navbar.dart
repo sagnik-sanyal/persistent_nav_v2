@@ -1,13 +1,13 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle14 extends StatefulWidget {
+class Style6BottomNavBar extends StatefulWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
 
-  BottomNavStyle14({
+  Style6BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -15,13 +15,13 @@ class BottomNavStyle14 extends StatefulWidget {
   });
 
   @override
-  _BottomNavStyle14State createState() => _BottomNavStyle14State();
+  _Style6BottomNavBarState createState() => _Style6BottomNavBarState();
 }
 
-class _BottomNavStyle14State extends State<BottomNavStyle14>
+class _Style6BottomNavBarState extends State<Style6BottomNavBar>
     with TickerProviderStateMixin {
   late List<AnimationController> _animationControllerList;
-  late List<Animation<Offset>> _animationList;
+  late List<Animation<double>> _animationList;
 
   late int _selectedIndex;
 
@@ -30,14 +30,12 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
     super.initState();
     _selectedIndex = widget.navBarConfig.selectedIndex;
     _animationControllerList = List<AnimationController>.empty(growable: true);
-    _animationList = List<Animation<Offset>>.empty(growable: true);
+    _animationList = List<Animation<double>>.empty(growable: true);
 
     for (int i = 0; i < widget.navBarConfig.items.length; ++i) {
       _animationControllerList.add(AnimationController(
           duration: widget.itemAnimationProperties.duration, vsync: this));
-      _animationList.add(Tween(
-              begin: Offset(0, widget.navBarConfig.navBarHeight / 1.5),
-              end: Offset(0, 0.0))
+      _animationList.add(Tween(begin: 0.95, end: 1.18)
           .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
           .animate(_animationControllerList[i]));
     }
@@ -48,17 +46,15 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
   }
 
   Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) {
-    double itemWidth = ((MediaQuery.of(context).size.width -
-            widget.navBarDecoration.padding.horizontal) /
-        widget.navBarConfig.items.length);
     return AnimatedBuilder(
       animation: _animationList[itemIndex],
-      builder: (context, child) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: IconTheme(
+      builder: (context, child) => Transform.scale(
+        scale: _animationList[itemIndex].value,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            IconTheme(
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
@@ -67,11 +63,8 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
-          ),
-          if (item.title != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: FittedBox(
+            if (item.title != null)
+              FittedBox(
                 child: Text(
                   item.title!,
                   style: item.textStyle.apply(
@@ -80,22 +73,8 @@ class _BottomNavStyle14State extends State<BottomNavStyle14>
                           : item.inactiveColorPrimary),
                 ),
               ),
-            ),
-          AnimatedOpacity(
-            opacity: isSelected ? 1.0 : 0.0,
-            duration: widget.itemAnimationProperties.duration,
-            child: Transform.translate(
-              offset: _animationList[itemIndex].value,
-              child: Container(
-                height: 5.0,
-                width: itemWidth * 0.8,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: item.activeColorSecondary),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

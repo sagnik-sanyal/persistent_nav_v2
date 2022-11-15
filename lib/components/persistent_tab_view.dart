@@ -1,6 +1,3 @@
-// Original Author: Bilal Shahid (bilalscheema@gmail.com)
-// Version 2 maintained by: Jannis Berndt (berndtjannis@gmail.com)
-
 part of persistent_bottom_nav_bar_v2;
 
 /// A highly customizable persistent bottom navigation bar for flutter.
@@ -43,7 +40,6 @@ class PersistentTabView extends StatefulWidget {
   /// The margin around the navigation bar.
   final EdgeInsets margin;
 
-  /// TODO update doc:
   /// Builder for the Navigation Bar Widget. This also exposes
   /// [NavBarConfig] for further control. You can either pass a custom
   /// Widget or choose one of the predefined Navigation Bars.
@@ -169,7 +165,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     );
   }
 
-  Widget navigationBarWidget() => PersistentTabScaffold(
+  Widget navigationBarWidget() => PersistentTabViewScaffold(
         controller: _controller,
         hideNavigationBar: widget.hideNavigationBar,
         tabCount: widget.tabs.length,

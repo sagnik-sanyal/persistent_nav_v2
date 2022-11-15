@@ -1,10 +1,10 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle18 extends StatelessWidget {
+class Style15BottomNavBar extends StatelessWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
-  BottomNavStyle18({
+  Style15BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -33,27 +33,24 @@ class BottomNavStyle18 extends StatelessWidget {
             child: Text(
               item.title!,
               style: item.textStyle.apply(
-                color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
-              ),
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary),
             ),
-          )
+          ),
       ],
     );
   }
 
-  Widget _buildMiddleItem(
-      BuildContext context, ItemConfig item, bool isSelected) {
+  Widget _buildMiddleItem(ItemConfig item, bool isSelected) {
     return Container(
       margin: EdgeInsets.only(
         left: 5.0,
         right: 5.0,
       ),
       decoration: BoxDecoration(
+        shape: BoxShape.circle,
         color: item.activeColorPrimary,
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.transparent, width: 5.0),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +92,6 @@ class BottomNavStyle18 extends StatelessWidget {
               },
               child: index == midIndex
                   ? _buildMiddleItem(
-                      context,
                       item,
                       this.navBarConfig.selectedIndex == index,
                     )

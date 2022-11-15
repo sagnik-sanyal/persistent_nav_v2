@@ -1,6 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle9 extends StatelessWidget {
+class Style2BottomNavBar extends StatelessWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
   final EdgeInsets itemPadding;
@@ -8,7 +8,7 @@ class BottomNavStyle9 extends StatelessWidget {
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
 
-  BottomNavStyle9({
+  Style2BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -26,7 +26,7 @@ class BottomNavStyle9 extends StatelessWidget {
         color: isSelected
             ? item.activeColorSecondary
             : item.inactiveColorSecondary,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(50)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,25 +34,23 @@ class BottomNavStyle9 extends StatelessWidget {
         children: <Widget>[
           IconTheme(
             data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
-            ),
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary),
             child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null && isSelected)
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
-                        color: isSelected
-                            ? item.activeColorPrimary
-                            : item.inactiveColorPrimary),
-                  ),
+                child: Text(
+                  item.title!,
+                  softWrap: false,
+                  style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary),
                 ),
               ),
             ),
@@ -73,7 +71,7 @@ class BottomNavStyle9 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: this.navBarConfig.items.map((item) {
           int index = this.navBarConfig.items.indexOf(item);
-          return GestureDetector(
+          return InkWell(
             onTap: () {
               this.navBarConfig.onItemSelected(index);
             },

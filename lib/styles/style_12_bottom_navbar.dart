@@ -1,13 +1,13 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle13 extends StatefulWidget {
+class Style12BottomNavBar extends StatefulWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
 
-  BottomNavStyle13({
+  Style12BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -15,13 +15,14 @@ class BottomNavStyle13 extends StatefulWidget {
   });
 
   @override
-  _BottomNavStyle13State createState() => _BottomNavStyle13State();
+  _Style12BottomNavBarState createState() => _Style12BottomNavBarState();
 }
 
-class _BottomNavStyle13State extends State<BottomNavStyle13>
+class _Style12BottomNavBarState extends State<Style12BottomNavBar>
     with TickerProviderStateMixin {
   late List<AnimationController> _animationControllerList;
   late List<Animation<Offset>> _animationList;
+
   late int _selectedIndex;
 
   @override
@@ -67,6 +68,19 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
           ),
+          if (item.title != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2.0),
+              child: FittedBox(
+                child: Text(
+                  item.title!,
+                  style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary),
+                ),
+              ),
+            ),
           AnimatedOpacity(
             opacity: isSelected ? 1.0 : 0.0,
             duration: widget.itemAnimationProperties.duration,
@@ -114,7 +128,7 @@ class _BottomNavStyle13State extends State<BottomNavStyle13>
         children: widget.navBarConfig.items.map((item) {
           int index = widget.navBarConfig.items.indexOf(item);
           return Expanded(
-            child: InkWell(
+            child: GestureDetector(
               onTap: () {
                 widget.navBarConfig.onItemSelected(index);
               },

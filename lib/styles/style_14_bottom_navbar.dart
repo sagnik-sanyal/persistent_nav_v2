@@ -1,10 +1,10 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle16 extends StatelessWidget {
+class Style14BottomNavBar extends StatelessWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
-  BottomNavStyle16({
+  Style14BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),

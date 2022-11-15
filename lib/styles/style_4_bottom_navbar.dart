@@ -1,13 +1,13 @@
 part of persistent_bottom_nav_bar_v2;
 
-class BottomNavStyle3 extends StatelessWidget {
+class Style4BottomNavBar extends StatelessWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimationProperties itemAnimationProperties;
 
-  BottomNavStyle3({
+  Style4BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),

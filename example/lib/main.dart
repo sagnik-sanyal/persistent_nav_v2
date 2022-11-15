@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:persistent_bottom_nav_bar_v2_example_project/interactive_example.dart';
-import 'package:persistent_bottom_nav_bar_v2_example_project/modal-screen.dart';
+import 'package:persistent_bottom_nav_bar_v2_example_project/modal_screen.dart';
 import 'package:persistent_bottom_nav_bar_v2_example_project/screens.dart';
 
 void main() => runApp(PersistenBottomNavBarDemo());
@@ -211,8 +211,8 @@ class _ProvidedStyleExampleState extends State<ProvidedStyleExample> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarBuilder: (navBarEssentials) => BottomNavStyle15(
-        navBarEssentials: navBarEssentials,
+      navBarBuilder: (navBarEssentials) => Style15BottomNavBar(
+        navBarConfig: navBarEssentials,
         // itemAnimationProperties: ItemAnimationProperties(
         //   duration: Duration(milliseconds: 400),
         //   curve: Curves.ease,

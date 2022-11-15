@@ -1,7 +1,7 @@
 part of persistent_bottom_nav_bar_v2;
 
-class PersistentTabScaffold extends StatefulWidget {
-  PersistentTabScaffold({
+class PersistentTabViewScaffold extends StatefulWidget {
+  PersistentTabViewScaffold({
     Key? key,
     required this.tabBar,
     required this.tabBuilder,
@@ -51,10 +51,11 @@ class PersistentTabScaffold extends StatefulWidget {
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   @override
-  State<PersistentTabScaffold> createState() => _PersistentTabScaffoldState();
+  State<PersistentTabViewScaffold> createState() =>
+      _PersistentTabViewScaffoldState();
 }
 
-class _PersistentTabScaffoldState extends State<PersistentTabScaffold>
+class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
     with TickerProviderStateMixin {
   late bool _navBarFullyShown;
   late final AnimationController _hideNavBarAnimationController =
@@ -75,7 +76,7 @@ class _PersistentTabScaffoldState extends State<PersistentTabScaffold>
     _navBarFullyShown = !widget.hideNavigationBar;
   }
 
-  didUpdateWidget(PersistentTabScaffold oldWidget) {
+  didUpdateWidget(PersistentTabViewScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.hideNavigationBar != oldWidget.hideNavigationBar) {
       if (widget.hideNavigationBar) {

@@ -93,3 +93,79 @@ class PersistentTabConfig {
     this.onSelectedTabPressWhenNoScreensPushed,
   }) : screen = Container();
 }
+
+class NavBarConfig {
+  final int selectedIndex;
+  final List<ItemConfig> items;
+  final void Function(int) onItemSelected;
+  final double navBarHeight;
+
+  const NavBarConfig({
+    required this.selectedIndex,
+    required this.items,
+    required this.onItemSelected,
+    this.navBarHeight = kBottomNavigationBarHeight,
+  });
+
+  ItemConfig get selectedItem => this.items[this.selectedIndex];
+
+  NavBarConfig copyWith({
+    int? selectedIndex,
+    List<ItemConfig>? items,
+    bool Function(int)? onItemSelected,
+    double? navBarHeight,
+  }) {
+    return NavBarConfig(
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      items: items ?? this.items,
+      onItemSelected: onItemSelected ?? this.onItemSelected,
+      navBarHeight: navBarHeight ?? this.navBarHeight,
+    );
+  }
+}
+
+class NavigatorConfig {
+  final String? defaultTitle;
+
+  final Map<String, WidgetBuilder> routes;
+
+  final RouteFactory? onGenerateRoute;
+
+  final RouteFactory? onUnknownRoute;
+
+  final String? initialRoute;
+
+  final List<NavigatorObserver> navigatorObservers;
+
+  final GlobalKey<NavigatorState>? navigatorKey;
+
+  const NavigatorConfig({
+    this.defaultTitle,
+    this.routes = const {},
+    this.onGenerateRoute,
+    this.onUnknownRoute,
+    this.initialRoute,
+    this.navigatorObservers = const <NavigatorObserver>[],
+    this.navigatorKey,
+  });
+
+  NavigatorConfig copyWith({
+    String? defaultTitle,
+    Map<String, WidgetBuilder>? routes,
+    RouteFactory? onGenerateRoute,
+    RouteFactory? onUnknownRoute,
+    String? initialRoute,
+    List<NavigatorObserver>? navigatorObservers,
+    GlobalKey<NavigatorState>? navigatorKeys,
+  }) {
+    return NavigatorConfig(
+      defaultTitle: defaultTitle ?? this.defaultTitle,
+      routes: routes ?? this.routes,
+      onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,
+      onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
+      initialRoute: initialRoute ?? this.initialRoute,
+      navigatorObservers: navigatorObservers ?? this.navigatorObservers,
+      navigatorKey: navigatorKey ?? this.navigatorKey,
+    );
+  }
+}
