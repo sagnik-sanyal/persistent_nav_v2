@@ -60,7 +60,7 @@ class Style13BottomNavBar extends StatelessWidget {
             child: IconTheme(
               data: IconThemeData(
                 size: item.iconSize,
-                color: item.activeColorPrimary,
+                color: item.inactiveColorPrimary,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -68,7 +68,7 @@ class Style13BottomNavBar extends StatelessWidget {
         ),
         if (item.title != null)
           Padding(
-            padding: const EdgeInsets.only(top: 2.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: Align(
               alignment: Alignment.bottomCenter,
               child: FittedBox(

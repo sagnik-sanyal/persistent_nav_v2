@@ -47,8 +47,6 @@ class Style4BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color selectedItemActiveColor =
-        this.navBarConfig.selectedItem.activeColorPrimary;
     double itemWidth = ((MediaQuery.of(context).size.width -
             this.navBarDecoration.padding.horizontal) /
         this.navBarConfig.items.length);
@@ -64,27 +62,22 @@ class Style4BottomNavBar extends StatelessWidget {
               AnimatedContainer(
                 duration: this.itemAnimationProperties.duration,
                 curve: this.itemAnimationProperties.curve,
-                width: this.navBarConfig.selectedIndex == 0
-                    ? 0.0
-                    : itemWidth * this.navBarConfig.selectedIndex,
+                width: itemWidth * this.navBarConfig.selectedIndex,
                 height: 4.0,
               ),
-              Flexible(
-                child: AnimatedContainer(
-                  duration: this.itemAnimationProperties.duration,
-                  curve: this.itemAnimationProperties.curve,
-                  width: itemWidth,
-                  height: 4.0,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: selectedItemActiveColor,
-                    borderRadius: BorderRadius.circular(100.0),
-                  ),
+              AnimatedContainer(
+                duration: this.itemAnimationProperties.duration,
+                curve: this.itemAnimationProperties.curve,
+                width: itemWidth,
+                height: 4.0,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: this.navBarConfig.selectedItem.activeColorPrimary,
+                  borderRadius: BorderRadius.circular(100.0),
                 ),
               )
             ],
           ),
-          SizedBox(height: 5.0),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -96,9 +89,11 @@ class Style4BottomNavBar extends StatelessWidget {
                     onTap: () {
                       this.navBarConfig.onItemSelected(index);
                     },
-                    child: _buildItem(
-                      item,
-                      this.navBarConfig.selectedIndex == index,
+                    child: Center(
+                      child: _buildItem(
+                        item,
+                        this.navBarConfig.selectedIndex == index,
+                      ),
                     ),
                   ),
                 );

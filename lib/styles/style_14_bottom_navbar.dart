@@ -45,46 +45,46 @@ class Style14BottomNavBar extends StatelessWidget {
 
   Widget _buildMiddleItem(
       BuildContext context, ItemConfig item, bool isSelected) {
-    return Container(
-      margin: EdgeInsets.only(
-        left: 5.0,
-        right: 5.0,
-      ),
-      decoration: BoxDecoration(
-        color: item.activeColorPrimary,
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: this.navBarDecoration.decoration?.boxShadow,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: item.activeColorPrimary,
-            ),
-            child: isSelected ? item.icon : item.inactiveIcon,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: this.navBarConfig.navBarHeight,
+          height: this.navBarConfig.navBarHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: item.activeColorPrimary,
+            boxShadow: this.navBarDecoration.decoration?.boxShadow,
           ),
-          if (item.title != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
-                        color: isSelected
-                            ? item.activeColorPrimary
-                            : item.inactiveColorPrimary),
-                  ),
+          child: Center(
+            child: IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
+                color: item.inactiveColorPrimary,
+              ),
+              child: isSelected ? item.icon : item.inactiveIcon,
+            ),
+          ),
+        ),
+        if (item.title != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FittedBox(
+                child: Text(
+                  item.title!,
+                  style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary),
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 

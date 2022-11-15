@@ -23,7 +23,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           title: "Home",
           activeColorPrimary: Colors.blue,
           inactiveColorPrimary: Colors.grey,
-          inactiveColorSecondary: Colors.purple,
         ),
       ),
       PersistentTabConfig(
@@ -75,7 +74,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       navBarBuilder: (essentials) => settings.navBarBuilder(
         essentials,
         NavBarDecoration(
-          padding: EdgeInsets.all(0.0),
           decoration: BoxDecoration(
             color: settings.navBarColor,
             borderRadius: BorderRadius.circular(10.0),

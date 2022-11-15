@@ -6,13 +6,11 @@ class NavBarDecoration {
   final BoxDecoration? decoration;
 
   /// `padding` for the persistent navigation bar content.
-  ///
-  /// `USE WITH CAUTION, MAY CAUSE LAYOUT ISSUES`.
   final EdgeInsets padding;
 
   const NavBarDecoration({
     this.decoration,
-    this.padding = const EdgeInsets.all(8),
+    this.padding = const EdgeInsets.all(5),
   });
 
   double borderHeight() {
