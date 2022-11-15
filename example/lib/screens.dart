@@ -11,6 +11,7 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Tab Main Screen')),
       backgroundColor: Colors.indigo,
       body: ListView(
+        padding: EdgeInsets.all(16),
         children: <Widget>[
           Padding(
             padding:
@@ -99,9 +100,6 @@ class MainScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 60.0,
-          ),
         ],
       ),
     );
@@ -117,23 +115,28 @@ class MainScreen2 extends StatelessWidget {
       appBar: AppBar(title: const Text('Secondary Screen')),
       backgroundColor: Colors.teal,
       body: ListView(
+        padding: EdgeInsets.all(16),
         children: <Widget>[
-          ElevatedButton(
-            onPressed: () {
-              pushNewScreen(context, screen: MainScreen3());
-            },
-            child: Text(
-              "Go to Third Screen",
-              style: TextStyle(color: Colors.white),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                pushNewScreen(context, screen: MainScreen3());
+              },
+              child: Text(
+                "Go to Third Screen",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              "Go Back to First Screen",
-              style: TextStyle(color: Colors.white),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Go Back to First Screen",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ],

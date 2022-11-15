@@ -103,7 +103,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         icon: Icon(Icons.settings),
       ),
       backgroundColor: Colors.green,
-      margin: EdgeInsets.all(4.0),
+      margin: settings.margin,
       navBarOverlap: NavBarOverlap.full(),
       avoidBottomPadding: settings.avoidBottomPadding,
       handleAndroidBackButtonPress: settings.handleAndroidBackButtonPress,
