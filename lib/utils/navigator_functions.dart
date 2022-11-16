@@ -26,5 +26,5 @@ Future<T?> pushWithNavBar<T>(BuildContext context, Route<T> route) {
 
 @optionalTypeArgs
 Future<T?> pushWithoutNavBar<T>(BuildContext context, Route<T> route) {
-  return Navigator.of(context, rootNavigator: false).push<T>(route);
+  return Navigator.of(context, rootNavigator: true).push<T>(route);
 }
