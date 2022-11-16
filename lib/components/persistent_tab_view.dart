@@ -153,7 +153,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       navigatorConfig: widget.tabs[index].navigatorConfig,
       home: (BuildContext screenContext) {
         _contextList[index] = screenContext;
-        if (_sendScreenContext) {
+        if (_sendScreenContext && index == _controller.index) {
           _sendScreenContext = false;
           widget.selectedTabContext!(_contextList[_controller.index]!);
         }
