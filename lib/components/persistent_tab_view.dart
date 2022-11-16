@@ -61,6 +61,9 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to `true`.
   final bool popAllScreensOnTapOfSelectedTab;
 
+  /// All the screens pushed on that particular tab will pop until the first screen in the stack, whether the tab is already selected or not. Defaults to `false`.
+  final bool popAllScreensOnTapAnyTabs;
+
   /// If set all pop until to first screen else set once pop once
   final PopActionScreensType? popActionScreens;
 
@@ -106,6 +109,7 @@ class PersistentTabView extends StatefulWidget {
     this.selectedTabContext,
     this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
+    this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
     this.onWillPop,
@@ -156,11 +160,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           _sendScreenContext = false;
           widget.selectedTabContext!(_contextList[_controller.index]!);
         }
-        return Material(
-          elevation: 0,
-          child: widget.tabs[index].screen,
-          type: MaterialType.transparency,
-        );
+        return widget.tabs[index].screen;
       },
     );
   }
@@ -237,7 +237,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   void popAllScreens() {
-    if (widget.popAllScreensOnTapOfSelectedTab) {
+    if (widget.popAllScreensOnTapOfSelectedTab ||
+        widget.popAllScreensOnTapAnyTabs) {
       if (widget.tabs[_controller.index]
                   .onSelectedTabPressWhenNoScreensPushed !=
               null &&

@@ -309,6 +309,16 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
     ```dart
     Navigator.of(context).popUntil(ModalRoute.withName("/"));
     ```
+    
+    In order for this to work, you will need your `PersistentNavBarItem` to be named '/' like:
+    ```dart
+      PersistentBottomNavBarItem(
+          title: ("Home"),
+          routeAndNavigatorSettings:
+              RouteAndNavigatorSettings(initialRoute: '/')),
+    ```
+    
+    Or instead of using a named Route you can also do this:
 
     ```dart
     Navigator.of(context).pushAndRemoveUntil(

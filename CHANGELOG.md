@@ -19,6 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make null-safety safer
 - Tabs Navigators inherit the settings of the root Navigator
 
+## [4.2.7] - 2022-11-13
+### Fixed
+- Scroll to top on iOS (#34 via #72)
+- Fix text color in dark mode on iOS (#71)
+
+## [4.2.6] - 2022-10-30
+### Fixed
+- Fix text color issues with style 3
+
 ## [4.2.5] - 2022-08-16
 ### Fixed
 - Fix cast error when using `onWillPop` with `handleAndroidBackButtonPress: false`
@@ -452,7 +461,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
-[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.5...HEAD
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...HEAD
+[4.2.7]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.6...4.2.7
+[4.2.6]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.5...4.2.6
 [4.2.5]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.4...4.2.5
 [4.2.4]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.3...4.2.4
 [4.2.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.2...4.2.3
