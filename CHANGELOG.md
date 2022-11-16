@@ -5,19 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Changed
-- Remove PersistentTabViewBase
+**Important:** Please read the [Migration Guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md) for switching to this version.
+
+### **Breaking Changes**
 - `itemAnimationProperties`, `neumorphicProperties` and `navBarDecoration` now have to be applied to the NavBar Widget directly
 - navBarStyle now is a widget builder which also allows to pass a custom Widget instead of only the predefined ones
-- Remove `PersistenTabView.custom` constructor
+- Remove `PersistenTabView.custom` (use `PersistentTabView` instead) constructor
 - Make items primary color the title and icon color and secondary the background color
-- Make inactiveIcon default to icon globally
 - `backgroundColor` now changes the color of the background
 - `NavBarOverlap` replaces the `buttomScreenMargin`
-- Trimmed the styles
+
+### Changed
+- Remove PersistentTabViewBase
 - Replace `CupertinoPageScaffold` with `Scaffold`
-- Make null-safety safer
+- Trimmed the styles
+- Make inactiveIcon default to icon globally
 - Tabs Navigators inherit the settings of the root Navigator
+- Make null-safety safer
 
 ## [4.2.7] - 2022-11-13
 ### Fixed
