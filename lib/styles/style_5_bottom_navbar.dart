@@ -15,14 +15,16 @@ class Style5BottomNavBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        IconTheme(
-          data: IconThemeData(
-            size: item.iconSize,
-            color: isSelected
-                ? item.activeColorPrimary
-                : item.inactiveColorPrimary,
+        Expanded(
+          child: IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeColorPrimary
+                  : item.inactiveColorPrimary,
+            ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
-          child: isSelected ? item.icon : item.inactiveIcon,
         ),
         Container(
           height: 5.0,
