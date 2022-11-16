@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-List<ItemConfig> items = [
-  ItemConfig(title: "Item1", icon: Icon(Icons.add)),
-  ItemConfig(title: "Item2", icon: Icon(Icons.add)),
-  ItemConfig(title: "Item3", icon: Icon(Icons.add)),
-];
+typedef StyleBuilder = Widget Function(NavBarConfig navBarConfig);
 
-Widget defaultScreen(int id) => Container(child: Text("Screen$id"));
+PersistentTabConfig tabConfig(int id) => PersistentTabConfig(
+      screen: Container(child: Text("Screen$id")),
+      item: ItemConfig(title: "Item$id", icon: Icon(Icons.add)),
+    );
 
 void main() {
   Widget wrapTabView(WidgetBuilder builder) {
@@ -19,28 +18,54 @@ void main() {
     );
   }
 
-  testStyle(WidgetTester tester, NavBarStyle style) async {
+  testStyle(WidgetTester tester, StyleBuilder builder) async {
     await tester.pumpWidget(
       wrapTabView(
         (context) => PersistentTabView(
-          context,
-          screens: [1, 2, 3].map((id) => defaultScreen(id)).toList(),
-          items: items,
-          navBarStyle: style,
-          itemAnimationProperties: ItemAnimationProperties(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.ease,
-          ),
+          tabs: [1, 2, 3].map((id) => tabConfig(id)).toList(),
+          navBarBuilder: (navBarConfig) => builder(navBarConfig),
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
-    expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
+    expect(find.byType(DecoratedNavBar).hitTestable(at: Alignment.centerLeft), findsOneWidget);
   }
 
   testWidgets('builds every style', (WidgetTester tester) async {
-    for (NavBarStyle style in NavBarStyle.values) {
-      await testStyle(tester, style);
-    }
+    await testStyle(
+        tester, (config) => NeumorphicBottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style1BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style2BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style3BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style4BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style5BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style6BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style7BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style8BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style9BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style10BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style11BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style12BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style13BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style14BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style15BottomNavBar(navBarConfig: config));
+    await testStyle(
+        tester, (config) => Style16BottomNavBar(navBarConfig: config));
   });
 }
