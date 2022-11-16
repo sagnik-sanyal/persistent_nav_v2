@@ -175,12 +175,14 @@ Some of the parameters of these constructors have been removed, some changed in 
 - **`screens`**: Is now incorporated in `tabs` (see [above](#tabs-and-screens))
 - **`bottomScreenMargin`**: The same functionality can be accomplished with `navBarOverlap: NavBarOverlap.custom(overlap: x)`
 - **`context`**
+- **`hideNavigationBarWhenKeyboardShows`**
 
 ### Changed
 
 - **`backgroundColor`**: This did previously set the color of the navigation bar. Now is sets the background of the whole `PersistentTabView`.
 - **`confineToSafeArea`**: Renamed to `avoidBottomPadding`
 - **`selectedTabScreenContext`**: Renamed to `selectedTabContext`
+- **`padding`**: Moved to `NavBarDecoration`
 
 ### Added
 

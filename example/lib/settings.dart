@@ -7,7 +7,6 @@ typedef NavBarBuilder = Widget Function(NavBarConfig, NavBarDecoration,
 
 class Settings {
   bool hideNavBar = false;
-  bool hideNavigationBarWhenKeyboardShows = true;
   bool resizeToAvoidBottomInset = true;
   bool stateManagement = true;
   bool handleAndroidBackButtonPress = true;
@@ -262,21 +261,6 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               Text("Hide Navigation Bar"),
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Switch(
-                value: widget.settings.hideNavigationBarWhenKeyboardShows,
-                onChanged: (value) {
-                  setState(() {
-                    widget.settings.hideNavigationBarWhenKeyboardShows = value;
-                  });
-                  widget.onChanged(widget.settings);
-                },
-              ),
-              Text("Hide Navigation Bar\nWhen Keyboard Shows"),
             ],
           ),
           Row(

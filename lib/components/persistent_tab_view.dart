@@ -82,8 +82,6 @@ class PersistentTabView extends StatefulWidget {
   /// Screen transition animation properties when switching tabs.
   final ScreenTransitionAnimation screenTransitionAnimation;
 
-  final bool hideNavigationBarWhenKeyboardShows;
-
   /// Hides the navigation bar with a transition animation. Defaults to `false`.
   final bool hideNavigationBar;
 
@@ -107,7 +105,6 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
     this.selectedTabContext,
-    this.hideNavigationBarWhenKeyboardShows = true,
     this.popAllScreensOnTapOfSelectedTab = true,
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,

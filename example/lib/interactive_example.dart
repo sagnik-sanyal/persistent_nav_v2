@@ -105,8 +105,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       resizeToAvoidBottomInset: settings.resizeToAvoidBottomInset,
       stateManagement: settings.stateManagement,
       navBarHeight: kBottomNavigationBarHeight,
-      hideNavigationBarWhenKeyboardShows:
-          settings.hideNavigationBarWhenKeyboardShows,
       popActionScreens: PopActionScreensType.all,
       onWillPop: (context) async {
         await showDialog(
