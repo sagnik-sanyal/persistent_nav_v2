@@ -54,7 +54,7 @@ class Style13BottomNavBar extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: item.activeColorPrimary,
-            boxShadow: this.navBarDecoration.decoration?.boxShadow,
+            boxShadow: this.navBarDecoration.decoration.boxShadow,
           ),
           child: Center(
             child: IconTheme(

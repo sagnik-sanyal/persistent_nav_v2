@@ -51,7 +51,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
           ? NeumorphicContainer(
               decoration: this.neumorphicProperties.decoration?.copyWith(
                     color: this.neumorphicProperties.decoration?.color ??
-                        this.navBarDecoration.decoration?.color,
+                        this.navBarDecoration.decoration.color,
                   ),
               bevel: this.neumorphicProperties.bevel,
               curveType: isSelected
@@ -68,7 +68,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
                 color: getBackgroundColor(
                     context,
                     this.navBarConfig.items,
-                    this.navBarDecoration.decoration?.color,
+                    this.navBarDecoration.decoration.color,
                     this.navBarConfig.selectedIndex),
               ),
               padding: EdgeInsets.all(6.0),

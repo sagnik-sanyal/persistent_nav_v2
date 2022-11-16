@@ -16,9 +16,9 @@ class Style2BottomNavBar extends StatelessWidget {
     this.itemPadding = const EdgeInsets.all(5.0),
   });
 
-  Widget _buildItem(ItemConfig item, bool isSelected) {
+  Widget _buildItem(ItemConfig item, bool isSelected, double deviceWidth) {
     return AnimatedContainer(
-      width: isSelected ? 120 : 50,
+      width: isSelected ? deviceWidth * 0.29 : deviceWidth * 0.12,
       duration: this.itemAnimationProperties.duration,
       curve: this.itemAnimationProperties.curve,
       padding: itemPadding,
@@ -78,6 +78,7 @@ class Style2BottomNavBar extends StatelessWidget {
             child: _buildItem(
               item,
               this.navBarConfig.selectedIndex == index,
+              MediaQuery.of(context).size.width,
             ),
           );
         }).toList(),
