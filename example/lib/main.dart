@@ -57,9 +57,7 @@ class MinimalExample extends StatelessWidget {
       navBarBuilder: (navBarConfig) => Style1BottomNavBar(
         navBarConfig: navBarConfig,
         navBarDecoration: NavBarDecoration(
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
+          color: Colors.white,
         ),
       ),
     );

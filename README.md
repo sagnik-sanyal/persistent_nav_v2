@@ -128,11 +128,6 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
         ],
         navBarBuilder: (navBarConfig) => Style1BottomNavBar(
           navBarConfig: navBarConfig,
-          navBarDecoration: NavBarDecoration(
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-          ),
         ),
       ),
     );
@@ -142,7 +137,7 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
 
 ## Styling
 
-You can customize the Navigation Bar with all the parameters, each style allows. Here, for example, you could set a different border radius by passing `BorderRadius.circular(8)` to the `BoxDecoration`. Styles that include animations also allow you to adjust the timings and interpolation curves.
+You can customize the Navigation Bar with all the parameters, each style allows. Every style allows you to pass an instance of `NavBarDecoration` for example. This extends `BoxDecoration` by an additional padding and thus offers everything the `BoxDecoration` offers. You could set a different border radius by passing `BorderRadius.circular(8)` to the `NavBarDecoration.border`. Styles that include animations also allow you to adjust the timings and interpolation curves.
 
 ## Using a custom Navigation Bar
 
@@ -231,11 +226,6 @@ PersistentTabView(
   tabs: ...,
   navBarBuilder: (navBarConfig) => CustomNavBar(
     navBarConfig: navBarConfig,
-    navBarDecoration: NavBarDecoration(
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-    ),
   ),
 ),
 ```
@@ -309,7 +299,7 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
     ```dart
     Navigator.of(context).popUntil(ModalRoute.withName("/"));
     ```
-    
+
     In order for this to work, you will need your `PersistentNavBarItem` to be named '/' like:
     ```dart
       PersistentBottomNavBarItem(
@@ -317,7 +307,7 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
           routeAndNavigatorSettings:
               RouteAndNavigatorSettings(initialRoute: '/')),
     ```
-    
+
     Or instead of using a named Route you can also do this:
 
     ```dart

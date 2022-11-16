@@ -74,10 +74,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       navBarBuilder: (essentials) => settings.navBarBuilder(
         essentials,
         NavBarDecoration(
-          decoration: BoxDecoration(
-            color: settings.navBarColor,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          color: settings.navBarColor,
+          borderRadius: BorderRadius.circular(10.0),
         ),
         ItemAnimationProperties(
           duration: Duration(milliseconds: 200),

@@ -281,7 +281,7 @@ If you still need specific configuration for individual tabs, you can pass a `Na
 
 ## NavBarDecoration
 
-Most of its attributes just moved to the `decoration` attribute, which is a `BoxDecoration` and thus includes some more options. Extra notes on the following attributes:
+This now extends the `BoxDecoration` and thus includes some more options. Extra notes on the following attributes:
 
 - the attribute `colorBehindNavBar` moved to `PersistentTabView.backgroundColor` (which previously was the navigation bar color. The color of the navigation bar must now be set in `NavBarDecoration.decoration.color`)
 - the attribute `adjustScreenBottomPaddingOnCurve` got removed in favor of more flexibility. You can accomplish the same functionality by setting `NavBarOverlap.custom(overlap: navBarDecoration.exposedHeight)` on `PersistentTabView.navBarOverlap` where `navBarDecoration` must be what you pass to you navigation bar so you might need to store that somewhere in between.
@@ -300,9 +300,7 @@ All navigation bar styles receive the `NavBarDecoration` ([see here](#navbardeco
 PersistentTabView(
     ...,
     decoration: NavBarDecoration(
-        decoration: BoxDecoration(
-            color: Colors.white,
-        ),
+        color: Colors.green,
     ),
 ),
 ```
@@ -311,10 +309,11 @@ PersistentTabView(
 <td>
 
 ```dart
-Style1BottomNavBar(
+PersistentTabView(
     ...,
-    navBarDecoration: NavBarDecoration(
-        decoration: BoxDecoration(
+    navBarBuilder: (config) => Style1BottomNavBar(
+        navBarConfig: config,
+        navBarDecoration: NavBarDecoration(
             color: Colors.white,
         ),
     ),
