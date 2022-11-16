@@ -74,7 +74,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   initState() {
     super.initState();
     _navBarFullyShown = !widget.hideNavigationBar;
-    if(widget.hideNavigationBar) {
+    if (widget.hideNavigationBar) {
       _hideNavBarAnimationController.value = 1.0;
     }
   }

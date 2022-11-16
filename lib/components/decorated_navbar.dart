@@ -20,16 +20,13 @@ class DecoratedNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: this.decoration.borderRadius as BorderRadius? ??
-          BorderRadius.zero,
+      borderRadius:
+          this.decoration.borderRadius as BorderRadius? ?? BorderRadius.zero,
       child: BackdropFilter(
         filter: this.filter,
         child: Container(
           decoration: this.decoration.copyWith(
-                color: this
-                    .decoration
-                    .color
-                    ?.withOpacity(this.opacity),
+                color: this.decoration.color?.withOpacity(this.opacity),
               ),
           child: SafeArea(
             top: false,

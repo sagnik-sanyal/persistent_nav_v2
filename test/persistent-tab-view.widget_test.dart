@@ -447,8 +447,8 @@ void main() {
         ),
       );
 
-      expect(tester.getSize(find.byType(CustomTabView).first).height,
-          equals(500));
+      expect(
+          tester.getSize(find.byType(CustomTabView).first).height, equals(500));
 
       await tester.pumpWidget(
         wrapTabView(
@@ -471,8 +471,8 @@ void main() {
         ),
       );
 
-      expect(tester.getSize(find.byType(CustomTabView).first).height,
-          equals(600));
+      expect(
+          tester.getSize(find.byType(CustomTabView).first).height, equals(600));
     });
 
     testWidgets('shrinks screens according to NavBarOverlap.custom',
@@ -484,14 +484,13 @@ void main() {
                 .map((id) => tabConfig(id, defaultScreen(id)))
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            navBarOverlap:
-                NavBarOverlap.full(),
+            navBarOverlap: NavBarOverlap.full(),
           ),
         ),
       );
 
-      expect(tester.getSize(find.byType(CustomTabView).first).height,
-          equals(600));
+      expect(
+          tester.getSize(find.byType(CustomTabView).first).height, equals(600));
 
       await tester.pumpWidget(
         wrapTabView(
@@ -500,8 +499,7 @@ void main() {
                 .map((id) => tabConfig(id, defaultScreen(id)))
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            navBarOverlap:
-                NavBarOverlap.none(),
+            navBarOverlap: NavBarOverlap.none(),
           ),
         ),
       );
@@ -516,8 +514,7 @@ void main() {
                 .map((id) => tabConfig(id, defaultScreen(id)))
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            navBarOverlap:
-                NavBarOverlap.custom(overlap: 30),
+            navBarOverlap: NavBarOverlap.custom(overlap: 30),
           ),
         ),
       );

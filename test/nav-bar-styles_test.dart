@@ -29,7 +29,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(DecoratedNavBar).hitTestable(at: Alignment.centerLeft), findsOneWidget);
+    expect(find.byType(DecoratedNavBar).hitTestable(at: Alignment.centerLeft),
+        findsOneWidget);
   }
 
   testWidgets('builds every style', (WidgetTester tester) async {
