@@ -11,6 +11,8 @@ A highly customizable bottom navigation bar for Flutter. It is shipped with 17 p
 
 NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.dev/packages/persistent_bottom_nav_bar).
 
+If you are migrating from Version 4.x.x to Version 5 please read this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md).
+
 <p align="center">
 <img src="gifs/persistent.gif" alt="Preview" style="height:400px;"/>
 </p>

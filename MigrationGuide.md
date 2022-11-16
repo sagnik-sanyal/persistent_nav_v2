@@ -1,5 +1,7 @@
 # V4 -> V5 Migration Guide
 
+All PRs on how to improve this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/edit/master/MigrationGuide.md) are very welcome :)
+
 ## Using Predefined Navigation Bar Styles
 
 To specify the style you want to use, you now have to use the corresponding widget directly, instead of `NavBarStyle.style1`. Also notice that the parameter is named differently:
@@ -24,9 +26,9 @@ PersistentTabView(
 PersistentTabView(
   ...,
   navBarBuilder: (navBarConfig) =>
-      Style1BottomNavBar(
-          navBarConfig: navBarConfig
-      )
+    Style1BottomNavBar(
+      navBarConfig: navBarConfig
+    )
 ),
 ```
 
@@ -36,7 +38,7 @@ PersistentTabView(
 
 ## Using Custom Navigation Bar Styles
 
-The additional constructor `PersistentTabView.custom` now is gone, so you now can also use the other one. Also, in your `onItemSelected` function you dont need to call `setState`, just call the `navBarConfig.onItemSelected` (either by passing the function (like here) or by passing `navBarConfig` into your navigatino bar widget (like in the example in the main Readme)):
+The additional constructor `PersistentTabView.custom` is now gone, so you now can also use the main one. Also, in your `onItemSelected` function you dont need to call `setState` anymore, just call the `navBarConfig.onItemSelected` (either by passing the function to your navigation bar (like here) or by passing `navBarConfig` into your navigation bar (like in the example in the main Readme)):
 
 <table>
 <tr>
@@ -89,7 +91,7 @@ PersistentTabView(
   <summary>Removed Parameters</summary>
 
 - itemCount
-- routeAndNavigatorSettings: They are now applied inside `ItemConfig` if you need. By default they are inherited from the root navigator.
+- routeAndNavigatorSettings: They are now applied inside `ItemConfig` if you need. By default they are inherited from the root navigator. More on that [here](#navigator)
 
 </details>
 
@@ -189,6 +191,10 @@ Some of the parameters of these constructors have been removed, some changed in 
 
 This got renamed to `ItemConfig`.
 
+### `contentPadding`
+
+This argument was only used in styles 1, 7, 9 and 10. It now has to be applied to the styles directly when building the navigation bar in form of `itemPadding`. Please note that Styles 7 and 10 have been removed due to redundancy and style 1 got renamed to style 2 and style 9 got renamed to style 8.
+
 ### Colors
 
 The behavior of primary and secondary colors and their defaults got changed (hopefully in favor of better understandability). Without going into too much detail, the roles of primary and secondary colors swapped. Also the `activeColorPrimary` no longer serves as a default for `activeColorSecondary` (but the other way around).
@@ -226,7 +232,52 @@ ItemConfig(
 </tr>
 </table>
 
-## NavigatorSettings
+### `onPressed`
+
+This argument moved to the `PersistentTabConfig`. There you can set a method to invoke (-> `onPressed`) instead of switching to that screen:
+
+<table>
+<tr>
+<td> Old </td> <td> New </td>
+</tr>
+<td>
+
+```dart
+PersistentBottomNavBarItem(
+  ...,
+  onPressed: (ctx) => showDialog(...),
+),
+```
+
+</td>
+<td>
+
+```dart
+PersistentTabConfig.noScreen(
+  item: ItemConfig(
+    ...,
+  ),
+  onPressed: (ctx) => showDialog(...),
+),
+```
+
+</td>
+</tr>
+</table>
+
+### `onSelectedTabPressWhenNoScreensPushed`
+
+Moved to `PersistentTabConfig`.
+
+### `routeAndNavigatorSettings`
+
+Moved to `PersistentTabConfig.navigatorConfig`. More info on that can be read [here](#routeandnavigatorsettings-1)
+
+## RouteAndNavigatorSettings
+
+This settings got renamed to `NavigatorConfig`. Previously you were required to pass a `RouteAndNavigatorSettings` to each of your tab items. That is not the case anymore, so you can just drop them. The Navigators for each tab now inherit everything from the root navigator above them. So if you define all your routes and route generators in your `MaterialApp` or `CupertinoApp`, they should work in your tabs just fine.
+
+If you still need specific configuration for individual tabs, you can pass a `NavigatorConfig` to the tabs you want, like before. In the background the navigator of that tab will search through that individual `NavigatorConfig` and tries to generate a route. If it succeeds, this route will be taken, if not, it will fall back to the configuration of the root navigator and try the same with that. So you can shadow and add any routes of your root navigator.
 
 ## NavBarDecoration
 
@@ -274,5 +325,28 @@ Style1BottomNavBar(
 </tr>
 </table>
 
-### Neumorphic Style
-`NeumorphicBottomNavBar` got renamed to `NeumorphicBottomNavBar`
+### Removed Styles
+
+- `BottomNavStyle4` (`NavBarStyle.style4`): Use `Style4BottomNavBar` from now on
+- `BottomNavStyle7` (`NavBarStyle.style7`): Use `Style2BottomNavBar`. You might need to change `ItemConfig.activeColorSecondary` to fit the design you had before.
+- `BottomNavStyle10` (`NavBarStyle.style10`): Use `Style8BottomNavBar`. You might need to change `ItemConfig.activeColorSecondary` to fit the design you had before.
+
+### Renamed Styles
+
+- `BottomNavSimple` (`NavBarStyle.simple`) -> `Style1BottomNavBar`
+- `BottomNavStyle1` (`NavBarStyle.style1`) -> `Style2BottomNavBar`
+- `BottomNavStyle2` (`NavBarStyle.style2`) -> `Style3BottomNavBar`
+- `BottomNavStyle3` (`NavBarStyle.style3`) -> `Style4BottomNavBar`
+- `BottomNavStyle5` (`NavBarStyle.style5`) -> `Style5BottomNavBar`
+- `BottomNavStyle6` (`NavBarStyle.style6`) -> `Style6BottomNavBar`
+- `BottomNavStyle8` (`NavBarStyle.style8`) -> `Style7BottomNavBar`
+- `BottomNavStyle9` (`NavBarStyle.style9`) -> `Style8BottomNavBar`
+- `BottomNavStyle11` (`NavBarStyle.style11`) -> `Style9BottomNavBar`
+- `BottomNavStyle12` (`NavBarStyle.style12`) -> `Style10BottomNavBar`
+- `BottomNavStyle13` (`NavBarStyle.style13`) -> `Style11BottomNavBar`
+- `BottomNavStyle14` (`NavBarStyle.style14`) -> `Style12BottomNavBar`
+- `BottomNavStyle15` (`NavBarStyle.style15`) -> `Style13BottomNavBar`
+- `BottomNavStyle16` (`NavBarStyle.style16`) -> `Style14BottomNavBar`
+- `BottomNavStyle17` (`NavBarStyle.style17`) -> `Style15BottomNavBar`
+- `BottomNavStyle18` (`NavBarStyle.style18`) -> `Style16BottomNavBar`
+
