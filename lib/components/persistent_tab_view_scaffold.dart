@@ -74,6 +74,9 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   initState() {
     super.initState();
     _navBarFullyShown = !widget.hideNavigationBar;
+    if(widget.hideNavigationBar) {
+      _hideNavBarAnimationController.value = 1.0;
+    }
   }
 
   didUpdateWidget(PersistentTabViewScaffold oldWidget) {
@@ -110,7 +113,6 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
       floatingActionButtonLocation: widget.floatingActionButtonLocation,
       body: Builder(builder: (context) {
         return _TabSwitchingView(
-          key: Key("TabSwitchingView"),
           currentTabIndex: widget.controller.index,
           tabCount: widget.tabCount,
           tabBuilder: (context, index) {
