@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- `itemAnimationProperties` now have to be applied to the NavBar Widget directly instead of being passed through to `navBarEssentials` and being accessible from there
-- navBarStyle now is a widget builder which also allows to pass a custom Widget instead of the predefined ones
+- Remove PersistentTabViewBase
+- `itemAnimationProperties`, `neumorphicProperties` and `navBarDecoration` now have to be applied to the NavBar Widget directly
+- navBarStyle now is a widget builder which also allows to pass a custom Widget instead of only the predefined ones
+- Remove `PersistenTabView.custom` constructor
 - Make items primary color the title and icon color and secondary the background color
 - Make inactiveIcon default to icon globally
+- `backgroundColor` now changes the color of the background
+- `NavBarOverlap` replaces the `buttomScreenMargin`
+- Trimmed the styles
+- Replace `CupertinoPageScaffold` with `Scaffold`
+- Make null-safety safer
+- Tabs Navigators inherit the settings of the root Navigator
 
 ## [4.2.5] - 2022-08-16
 ### Fixed
