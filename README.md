@@ -14,7 +14,7 @@ NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.
 If you are migrating from Version 4.x.x to Version 5 please read this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md).
 
 <p align="center">
-<img src="gifs/persistent.gif" alt="Preview" style="height:400px;"/>
+<img src="gifs/preview.gif" alt="Preview" style="height:400px;"/>
 </p>
 
 <details>
@@ -36,29 +36,29 @@ If you are migrating from Version 4.x.x to Version 5 please read this [migration
 
 ## Styles
 
-| Style15                      | Style16                       | Style9                       |
+| Style1                      | Style2                       | Style3                       |
 | ---------------------------- | ----------------------------- | ---------------------------- |
-| ![style1](gifs/style-15.gif) | ![style10](gifs/style-16.gif) | ![style10](gifs/style-9.gif) |
+| ![style1](gifs/style1.gif) | ![style2](gifs/style2.gif) | ![style3](gifs/style3.gif) |
 
-| Style1                      | Style9                       |
-| --------------------------- | ---------------------------- |
-| ![style1](gifs/style-1.gif) | ![style10](gifs/style-9.gif) |
+| Style4                      | Style5                       | Style6                       |
+| ---------------------------- | ----------------------------- | ---------------------------- |
+| ![style4](gifs/style4.gif) | ![style5](gifs/style5.gif) | ![style6](gifs/style6.gif) |
 
-| Style7                      | Style10                      |
-| --------------------------- | ---------------------------- |
-| ![style3](gifs/style-7.gif) | ![style5](gifs/style-10.gif) |
+| Style7                      | Style8                       | Style9                       |
+| ---------------------------- | ----------------------------- | ---------------------------- |
+| ![style7](gifs/style7.gif) | ![style8](gifs/style8.gif) | ![style9](gifs/style9.gif) |
 
-| Style12                      | Style13                      |
-| ---------------------------- | ---------------------------- |
-| ![style6](gifs/style-12.gif) | ![style8](gifs/style-13.gif) |
+| Style10                      | Style11                       | Style12                       |
+| ---------------------------- | ----------------------------- | ---------------------------- |
+| ![style12](gifs/style10.gif) | ![style11](gifs/style11.gif) | ![style12](gifs/style12.gif) |
 
-| Style3                      | Style6                      |
-| --------------------------- | --------------------------- |
-| ![style6](gifs/style-3.gif) | ![style8](gifs/style-6.gif) |
+| Style13                      | Style14                       | Style15                       |
+| ---------------------------- | ----------------------------- | ---------------------------- |
+| ![style13](gifs/style13.gif) | ![style14](gifs/style14.gif) | ![style15](gifs/style15.gif) |
 
-| Neumorphic                          | Neumorphic without subtitle                |
-| ----------------------------------- | ------------------------------------------ |
-| ![neumorphic1](gifs/neumorphic.gif) | ![neumorphic2](gifs/neumorphic-nosubs.gif) |
+| Style16                      | Neumorphic                       |
+| ---------------------------- | ----------------------------- |
+| ![style16](gifs/style16.gif) | ![neumorphic](gifs/neumorphic.gif) |
 
 Note: These do not include all style variations
 
