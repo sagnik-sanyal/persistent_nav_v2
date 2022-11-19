@@ -18,7 +18,7 @@ If you are migrating from Version 4.x.x to Version 5 please read this [migration
 </p>
 
 <details>
-  <summary><h2>Table of Contents</h2></summary>
+  <summary><span style="font-size: 25px">Table of Contents</span></summary>
 
 - [Styles](#styles)
 - [Features](#features)

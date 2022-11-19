@@ -2,5 +2,4 @@ build
 example/android
 example/build
 example/ios
-gifs
 test
