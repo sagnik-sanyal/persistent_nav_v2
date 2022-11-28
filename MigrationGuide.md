@@ -292,6 +292,10 @@ This now extends the `BoxDecoration` and thus includes some more options. Extra 
 
 This class got renamed to `ItemAnimation`.
 
+## ScreenTransitionAnimation
+
+The parameter `animateTabTransition` was made private. So in order to disable the Screen Transition Animation, use `ScreenTransitionAnimation.none()`.
+
 ## Styles
 
 All navigation bar styles receive the `NavBarDecoration` ([see here](#navbardecoration) for the migration of that) directly, instead of being passed through the `PersistentTabView`. So just move the `NavBarDecoration` from the `PersistentTabView` to the navigation bar widget you use:

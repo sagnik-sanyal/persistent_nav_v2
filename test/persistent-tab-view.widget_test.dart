@@ -664,7 +664,6 @@ void main() {
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
             stateManagement: false,
             screenTransitionAnimation: ScreenTransitionAnimation(
-              animateTabTransition: true,
               curve: Curves.ease,
               duration: Duration(milliseconds: 200),
             ),

@@ -127,7 +127,6 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       hideNavigationBar: settings.hideNavBar,
       popAllScreensOnTapOfSelectedTab: settings.popAllScreensOnTapOfSelectedTab,
       screenTransitionAnimation: ScreenTransitionAnimation(
-        animateTabTransition: true,
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
