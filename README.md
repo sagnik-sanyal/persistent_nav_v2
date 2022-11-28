@@ -137,7 +137,7 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
 
 ## Styling
 
-You can customize the Navigation Bar with all the parameters, each style allows. Every style allows you to pass an instance of `NavBarDecoration` for example. This extends `BoxDecoration` by an additional padding and thus offers everything the `BoxDecoration` offers. You could set a different border radius by passing `BorderRadius.circular(8)` to the `NavBarDecoration.border`. Styles that include animations also allow you to adjust the timings and interpolation curves.
+You can customize the Navigation Bar with all the parameters, each style allows. Every style allows you to pass an instance of `NavBarDecoration`. This inherits from `BoxDecoration` and thus offers everything the `BoxDecoration` is capable of. As an example, you could set a different border radius by passing `BorderRadius.circular(8)` to the `NavBarDecoration.border`. Styles that include animations also allow you to adjust the timings and interpolation curves of the animation.
 
 ## Using a custom Navigation Bar
 
