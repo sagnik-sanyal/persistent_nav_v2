@@ -10,12 +10,29 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Persistent Bottom Navigation Bar Demo',
-      home: InteractiveExample(),
+      home: Builder(
+        builder: (context) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pushNamed("/minimal"),
+                  child: Text("Show Minimal Example"),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pushNamed("/interactive"),
+                  child: Text("Show Interactive Example"),
+                ),
+              ],
+            ),
+          );
+        }
+      ),
       routes: {
-        // When navigating to the "/first" route, build the FirstScreen widget.
-        '/first': (context) => MainScreen2(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        '/second': (context) => MainScreen3(),
+        '/minimal': (context) => MinimalExample(),
+        '/interactive': (context) => InteractiveExample(),
       },
     );
   }
