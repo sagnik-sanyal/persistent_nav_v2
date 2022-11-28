@@ -12,11 +12,11 @@ class ScreenTransitionAnimation {
   });
 }
 
-class ItemAnimationProperties {
+class ItemAnimation {
   final Duration duration;
   final Curve curve;
 
-  const ItemAnimationProperties({
+  const ItemAnimation({
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.ease,
   });

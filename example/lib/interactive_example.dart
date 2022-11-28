@@ -77,7 +77,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           color: settings.navBarColor,
           borderRadius: BorderRadius.circular(10.0),
         ),
-        ItemAnimationProperties(
+        ItemAnimation(
           duration: Duration(milliseconds: 200),
           curve: Curves.ease,
         ),

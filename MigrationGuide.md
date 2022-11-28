@@ -288,6 +288,10 @@ This now extends the `BoxDecoration` and thus includes some more options. Extra 
 - the attribute `colorBehindNavBar` moved to `PersistentTabView.backgroundColor` (which previously was the navigation bar color. The color of the navigation bar must now be set in `NavBarDecoration.decoration.color`)
 - the attribute `adjustScreenBottomPaddingOnCurve` got removed in favor of more flexibility. You can accomplish the same functionality by setting `NavBarOverlap.custom(overlap: navBarDecoration.exposedHeight)` on `PersistentTabView.navBarOverlap` where `navBarDecoration` must be what you pass to you navigation bar so you might need to store that somewhere in between.
 
+## ItemAnimationProperties
+
+This class got renamed to `ItemAnimation`.
+
 ## Styles
 
 All navigation bar styles receive the `NavBarDecoration` ([see here](#navbardecoration) for the migration of that) directly, instead of being passed through the `PersistentTabView`. So just move the `NavBarDecoration` from the `PersistentTabView` to the navigation bar widget you use:

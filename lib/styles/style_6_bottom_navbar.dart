@@ -5,13 +5,13 @@ class Style6BottomNavBar extends StatefulWidget {
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
-  final ItemAnimationProperties itemAnimationProperties;
+  final ItemAnimation itemAnimationProperties;
 
   Style6BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
-    this.itemAnimationProperties = const ItemAnimationProperties(),
+    this.itemAnimationProperties = const ItemAnimation(),
   });
 
   @override

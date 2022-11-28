@@ -5,13 +5,13 @@ class Style4BottomNavBar extends StatelessWidget {
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
-  final ItemAnimationProperties itemAnimationProperties;
+  final ItemAnimation itemAnimationProperties;
 
   Style4BottomNavBar({
     Key? key,
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
-    this.itemAnimationProperties = const ItemAnimationProperties(),
+    this.itemAnimationProperties = const ItemAnimation(),
   });
 
   Widget _buildItem(ItemConfig item, bool isSelected) {
