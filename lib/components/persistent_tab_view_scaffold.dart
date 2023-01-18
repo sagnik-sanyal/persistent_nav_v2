@@ -12,7 +12,8 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.avoidBottomPadding = true,
     this.margin = EdgeInsets.zero,
     this.resizeToAvoidBottomInset = true,
-    this.stateManagement,
+    this.stateManagement = false,
+    this.gestureNavigationEnabled = false,
     this.screenTransitionAnimation,
     this.hideNavigationBar = false,
     this.navBarOverlap = const NavBarOverlap.full(),
@@ -40,7 +41,9 @@ class PersistentTabViewScaffold extends StatefulWidget {
 
   final bool hideNavigationBar;
 
-  final bool? stateManagement;
+  final bool stateManagement;
+
+  final bool gestureNavigationEnabled;
 
   final NavBarOverlap navBarOverlap;
 
@@ -115,6 +118,8 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         return _TabSwitchingView(
           currentTabIndex: widget.controller.index,
           tabCount: widget.tabCount,
+          controller: widget.controller,
+          gestureNavigationEnabled: widget.gestureNavigationEnabled,
           tabBuilder: (context, index) {
             double overlap = 0.0;
             bool isNotOpaque = index > widget.opacities.length
@@ -190,14 +195,18 @@ class _TabSwitchingView extends StatefulWidget {
     required this.stateManagement,
     required this.tabBuilder,
     required this.screenTransitionAnimation,
-  })  : assert(tabCount != null && tabCount > 0),
+    required this.controller,
+    required this.gestureNavigationEnabled,
+  })  : assert(tabCount > 0),
         super(key: key);
 
   final int currentTabIndex;
-  final int? tabCount;
+  final int tabCount;
   final IndexedWidgetBuilder tabBuilder;
-  final bool? stateManagement;
+  final bool stateManagement;
   final ScreenTransitionAnimation? screenTransitionAnimation;
+  final PersistentTabController controller;
+  final bool gestureNavigationEnabled;
 
   @override
   _TabSwitchingViewState createState() => _TabSwitchingViewState();
@@ -215,7 +224,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
   @override
   void didUpdateWidget(_TabSwitchingView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.currentTabIndex != oldWidget.currentTabIndex) {
+    if (widget.currentTabIndex != oldWidget.currentTabIndex &&
+        _pageController.page == _pageController.page?.roundToDouble()) {
       _pageController.animateToPage(
         widget.currentTabIndex,
         duration:
@@ -235,16 +245,25 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
   Widget build(BuildContext context) {
     return PageView(
       controller: _pageController,
-      children: List.generate(widget.tabCount!, (int index) {
+      scrollBehavior: ScrollBehavior().copyWith(
+        overscroll: false,
+      ),
+      physics: widget.gestureNavigationEnabled
+          ? null
+          : NeverScrollableScrollPhysics(),
+      children: List.generate(widget.tabCount, (int index) {
         return FocusScope(
           node: FocusScopeNode(),
-          child: KeepAlivePage(
-            child: widget.tabBuilder(context, index),
-          ),
+          child: widget.stateManagement
+              ? KeepAlivePage(
+                  child: widget.tabBuilder(context, index),
+                )
+              : widget.tabBuilder(context, index),
         );
       }),
       onPageChanged: (i) {
         FocusManager.instance.primaryFocus?.unfocus();
+        widget.controller.index = i;
       },
     );
   }

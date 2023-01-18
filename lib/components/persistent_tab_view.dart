@@ -85,6 +85,9 @@ class PersistentTabView extends StatefulWidget {
   /// Hides the navigation bar with a transition animation. Defaults to `false`.
   final bool hideNavigationBar;
 
+  /// If set to `true`, you can additionally swipe left/right to change the tab. Defaults to `false`.
+  final bool gestureNavigationEnabled;
+
   /// Creates a fullscreen container with a navigation bar at the bottom. The
   /// navigation bar style can be chosen from [NavBarStyle]. If you want to
   /// make a custom style use [PersistentTabView.custom].
@@ -114,6 +117,7 @@ class PersistentTabView extends StatefulWidget {
     this.handleAndroidBackButtonPress = true,
     this.hideNavigationBar = false,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
+    this.gestureNavigationEnabled = false,
   }) : super(key: key);
 
   @override
@@ -176,6 +180,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         margin: widget.margin,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        gestureNavigationEnabled: widget.gestureNavigationEnabled,
         tabBar: widget.navBarBuilder(
           NavBarConfig(
             selectedIndex: _controller.index,
