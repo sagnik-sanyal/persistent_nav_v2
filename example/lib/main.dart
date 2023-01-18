@@ -22,13 +22,14 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed("/interactive"),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed("/interactive"),
                   child: Text("Show Interactive Example"),
                 ),
               ],
             ),
           );
-        }
+        },
       ),
       routes: {
         '/minimal': (context) => MinimalExample(),

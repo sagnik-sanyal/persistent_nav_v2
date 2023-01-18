@@ -2,6 +2,24 @@
 
 All PRs on how to improve this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/edit/master/MigrationGuide.md) are very welcome :)
 
+## **Remove all Scaffolds that wrap PersistentTabView**
+
+## Drawers
+
+```dart
+AppBar(
+    leading: Builder(
+        builder: (BuildContext context) {
+            return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () { Scaffold.of(context).openDrawer(); },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+        },
+    ),
+)
+```
+
 ## Using Predefined Navigation Bar Styles
 
 To specify the style you want to use, you now have to use the corresponding widget directly, instead of `NavBarStyle.style1`. Also notice that the parameter is named differently:
