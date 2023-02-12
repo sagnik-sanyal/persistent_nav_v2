@@ -1,7 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style12BottomNavBar extends StatefulWidget {
-
   const Style12BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -34,13 +33,20 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
     _animationList = List<Animation<Offset>>.empty(growable: true);
 
     for (int i = 0; i < widget.navBarConfig.items.length; ++i) {
-      _animationControllerList.add(AnimationController(
-          duration: widget.itemAnimationProperties.duration, vsync: this,),);
-      _animationList.add(Tween(
-              begin: Offset(0, widget.navBarConfig.navBarHeight / 1.5),
-              end: Offset.zero,)
-          .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
-          .animate(_animationControllerList[i]),);
+      _animationControllerList.add(
+        AnimationController(
+          duration: widget.itemAnimationProperties.duration,
+          vsync: this,
+        ),
+      );
+      _animationList.add(
+        Tween(
+          begin: Offset(0, widget.navBarConfig.navBarHeight / 1.5),
+          end: Offset.zero,
+        )
+            .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
+            .animate(_animationControllerList[i]),
+      );
     }
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
@@ -75,9 +81,10 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
                 child: Text(
                   item.title!,
                   style: item.textStyle.apply(
-                      color: isSelected
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary,),
+                    color: isSelected
+                        ? item.activeColorPrimary
+                        : item.inactiveColorPrimary,
+                  ),
                 ),
               ),
             ),
@@ -90,8 +97,9 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
                 height: 5,
                 width: itemWidth * 0.8,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: item.activeColorSecondary,),
+                  borderRadius: BorderRadius.circular(100),
+                  color: item.activeColorSecondary,
+                ),
               ),
             ),
           ),

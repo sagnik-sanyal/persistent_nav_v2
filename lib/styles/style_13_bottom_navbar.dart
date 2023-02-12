@@ -14,75 +14,76 @@ class Style13BottomNavBar extends StatelessWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
-  Widget _buildItem(BuildContext context, ItemConfig item, bool isSelected) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
-            ),
-            child: isSelected ? item.icon : item.inactiveIcon,
-          ),
-        ),
-        if (item.title != null)
-          FittedBox(
-            child: Text(
-              item.title!,
-              style: item.textStyle.apply(
+  Widget _buildItem(BuildContext context, ItemConfig item, bool isSelected) =>
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
                 color: isSelected
                     ? item.activeColorPrimary
                     : item.inactiveColorPrimary,
               ),
-            ),
-          ),
-      ],
-    );
-
-  Widget _buildMiddleItem(ItemConfig item, bool isSelected) => Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: 150,
-          height: navBarConfig.navBarHeight,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: item.activeColorPrimary,
-            boxShadow: navBarDecoration.boxShadow,
-          ),
-          child: Center(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: item.inactiveColorPrimary,
-              ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
           ),
-        ),
-        if (item.title != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: FittedBox(
-                child: Text(
-                  item.title!,
-                  style: item.textStyle.apply(
-                    color: isSelected
-                        ? item.activeColorPrimary
-                        : item.inactiveColorPrimary,
+          if (item.title != null)
+            FittedBox(
+              child: Text(
+                item.title!,
+                style: item.textStyle.apply(
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary,
+                ),
+              ),
+            ),
+        ],
+      );
+
+  Widget _buildMiddleItem(ItemConfig item, bool isSelected) => Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 150,
+            height: navBarConfig.navBarHeight,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: item.activeColorPrimary,
+              boxShadow: navBarDecoration.boxShadow,
+            ),
+            child: Center(
+              child: IconTheme(
+                data: IconThemeData(
+                  size: item.iconSize,
+                  color: item.inactiveColorPrimary,
+                ),
+                child: isSelected ? item.icon : item.inactiveIcon,
+              ),
+            ),
+          ),
+          if (item.title != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: FittedBox(
+                  child: Text(
+                    item.title!,
+                    style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-      ],
-    );
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {

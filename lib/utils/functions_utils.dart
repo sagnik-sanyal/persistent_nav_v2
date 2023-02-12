@@ -24,8 +24,12 @@ double getTranslucencyAmount(List<ItemConfig> items, int? selectedIndex) {
   return 1;
 }
 
-Color getBackgroundColor(BuildContext context, List<ItemConfig>? items,
-    Color? color, int? selectedIndex,) {
+Color getBackgroundColor(
+  BuildContext context,
+  List<ItemConfig>? items,
+  Color? color,
+  int? selectedIndex,
+) {
   if (color == null) {
     return Colors.white;
   } else if (!opaque(items!, selectedIndex) && isColorOpaque(context, color)) {

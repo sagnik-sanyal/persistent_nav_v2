@@ -1,7 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style7BottomNavBar extends StatefulWidget {
-
   const Style7BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -34,11 +33,17 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
     _animationList = List<Animation<double>>.empty(growable: true);
 
     for (int i = 0; i < widget.navBarConfig.items.length; ++i) {
-      _animationControllerList.add(AnimationController(
-          duration: widget.itemAnimationProperties.duration, vsync: this,),);
-      _animationList.add(Tween(begin: 0.95, end: 1.2)
-          .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
-          .animate(_animationControllerList[i]),);
+      _animationControllerList.add(
+        AnimationController(
+          duration: widget.itemAnimationProperties.duration,
+          vsync: this,
+        ),
+      );
+      _animationList.add(
+        Tween(begin: 0.95, end: 1.2)
+            .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
+            .animate(_animationControllerList[i]),
+      );
     }
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
@@ -47,38 +52,38 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
   }
 
   Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary,
+              ),
+              child: isSelected ? item.icon : item.inactiveIcon,
             ),
-            child: isSelected ? item.icon : item.inactiveIcon,
           ),
-        ),
-        if (item.title != null)
-          AnimatedBuilder(
-            animation: _animationList[itemIndex],
-            builder: (context, child) => Transform.scale(
-              scale: _animationList[itemIndex].value,
-              child: FittedBox(
-                child: Text(
-                  item.title!,
-                  style: item.textStyle.apply(
-                    color: isSelected
-                        ? item.activeColorPrimary
-                        : item.inactiveColorPrimary,
+          if (item.title != null)
+            AnimatedBuilder(
+              animation: _animationList[itemIndex],
+              builder: (context, child) => Transform.scale(
+                scale: _animationList[itemIndex].value,
+                child: FittedBox(
+                  child: Text(
+                    item.title!,
+                    style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-      ],
-    );
+        ],
+      );
 
   @override
   void dispose() {

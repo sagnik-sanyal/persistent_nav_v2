@@ -1,7 +1,6 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style4BottomNavBar extends StatelessWidget {
-
   const Style4BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
@@ -16,32 +15,32 @@ class Style4BottomNavBar extends StatelessWidget {
   final ItemAnimation itemAnimationProperties;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
-            ),
-            child: isSelected ? item.icon : item.inactiveIcon,
-          ),
-        ),
-        if (item.title != null)
-          FittedBox(
-            child: Text(
-              item.title!,
-              style: item.textStyle.apply(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
                 color: isSelected
                     ? item.activeColorPrimary
                     : item.inactiveColorPrimary,
               ),
+              child: isSelected ? item.icon : item.inactiveIcon,
             ),
           ),
-      ],
-    );
+          if (item.title != null)
+            FittedBox(
+              child: Text(
+                item.title!,
+                style: item.textStyle.apply(
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary,
+                ),
+              ),
+            ),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {

@@ -79,27 +79,27 @@ class NeumorphicBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
-      decoration: navBarDecoration,
-      filter: navBarConfig.selectedItem.filter,
-      opacity: navBarConfig.selectedItem.opacity,
-      height: navBarConfig.navBarHeight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: navBarConfig.items.map((item) {
-          final int index = navBarConfig.items.indexOf(item);
-          return Expanded(
-            child: GestureDetector(
-              onTap: () {
-                navBarConfig.onItemSelected(index);
-              },
-              child: _buildItem(
-                context,
-                item,
-                navBarConfig.selectedIndex == index,
+        decoration: navBarDecoration,
+        filter: navBarConfig.selectedItem.filter,
+        opacity: navBarConfig.selectedItem.opacity,
+        height: navBarConfig.navBarHeight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: navBarConfig.items.map((item) {
+            final int index = navBarConfig.items.indexOf(item);
+            return Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  navBarConfig.onItemSelected(index);
+                },
+                child: _buildItem(
+                  context,
+                  item,
+                  navBarConfig.selectedIndex == index,
+                ),
               ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
+            );
+          }).toList(),
+        ),
+      );
 }

@@ -1,87 +1,94 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style14BottomNavBar extends StatelessWidget {
-
   Style14BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     Key? key,
-  })  : assert(navBarConfig.items.length.isOdd,
-            "The number of items must be odd for this style",),
+  })  : assert(
+          navBarConfig.items.length.isOdd,
+          "The number of items must be odd for this style",
+        ),
         super(key: key);
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
-            ),
-            child: isSelected ? item.icon : item.inactiveIcon,
-          ),
-        ),
-        if (item.title != null)
-          FittedBox(
-            child: Text(
-              item.title!,
-              style: item.textStyle.apply(
-                  color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,),
-            ),
-          ),
-      ],
-    );
-
-  Widget _buildMiddleItem(
-      BuildContext context, ItemConfig item, bool isSelected,) => Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: navBarConfig.navBarHeight,
-          height: navBarConfig.navBarHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: item.activeColorPrimary,
-            boxShadow: navBarDecoration.boxShadow,
-          ),
-          child: Center(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
             child: IconTheme(
               data: IconThemeData(
                 size: item.iconSize,
-                color: item.inactiveColorPrimary,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
           ),
-        ),
-        if (item.title != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: FittedBox(
-                child: Text(
-                  item.title!,
-                  style: item.textStyle.apply(
-                      color: isSelected
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary,),
+          if (item.title != null)
+            FittedBox(
+              child: Text(
+                item.title!,
+                style: item.textStyle.apply(
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary,
                 ),
               ),
             ),
+        ],
+      );
+
+  Widget _buildMiddleItem(
+    BuildContext context,
+    ItemConfig item,
+    bool isSelected,
+  ) =>
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: navBarConfig.navBarHeight,
+            height: navBarConfig.navBarHeight,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: item.activeColorPrimary,
+              boxShadow: navBarDecoration.boxShadow,
+            ),
+            child: Center(
+              child: IconTheme(
+                data: IconThemeData(
+                  size: item.iconSize,
+                  color: item.inactiveColorPrimary,
+                ),
+                child: isSelected ? item.icon : item.inactiveIcon,
+              ),
+            ),
           ),
-      ],
-    );
+          if (item.title != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: FittedBox(
+                  child: Text(
+                    item.title!,
+                    style: item.textStyle.apply(
+                      color: isSelected
+                          ? item.activeColorPrimary
+                          : item.inactiveColorPrimary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {

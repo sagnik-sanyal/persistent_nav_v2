@@ -54,40 +54,41 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
     });
   }
 
-  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) => AnimatedBuilder(
-      animation: _animationList[itemIndex],
-      builder: (context, child) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) =>
+      AnimatedBuilder(
+        animation: _animationList[itemIndex],
+        builder: (context, child) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: IconTheme(
+                data: IconThemeData(
+                  size: item.iconSize,
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary,
+                ),
+                child: isSelected ? item.icon : item.inactiveIcon,
               ),
-              child: isSelected ? item.icon : item.inactiveIcon,
             ),
-          ),
-          AnimatedOpacity(
-            opacity: isSelected ? 1.0 : 0.0,
-            duration: widget.itemAnimationProperties.duration,
-            child: Transform.translate(
-              offset: _animationList[itemIndex].value,
-              child: Container(
-                height: 5,
-                width: 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: item.activeColorPrimary,
+            AnimatedOpacity(
+              opacity: isSelected ? 1.0 : 0.0,
+              duration: widget.itemAnimationProperties.duration,
+              child: Transform.translate(
+                offset: _animationList[itemIndex].value,
+                child: Container(
+                  height: 5,
+                  width: 5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: item.activeColorPrimary,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
 
   @override
   void dispose() {

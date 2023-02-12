@@ -13,19 +13,21 @@ Widget screenWithButton(int id, void Function(BuildContext) onTap) => Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         defaultScreen(id),
-        Builder(builder: (context) => ElevatedButton(
+        Builder(
+          builder: (context) => ElevatedButton(
             onPressed: () => onTap(context),
             child: const Text("SubPage"),
-          ),)
+          ),
+        )
       ],
     );
 
 void main() {
   Widget wrapTabView(WidgetBuilder builder) => MaterialApp(
-      home: Builder(
-        builder: (context) => builder(context),
-      ),
-    );
+        home: Builder(
+          builder: (context) => builder(context),
+        ),
+      );
 
   group("pushScreen", () {
     testWidgets("pushes with navBar", (tester) async {
@@ -33,15 +35,19 @@ void main() {
         wrapTabView(
           (context) => PersistentTabView(
             tabs: [1, 2, 3]
-                .map((id) => tabConfig(
+                .map(
+                  (id) => tabConfig(
                     id,
                     screenWithButton(
-                        id,
-                        (context) => pushScreen(
-                              context,
-                              screen: defaultScreen(id * 10 + (id % 10)),
-                              withNavBar: true,
-                            ),),),)
+                      id,
+                      (context) => pushScreen(
+                        context,
+                        screen: defaultScreen(id * 10 + (id % 10)),
+                        withNavBar: true,
+                      ),
+                    ),
+                  ),
+                )
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
           ),
@@ -61,15 +67,19 @@ void main() {
         wrapTabView(
           (context) => PersistentTabView(
             tabs: [1, 2, 3]
-                .map((id) => tabConfig(
+                .map(
+                  (id) => tabConfig(
                     id,
                     screenWithButton(
-                        id,
-                        (context) => pushScreen(
-                              context,
-                              screen: defaultScreen(id * 10 + (id % 10)),
-                              withNavBar: false,
-                            ),),),)
+                      id,
+                      (context) => pushScreen(
+                        context,
+                        screen: defaultScreen(id * 10 + (id % 10)),
+                        withNavBar: false,
+                      ),
+                    ),
+                  ),
+                )
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
           ),
@@ -90,16 +100,21 @@ void main() {
       wrapTabView(
         (context) => PersistentTabView(
           tabs: [1, 2, 3]
-              .map((id) => tabConfig(
+              .map(
+                (id) => tabConfig(
                   id,
                   screenWithButton(
-                      id,
-                      (context) => pushWithNavBar(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    defaultScreen(id * 10 + (id % 10)),),
-                          ),),),)
+                    id,
+                    (context) => pushWithNavBar(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            defaultScreen(id * 10 + (id % 10)),
+                      ),
+                    ),
+                  ),
+                ),
+              )
               .toList(),
           navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
         ),
@@ -114,22 +129,26 @@ void main() {
     expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
   });
 
-  testWidgets("pushWithoutNavBar pushes without navBar",
-      (tester) async {
+  testWidgets("pushWithoutNavBar pushes without navBar", (tester) async {
     await tester.pumpWidget(
       wrapTabView(
         (context) => PersistentTabView(
           tabs: [1, 2, 3]
-              .map((id) => tabConfig(
+              .map(
+                (id) => tabConfig(
                   id,
                   screenWithButton(
-                      id,
-                      (context) => pushWithoutNavBar(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    defaultScreen(id * 10 + (id % 10)),),
-                          ),),),)
+                    id,
+                    (context) => pushWithoutNavBar(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            defaultScreen(id * 10 + (id % 10)),
+                      ),
+                    ),
+                  ),
+                ),
+              )
               .toList(),
           navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
         ),
