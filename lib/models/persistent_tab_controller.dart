@@ -8,6 +8,7 @@ class PersistentTabController extends ChangeNotifier {
 
   int get index => _index;
   int _index;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   ValueChanged<int>? onIndexChanged;
 
@@ -29,5 +30,9 @@ class PersistentTabController extends ChangeNotifier {
     _index = value;
     onIndexChanged?.call(value);
     notifyListeners();
+  }
+
+  void openDrawer() {
+    scaffoldKey.currentState?.openDrawer();
   }
 }

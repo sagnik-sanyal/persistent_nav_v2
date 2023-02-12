@@ -33,6 +33,7 @@ class PersistentTabView extends StatefulWidget {
     this.handleAndroidBackButtonPress = true,
     this.hideNavigationBar = false,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
+    this.drawer,
   }) : super(key: key);
 
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
@@ -116,6 +117,22 @@ class PersistentTabView extends StatefulWidget {
   /// Hides the navigation bar with a transition animation. Defaults to `false`.
   final bool hideNavigationBar;
 
+  /// A Drawer that should be accessible in every tab. To open the drawer, call `controller.openDrawer()` on your [PersistentTabController]. The hamburger menu button will not be automatically added to the appbar, but you can add it easily by using the following code in the initial screen of each tab:
+  /// ```dart
+  /// appBar: AppBar(
+  ///   ...
+  ///   leading: IconButton(
+  ///     icon: const Icon(Icons.menu),
+  ///     iconSize: 24,
+  ///     onPressed: () {
+  ///       controller.openDrawer();
+  ///     },
+  ///     tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+  ///   ),
+  /// )
+  /// ```
+  final Widget? drawer;
+
   @override
   State<PersistentTabView> createState() => _PersistentTabViewState();
 }
@@ -176,6 +193,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         margin: widget.margin,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        drawer: widget.drawer,
         tabBar: widget.navBarBuilder(
           NavBarConfig(
             selectedIndex: _controller.index,

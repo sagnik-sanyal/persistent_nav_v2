@@ -18,9 +18,12 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.navBarOverlap = const NavBarOverlap.full(),
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.drawer,
   }) : super(key: key);
 
   final Widget tabBar;
+
+  final Widget? drawer;
 
   final PersistentTabController controller;
 
@@ -109,11 +112,13 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        key: widget.controller.scaffoldKey,
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         backgroundColor: widget.backgroundColor,
         extendBody: true,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        drawer: widget.drawer,
         body: Builder(
           builder: (context) => _TabSwitchingView(
             currentTabIndex: widget.controller.index,
