@@ -34,6 +34,7 @@ class PersistentTabView extends StatefulWidget {
     this.hideNavigationBar = false,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
     this.drawer,
+    this.drawerEdgeDragWidth,
   }) : super(key: key);
 
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
@@ -133,6 +134,8 @@ class PersistentTabView extends StatefulWidget {
   /// ```
   final Widget? drawer;
 
+  final double? drawerEdgeDragWidth;
+
   @override
   State<PersistentTabView> createState() => _PersistentTabViewState();
 }
@@ -194,6 +197,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         drawer: widget.drawer,
+        drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         tabBar: widget.navBarBuilder(
           NavBarConfig(
             selectedIndex: _controller.index,

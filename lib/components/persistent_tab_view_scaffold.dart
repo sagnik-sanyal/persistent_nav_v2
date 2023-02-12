@@ -19,11 +19,14 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.drawer,
+    this.drawerEdgeDragWidth,
   }) : super(key: key);
 
   final Widget tabBar;
 
   final Widget? drawer;
+
+  final double? drawerEdgeDragWidth;
 
   final PersistentTabController controller;
 
@@ -118,6 +121,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         extendBody: true,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         drawer: widget.drawer,
         body: Builder(
           builder: (context) => _TabSwitchingView(
