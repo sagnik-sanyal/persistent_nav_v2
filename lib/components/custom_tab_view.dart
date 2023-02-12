@@ -82,9 +82,10 @@ class CustomTabViewState extends State<CustomTabView> {
   }
 
   Route<dynamic>? _onUnknownRoute(RouteSettings settings) {
-    assert(() {
-      if (widget.navigatorConfig.onUnknownRoute == null) {
-        throw FlutterError(
+    assert(
+      () {
+        if (widget.navigatorConfig.onUnknownRoute == null) {
+          throw FlutterError(
             "Could not find a generator for route $settings in the $runtimeType.\n"
             "Generators for routes are searched for in the following order:\n"
             ' 1. For the "/" route, the "builder" property, if non-null, is used.\n'
@@ -93,21 +94,27 @@ class CustomTabViewState extends State<CustomTabView> {
             " 3. Otherwise, onGenerateRoute is called. It should return a "
             'non-null value for any valid route not handled by "builder" and "routes".\n'
             " 4. Finally if all else fails onUnknownRoute is called.\n"
-            "Unfortunately, onUnknownRoute was not set.");
-      }
-      return true;
-    }());
+            "Unfortunately, onUnknownRoute was not set.",
+          );
+        }
+        return true;
+      }(),
+    );
     final Route<dynamic>? result =
         widget.navigatorConfig.onUnknownRoute!(settings);
-    assert(() {
-      if (result == null) {
-        throw FlutterError("The onUnknownRoute callback returned null.\n"
+    assert(
+      () {
+        if (result == null) {
+          throw FlutterError(
+            "The onUnknownRoute callback returned null.\n"
             "When the $runtimeType requested the route $settings from its "
             "onUnknownRoute callback, the callback returned null. Such callbacks "
-            "must never return null.");
-      }
-      return true;
-    }());
+            "must never return null.",
+          );
+        }
+        return true;
+      }(),
+    );
     return result;
   }
 }

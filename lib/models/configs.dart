@@ -23,8 +23,10 @@ class ItemConfig {
   })  : inactiveIcon = inactiveIcon ?? icon,
         activeColorSecondary =
             activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
-        assert(opacity >= 0 && opacity <= 1.0,
-            "Opacity must be between 0 and 1.0");
+        assert(
+          opacity >= 0 && opacity <= 1.0,
+          "Opacity must be between 0 and 1.0",
+        );
 
   /// Icon for the bar item.
   final Widget icon;
