@@ -214,9 +214,9 @@ void main() {
         ((tester.firstWidget(
           find.descendant(
             of: find.byType(DecoratedNavBar),
-            matching: find.byType(Container),
+            matching: find.byType(DecoratedBox),
           ),
-        ) as Container?)
+        ) as DecoratedBox?)
                 ?.decoration as BoxDecoration?)
             ?.color,
         const Color(0xFFFFC107),
