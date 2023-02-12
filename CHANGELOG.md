@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [5.0.0-beta.3] - 2023-02-12
+### Added
+- A drawer can be passed to the PersistentTabView to be usable in every tab
+
 ### Changed
 - Renamed ItemAnimationProperties to ItemAnimation
 - Made ScreenTransitionAnimation.animateTabTransition private
@@ -473,7 +476,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
-[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.2...HEAD
+[5.0.0-beta.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.2...5.0.0-beta.3
 [5.0.0-beta.2]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...5.0.0-beta.2
 [5.0.0-beta.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...5.0.0-beta.1
 [4.2.7]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.6...4.2.7
