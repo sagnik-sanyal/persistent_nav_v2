@@ -5,7 +5,7 @@ import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/settings.dart";
 
 class InteractiveExample extends StatefulWidget {
-  const InteractiveExample({Key key}) : super(key: key);
+  const InteractiveExample({Key? key}) : super(key: key);
 
   @override
   State<InteractiveExample> createState() => _InteractiveExampleState();

@@ -6,7 +6,7 @@ import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
 void main() => runApp(const PersistenBottomNavBarDemo());
 
 class PersistenBottomNavBarDemo extends StatelessWidget {
-  const PersistenBottomNavBarDemo({Key key}) : super(key: key);
+  const PersistenBottomNavBarDemo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -38,7 +38,7 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
 }
 
 class MinimalExample extends StatelessWidget {
-  const MinimalExample({Key key}) : super(key: key);
+  const MinimalExample({Key? key}) : super(key: key);
 
   List<PersistentTabConfig> _tabs() => [
         PersistentTabConfig(

@@ -17,7 +17,7 @@ class Settings {
   bool popAllScreensOnTapOfSelectedTab = true;
   bool avoidBottomPadding = true;
   Color navBarColor = Colors.white;
-  NavBarBuilder get navBarBuilder => navBarStyles[navBarStyle];
+  NavBarBuilder get navBarBuilder => navBarStyles[navBarStyle]!;
   String navBarStyle = "Style 1";
   EdgeInsets margin = EdgeInsets.zero;
 
@@ -91,9 +91,9 @@ class Settings {
 
 class SettingsView extends StatefulWidget {
   const SettingsView({
-    Key key,
-    this.settings,
-    this.onChanged,
+    required this.settings,
+    required this.onChanged,
+    Key? key,
   }) : super(key: key);
 
   final Settings settings;
@@ -132,7 +132,7 @@ class _SettingsViewState extends State<SettingsView> {
                   elevation: 16,
                   onChanged: (value) {
                     setState(() {
-                      widget.settings.navBarColor = value;
+                      widget.settings.navBarColor = value!;
                     });
                     widget.onChanged(widget.settings);
                   },
@@ -171,7 +171,7 @@ class _SettingsViewState extends State<SettingsView> {
                   elevation: 16,
                   onChanged: (value) {
                     setState(() {
-                      widget.settings.navBarStyle = value;
+                      widget.settings.navBarStyle = value!;
                     });
                     widget.onChanged(widget.settings);
                   },
