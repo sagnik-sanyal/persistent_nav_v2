@@ -1,19 +1,17 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style1BottomNavBar extends StatelessWidget {
+
+  const Style1BottomNavBar({
+    required this.navBarConfig,
+    Key? key,
+    this.navBarDecoration = const NavBarDecoration(),
+  }) : super(key: key);
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
-  Style1BottomNavBar({
-    Key? key,
-    required this.navBarConfig,
-    this.navBarDecoration = const NavBarDecoration(),
-  });
-
-  Widget _buildItem(ItemConfig item, bool isSelected) {
-    return Column(
+  Widget _buildItem(ItemConfig item, bool isSelected) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           child: IconTheme(
@@ -21,13 +19,13 @@ class Style1BottomNavBar extends StatelessWidget {
                 size: item.iconSize,
                 color: isSelected
                     ? item.activeColorPrimary
-                    : item.inactiveColorPrimary),
+                    : item.inactiveColorPrimary,),
             child: isSelected ? item.icon : item.inactiveIcon,
           ),
         ),
         if (item.title != null)
           Padding(
-            padding: const EdgeInsets.only(top: 15.0),
+            padding: const EdgeInsets.only(top: 15),
             child: Material(
               type: MaterialType.transparency,
               child: FittedBox(
@@ -44,33 +42,29 @@ class Style1BottomNavBar extends StatelessWidget {
           ),
       ],
     );
-  }
 
   @override
-  Widget build(BuildContext context) {
-    return DecoratedNavBar(
-      decoration: this.navBarDecoration,
-      filter: this.navBarConfig.selectedItem.filter,
-      opacity: this.navBarConfig.selectedItem.opacity,
-      height: this.navBarConfig.navBarHeight,
+  Widget build(BuildContext context) => DecoratedNavBar(
+      decoration: navBarDecoration,
+      filter: navBarConfig.selectedItem.filter,
+      opacity: navBarConfig.selectedItem.opacity,
+      height: navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarConfig.items.map((item) {
-          int index = this.navBarConfig.items.indexOf(item);
+        children: navBarConfig.items.map((item) {
+          final int index = navBarConfig.items.indexOf(item);
           return Expanded(
             child: InkWell(
               onTap: () {
-                this.navBarConfig.onItemSelected(index);
+                navBarConfig.onItemSelected(index);
               },
               child: _buildItem(
                 item,
-                this.navBarConfig.selectedIndex == index,
+                navBarConfig.selectedIndex == index,
               ),
             ),
           );
         }).toList(),
       ),
     );
-  }
 }

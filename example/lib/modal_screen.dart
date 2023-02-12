@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class SampleModalScreen extends ModalRoute<void> {
   SampleModalScreen();
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 500);
+  Duration get transitionDuration => const Duration(milliseconds: 500);
 
   @override
   bool get opaque => false;
@@ -26,45 +26,41 @@ class SampleModalScreen extends ModalRoute<void> {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-  ) {
-    // This makes sure that text and other content follows the material style
-    return SafeArea(
-      child: _buildOverlayContent(context),
-    );
-  }
+  ) =>
+      // This makes sure that text and other content follows the material style
+      SafeArea(
+        child: _buildOverlayContent(context),
+      );
 
-  Widget _buildOverlayContent(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
-      width: MediaQuery.of(context).size.width * 0.3,
-      margin: EdgeInsets.all(30.0),
-      padding: EdgeInsets.symmetric(horizontal: 30.0),
-      color: Colors.amber,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "This is a modal screen",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 26.0,
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                "Return",
-                style: TextStyle(color: Colors.white),
+  Widget _buildOverlayContent(BuildContext context) => Container(
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: MediaQuery.of(context).size.width * 0.3,
+        margin: const EdgeInsets.all(30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        color: Colors.amber,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              "This is a modal screen",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 26,
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  "Return",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 }

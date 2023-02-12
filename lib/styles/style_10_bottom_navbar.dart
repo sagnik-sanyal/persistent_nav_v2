@@ -1,21 +1,21 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style10BottomNavBar extends StatefulWidget {
+  const Style10BottomNavBar({
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
+    this.itemAnimationProperties = const ItemAnimation(),
+    Key? key,
+  }) : super(key: key);
+
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
 
-  Style10BottomNavBar({
-    Key? key,
-    required this.navBarConfig,
-    this.navBarDecoration = const NavBarDecoration(),
-    this.itemAnimationProperties = const ItemAnimation(),
-  });
-
   @override
-  _Style10BottomNavBarState createState() => _Style10BottomNavBarState();
+  State<Style10BottomNavBar> createState() => _Style10BottomNavBarState();
 }
 
 class _Style10BottomNavBarState extends State<Style10BottomNavBar>
@@ -33,13 +33,20 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
     _animationList = List<Animation<Offset>>.empty(growable: true);
 
     for (int i = 0; i < widget.navBarConfig.items.length; ++i) {
-      _animationControllerList.add(AnimationController(
-          duration: widget.itemAnimationProperties.duration, vsync: this));
-      _animationList.add(Tween(
-              begin: Offset(0, widget.navBarConfig.navBarHeight),
-              end: Offset(0, 0.0))
-          .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
-          .animate(_animationControllerList[i]));
+      _animationControllerList.add(
+        AnimationController(
+          duration: widget.itemAnimationProperties.duration,
+          vsync: this,
+        ),
+      );
+      _animationList.add(
+        Tween(
+          begin: Offset(0, widget.navBarConfig.navBarHeight),
+          end: Offset.zero,
+        )
+            .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
+            .animate(_animationControllerList[i]),
+      );
     }
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
@@ -47,12 +54,10 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
     });
   }
 
-  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) {
-    return AnimatedBuilder(
+  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) => AnimatedBuilder(
       animation: _animationList[itemIndex],
       builder: (context, child) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: IconTheme(
@@ -71,10 +76,10 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
             child: Transform.translate(
               offset: _animationList[itemIndex].value,
               child: Container(
-                height: 5.0,
-                width: 5.0,
+                height: 5,
+                width: 5,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100.0),
+                  borderRadius: BorderRadius.circular(100),
                   color: item.activeColorPrimary,
                 ),
               ),
@@ -83,7 +88,6 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
         ],
       ),
     );
-  }
 
   @override
   void dispose() {
@@ -109,9 +113,8 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
       height: widget.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: widget.navBarConfig.items.map((item) {
-          int index = widget.navBarConfig.items.indexOf(item);
+          final int index = widget.navBarConfig.items.indexOf(item);
           return Expanded(
             child: InkWell(
               onTap: () {

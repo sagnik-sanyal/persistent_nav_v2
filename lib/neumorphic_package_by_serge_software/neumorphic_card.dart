@@ -54,7 +54,7 @@ class NeumorphicContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = decoration.color ?? Theme.of(context).backgroundColor;
+    final color = decoration.color ?? Theme.of(context).colorScheme.background;
     final emboss = curveType == CurveType.emboss;
 
     Color colorValue = color;
@@ -125,9 +125,9 @@ class NeumorphicContainer extends StatelessWidget {
 
   Color _getAdjustColor(Color baseColor, double amount) {
     Map<String, int> colors = {
-      'r': baseColor.red,
-      'g': baseColor.green,
-      'b': baseColor.blue
+      "r": baseColor.red,
+      "g": baseColor.green,
+      "b": baseColor.blue
     };
 
     colors = colors.map((key, value) {
@@ -139,7 +139,7 @@ class NeumorphicContainer extends StatelessWidget {
       }
       return MapEntry(key, (value + amount).floor());
     });
-    return Color.fromRGBO(colors['r']!, colors['g']!, colors['b']!, 1);
+    return Color.fromRGBO(colors["r"]!, colors["g"]!, colors["b"]!, 1);
   }
 
   Gradient _getFlatGradients(Color baseColor, double depth) => LinearGradient(
@@ -189,12 +189,11 @@ class NeumorphicDecoration {
     BorderRadiusGeometry? borderRadius,
     BoxShape? shape,
     BoxBorder? border,
-  }) {
-    return NeumorphicDecoration(
-      color: color ?? this.color,
-      borderRadius: borderRadius ?? this.borderRadius,
-      shape: shape ?? this.shape,
-      border: border ?? this.border,
-    );
-  }
+  }) =>
+      NeumorphicDecoration(
+        color: color ?? this.color,
+        borderRadius: borderRadius ?? this.borderRadius,
+        shape: shape ?? this.shape,
+        border: border ?? this.border,
+      );
 }

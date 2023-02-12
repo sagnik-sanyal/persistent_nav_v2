@@ -1,12 +1,12 @@
 part of persistent_bottom_nav_bar_v2;
 
 class PersistentTabViewScaffold extends StatefulWidget {
-  PersistentTabViewScaffold({
-    Key? key,
+  const PersistentTabViewScaffold({
     required this.tabBar,
     required this.tabBuilder,
     required this.controller,
     required this.tabCount,
+    Key? key,
     this.opacities = const [],
     this.backgroundColor,
     this.avoidBottomPadding = true,
@@ -61,17 +61,20 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   late final AnimationController _hideNavBarAnimationController =
       AnimationController(
     vsync: this,
-    duration: Duration(milliseconds: 500),
+    duration: const Duration(milliseconds: 500),
   );
   late final Animation<Offset> slideAnimation = Tween<Offset>(
     begin: Offset.zero,
-    end: Offset(0, 1),
-  ).animate(CurvedAnimation(
-    parent: _hideNavBarAnimationController,
-    curve: Curves.ease,
-  ));
+    end: const Offset(0, 1),
+  ).animate(
+    CurvedAnimation(
+      parent: _hideNavBarAnimationController,
+      curve: Curves.ease,
+    ),
+  );
 
-  initState() {
+  @override
+  void initState() {
     super.initState();
     _navBarFullyShown = !widget.hideNavigationBar;
     if (widget.hideNavigationBar) {
@@ -79,7 +82,8 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
     }
   }
 
-  didUpdateWidget(PersistentTabViewScaffold oldWidget) {
+  @override
+  void didUpdateWidget(PersistentTabViewScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.hideNavigationBar != oldWidget.hideNavigationBar) {
       if (widget.hideNavigationBar) {
@@ -104,93 +108,93 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-      backgroundColor: widget.backgroundColor,
-      extendBody: true,
-      floatingActionButton: widget.floatingActionButton,
-      floatingActionButtonLocation: widget.floatingActionButtonLocation,
-      body: Builder(builder: (context) {
-        return _TabSwitchingView(
-          currentTabIndex: widget.controller.index,
-          tabCount: widget.tabCount,
-          tabBuilder: (context, index) {
-            double overlap = 0.0;
-            bool isNotOpaque = index > widget.opacities.length
-                ? false
-                : widget.opacities[index] != 1.0;
-            if ((isNotOpaque &&
-                    widget.navBarOverlap.fullOverlapWhenNotOpaque) ||
-                !_navBarFullyShown ||
-                widget.margin.bottom != 0) {
-              overlap = double.infinity;
-            } else {
-              overlap = widget.navBarOverlap.overlap;
-            }
+  Widget build(BuildContext context) => Scaffold(
+        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+        backgroundColor: widget.backgroundColor,
+        extendBody: true,
+        floatingActionButton: widget.floatingActionButton,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        body: Builder(
+          builder: (context) => _TabSwitchingView(
+            currentTabIndex: widget.controller.index,
+            tabCount: widget.tabCount,
+            tabBuilder: (context, index) {
+              double overlap = 0;
+              final bool isNotOpaque = index > widget.opacities.length
+                  ? false
+                  : widget.opacities[index] != 1.0;
+              if ((isNotOpaque &&
+                      widget.navBarOverlap.fullOverlapWhenNotOpaque) ||
+                  !_navBarFullyShown ||
+                  widget.margin.bottom != 0) {
+                overlap = double.infinity;
+              } else {
+                overlap = widget.navBarOverlap.overlap;
+              }
 
-            return PersistentTab(
-              child: widget.tabBuilder(context, index),
-              bottomMargin:
-                  max(0, MediaQuery.of(context).padding.bottom - overlap),
-            );
-          },
-          stateManagement: widget.stateManagement,
-          screenTransitionAnimation: widget.screenTransitionAnimation,
-        );
-      }),
-      bottomNavigationBar: SlideTransition(
-        position: slideAnimation,
-        child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-          child: Padding(
-            padding: widget.margin,
-            child: MediaQuery.removePadding(
-              context: context,
-              // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
-              removeBottom: !widget.avoidBottomPadding,
-              child: SafeArea(
-                top: false,
-                right: false,
-                left: false,
-                bottom: widget.avoidBottomPadding && widget.margin.bottom != 0,
-                child: widget.tabBar,
+              return PersistentTab(
+                bottomMargin: max(
+                  0,
+                  MediaQuery.of(context).padding.bottom - overlap,
+                ),
+                child: widget.tabBuilder(context, index),
+              );
+            },
+            stateManagement: widget.stateManagement,
+            screenTransitionAnimation: widget.screenTransitionAnimation,
+          ),
+        ),
+        bottomNavigationBar: SlideTransition(
+          position: slideAnimation,
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+            child: Padding(
+              padding: widget.margin,
+              child: MediaQuery.removePadding(
+                context: context,
+                // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
+                removeBottom: !widget.avoidBottomPadding,
+                child: SafeArea(
+                  top: false,
+                  right: false,
+                  left: false,
+                  bottom:
+                      widget.avoidBottomPadding && widget.margin.bottom != 0,
+                  child: widget.tabBar,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class PersistentTab extends StatelessWidget {
+  const PersistentTab({
+    Key? key,
+    this.child,
+    this.bottomMargin = 0.0,
+  }) : super(key: key);
+
   final Widget? child;
   final double bottomMargin;
 
-  PersistentTab({
-    this.child,
-    this.bottomMargin = 0.0,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomMargin),
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+        padding: EdgeInsets.only(bottom: bottomMargin),
+        child: child,
+      );
 }
 
 class _TabSwitchingView extends StatefulWidget {
   const _TabSwitchingView({
-    Key? key,
     required this.currentTabIndex,
     required this.tabCount,
     required this.stateManagement,
     required this.tabBuilder,
     required this.screenTransitionAnimation,
-  })  : assert(tabCount != null && tabCount > 0),
+    Key? key,
+  })  : assert(tabCount != null && tabCount > 0, "tabCount must be greater 0"),
         super(key: key);
 
   final int currentTabIndex;
@@ -234,7 +238,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
     _initAnimationControllers();
   }
 
-  _initAnimationControllers() {
+  void _initAnimationControllers() {
     if (widget.screenTransitionAnimation!.animateTabTransition) {
       _animationControllers =
           List<AnimationController?>.filled(widget.tabCount!, null);
@@ -242,8 +246,10 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       _animationCurve = widget.screenTransitionAnimation!.curve;
       for (int i = 0; i < widget.tabCount!; ++i) {
         _animationControllers[i] = AnimationController(
-            vsync: this, duration: widget.screenTransitionAnimation!.duration);
-        _animations[i] = Tween(begin: 0.0, end: 0.0)
+          vsync: this,
+          duration: widget.screenTransitionAnimation!.duration,
+        );
+        _animations[i] = Tween<double>(begin: 0, end: 0)
             .chain(CurveTween(curve: widget.screenTransitionAnimation!.curve))
             .animate(_animationControllers[i]!);
       }
@@ -264,8 +270,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _focusActiveTab() {
-    if (widget.screenTransitionAnimation!.animateTabTransition)
+    if (widget.screenTransitionAnimation!.animateTabTransition) {
       _startAnimation();
+    }
     if (tabFocusNodes.length != widget.tabCount) {
       if (tabFocusNodes.length > widget.tabCount!) {
         discardedNodes.addAll(tabFocusNodes.sublist(widget.tabCount!));
@@ -274,9 +281,10 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
         tabFocusNodes.addAll(
           List<FocusScopeNode>.generate(
             widget.tabCount! - tabFocusNodes.length,
-            (int index) => FocusScopeNode(
-                debugLabel:
-                    '$CupertinoTabScaffold Tab ${index + tabFocusNodes.length}'),
+            (index) => FocusScopeNode(
+              debugLabel:
+                  "$CupertinoTabScaffold Tab ${index + tabFocusNodes.length}",
+            ),
           ),
         );
       }
@@ -289,22 +297,25 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   /// This method must only be called once when [_previousTabIndex]
   /// and [_currentTabIndex] change.
   void _startAnimation() {
-    if (_previousTabIndex == _currentTabIndex) return;
+    if (_previousTabIndex == _currentTabIndex) {
+      return;
+    }
     _animationControllers[_previousTabIndex]!.reset();
-    _animations[_previousTabIndex] = Tween(
-            begin: 0.0,
-            end: (_previousTabIndex > _currentTabIndex)
-                ? _animationValue
-                : -_animationValue!)
+    _animations[_previousTabIndex] = Tween<double>(
+      begin: 0,
+      end: (_previousTabIndex > _currentTabIndex)
+          ? _animationValue
+          : -_animationValue!,
+    )
         .chain(CurveTween(curve: widget.screenTransitionAnimation!.curve))
         .animate(_animationControllers[_previousTabIndex]!);
 
     _animationControllers[_currentTabIndex]!.reset();
-    _animations[_currentTabIndex] = Tween(
+    _animations[_currentTabIndex] = Tween<double>(
       begin: (_previousTabIndex > _currentTabIndex)
           ? -_animationValue!
           : _animationValue!,
-      end: 0.0,
+      end: 0,
     )
         .chain(CurveTween(curve: widget.screenTransitionAnimation!.curve))
         .animate(_animationControllers[_currentTabIndex]!);
@@ -314,24 +325,22 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
     return;
   }
 
-  Widget _buildScreens() {
-    return Stack(
-      fit: StackFit.expand,
-      children: List<Widget>.generate(widget.tabCount!, (int index) {
-        final bool active = index == _currentTabIndex ||
-            (widget.screenTransitionAnimation!.animateTabTransition &&
-                index == _previousTabIndex);
-        shouldBuildTab[index] = active || shouldBuildTab[index];
+  Widget _buildScreens() => Stack(
+        fit: StackFit.expand,
+        children: List<Widget>.generate(widget.tabCount!, (index) {
+          final bool active = index == _currentTabIndex ||
+              (widget.screenTransitionAnimation!.animateTabTransition &&
+                  index == _previousTabIndex);
+          shouldBuildTab[index] = active || shouldBuildTab[index];
 
-        return Offstage(
-          offstage: !active,
-          child: TickerMode(
-            enabled: active,
-            child: FocusScope(
-              node: tabFocusNodes[index],
-              child: Builder(
-                builder: (BuildContext context) {
-                  return shouldBuildTab[index]
+          return Offstage(
+            offstage: !active,
+            child: TickerMode(
+              enabled: active,
+              child: FocusScope(
+                node: tabFocusNodes[index],
+                child: Builder(
+                  builder: (context) => shouldBuildTab[index]
                       ? (widget.screenTransitionAnimation!.animateTabTransition
                           ? AnimatedBuilder(
                               animation: _animations[index]!,
@@ -341,15 +350,13 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
                               ),
                             )
                           : widget.tabBuilder(context, index))
-                      : Container();
-                },
+                      : Container(),
+                ),
               ),
             ),
-          ),
-        );
-      }),
-    );
-  }
+          );
+        }),
+      );
 
   @override
   void didChangeDependencies() {

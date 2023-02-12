@@ -4,6 +4,37 @@ part of persistent_bottom_nav_bar_v2;
 ///
 /// To learn more, check out the [Readme](https://github.com/jb3rndt/PersistentBottomNavBarV2).
 class PersistentTabView extends StatefulWidget {
+  /// Creates a fullscreen container with a navigation bar at the bottom. The
+  /// navigation bar style can be chosen from [NavBarStyle]. If you want to
+  /// make a custom style use [PersistentTabView.custom].
+  ///
+  /// The different screens get displayed in the container when an item is
+  /// selected in the navigation bar.
+  const PersistentTabView({
+    required this.tabs,
+    required this.navBarBuilder,
+    Key? key,
+    this.controller,
+    this.navBarHeight = kBottomNavigationBarHeight,
+    this.navBarOverlap = const NavBarOverlap.full(),
+    this.margin = EdgeInsets.zero,
+    this.backgroundColor = Colors.white,
+    this.onTabChanged,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.resizeToAvoidBottomInset = true,
+    this.selectedTabContext,
+    this.popAllScreensOnTapOfSelectedTab = true,
+    this.popAllScreensOnTapAnyTabs = false,
+    this.popActionScreens = PopActionScreensType.all,
+    this.avoidBottomPadding = true,
+    this.onWillPop,
+    this.stateManagement = true,
+    this.handleAndroidBackButtonPress = true,
+    this.hideNavigationBar = false,
+    this.screenTransitionAnimation = const ScreenTransitionAnimation(),
+  }) : super(key: key);
+
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
   final List<PersistentTabConfig> tabs;
 
@@ -85,39 +116,8 @@ class PersistentTabView extends StatefulWidget {
   /// Hides the navigation bar with a transition animation. Defaults to `false`.
   final bool hideNavigationBar;
 
-  /// Creates a fullscreen container with a navigation bar at the bottom. The
-  /// navigation bar style can be chosen from [NavBarStyle]. If you want to
-  /// make a custom style use [PersistentTabView.custom].
-  ///
-  /// The different screens get displayed in the container when an item is
-  /// selected in the navigation bar.
-  PersistentTabView({
-    Key? key,
-    required this.tabs,
-    required this.navBarBuilder,
-    this.controller,
-    this.navBarHeight = kBottomNavigationBarHeight,
-    this.navBarOverlap = const NavBarOverlap.full(),
-    this.margin = EdgeInsets.zero,
-    this.backgroundColor = Colors.white,
-    this.onTabChanged,
-    this.floatingActionButton,
-    this.floatingActionButtonLocation,
-    this.resizeToAvoidBottomInset = true,
-    this.selectedTabContext,
-    this.popAllScreensOnTapOfSelectedTab = true,
-    this.popAllScreensOnTapAnyTabs = false,
-    this.popActionScreens = PopActionScreensType.all,
-    this.avoidBottomPadding = true,
-    this.onWillPop,
-    this.stateManagement = true,
-    this.handleAndroidBackButtonPress = true,
-    this.hideNavigationBar = false,
-    this.screenTransitionAnimation = const ScreenTransitionAnimation(),
-  }) : super(key: key);
-
   @override
-  _PersistentTabViewState createState() => _PersistentTabViewState();
+  State<PersistentTabView> createState() => _PersistentTabViewState();
 }
 
 class _PersistentTabViewState extends State<PersistentTabView> {
@@ -129,7 +129,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   void initState() {
     super.initState();
 
-    _controller = widget.controller ?? PersistentTabController(initialIndex: 0);
+    _controller = widget.controller ?? PersistentTabController();
     _controller.onIndexChanged = widget.onTabChanged;
 
     _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
@@ -138,7 +138,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       if (widget.selectedTabContext != null) {
         _sendScreenContext = true;
       }
-      if (mounted) setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
 
     if (widget.selectedTabContext != null) {
@@ -148,19 +150,17 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     }
   }
 
-  Widget _buildScreen(int index) {
-    return CustomTabView(
-      navigatorConfig: widget.tabs[index].navigatorConfig,
-      home: (BuildContext screenContext) {
-        _contextList[index] = screenContext;
-        if (_sendScreenContext && index == _controller.index) {
-          _sendScreenContext = false;
-          widget.selectedTabContext!(_contextList[_controller.index]!);
-        }
-        return widget.tabs[index].screen;
-      },
-    );
-  }
+  Widget _buildScreen(int index) => CustomTabView(
+        navigatorConfig: widget.tabs[index].navigatorConfig,
+        home: (screenContext) {
+          _contextList[index] = screenContext;
+          if (_sendScreenContext && index == _controller.index) {
+            _sendScreenContext = false;
+            widget.selectedTabContext!(_contextList[_controller.index]!);
+          }
+          return widget.tabs[index].screen;
+        },
+      );
 
   Widget navigationBarWidget() => PersistentTabViewScaffold(
         controller: _controller,
@@ -181,7 +181,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             selectedIndex: _controller.index,
             items: widget.tabs.map((e) => e.item).toList(),
             navBarHeight: widget.navBarHeight,
-            onItemSelected: (int index) {
+            onItemSelected: (index) {
               if (widget.tabs[index].onPressed != null) {
                 widget.tabs[index].onPressed!(context);
               } else {
@@ -194,9 +194,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             },
           ),
         ),
-        tabBuilder: (BuildContext context, int index) {
-          return _buildScreen(index);
-        },
+        tabBuilder: (context, index) => _buildScreen(index),
       );
 
   @override
@@ -250,10 +248,12 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         }
       } else {
         Navigator.popUntil(
-            _contextList[_controller.index]!,
-            ModalRoute.withName(
-                widget.tabs[_controller.index].navigatorConfig.initialRoute ??
-                    Navigator.defaultRouteName));
+          _contextList[_controller.index]!,
+          ModalRoute.withName(
+            widget.tabs[_controller.index].navigatorConfig.initialRoute ??
+                Navigator.defaultRouteName,
+          ),
+        );
       }
     }
   }

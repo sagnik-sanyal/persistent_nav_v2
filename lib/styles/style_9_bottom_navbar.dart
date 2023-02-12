@@ -1,21 +1,22 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style9BottomNavBar extends StatefulWidget {
+
+  const Style9BottomNavBar({
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
+    this.itemAnimationProperties = const ItemAnimation(),
+    Key? key,
+  }) : super(key: key);
+
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
 
-  Style9BottomNavBar({
-    Key? key,
-    required this.navBarConfig,
-    this.navBarDecoration = const NavBarDecoration(),
-    this.itemAnimationProperties = const ItemAnimation(),
-  });
-
   @override
-  _Style9BottomNavBarState createState() => _Style9BottomNavBarState();
+  State<Style9BottomNavBar> createState() => _Style9BottomNavBarState();
 }
 
 class _Style9BottomNavBarState extends State<Style9BottomNavBar>
@@ -33,12 +34,12 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
 
     for (int i = 0; i < widget.navBarConfig.items.length; ++i) {
       _animationControllerList.add(AnimationController(
-          duration: widget.itemAnimationProperties.duration, vsync: this));
+          duration: widget.itemAnimationProperties.duration, vsync: this,),);
       _animationList.add(Tween(
               begin: Offset(0, widget.navBarConfig.navBarHeight),
-              end: Offset(0, 0.0))
+              end: Offset.zero,)
           .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
-          .animate(_animationControllerList[i]));
+          .animate(_animationControllerList[i]),);
     }
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
@@ -46,12 +47,10 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
     });
   }
 
-  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) {
-    return AnimatedBuilder(
+  Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) => AnimatedBuilder(
       animation: _animationList[itemIndex],
       builder: (context, child) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: IconTheme(
@@ -85,13 +84,12 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
         ],
       ),
     );
-  }
 
   @override
   void dispose() {
-    _animationControllerList.forEach((controller) {
+    for (var controller in _animationControllerList) {
       controller.dispose();
-    });
+    }
     super.dispose();
   }
 
@@ -109,9 +107,8 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
       height: widget.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: widget.navBarConfig.items.map((item) {
-          int index = widget.navBarConfig.items.indexOf(item);
+         final int index = widget.navBarConfig.items.indexOf(item);
           return Expanded(
             child: InkWell(
               onTap: () {

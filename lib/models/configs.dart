@@ -4,6 +4,27 @@ part of persistent_bottom_nav_bar_v2;
 /// Styling depends on the styling of the navigation bar.
 /// Needs to be passed to the [PersistentTabView] widget via [PersistentTabConfig].
 class ItemConfig {
+  ItemConfig({
+    required this.icon,
+    Icon? inactiveIcon,
+    this.title,
+    this.activeColorPrimary = CupertinoColors.activeBlue,
+    this.inactiveColorPrimary = CupertinoColors.systemGrey,
+    Color? activeColorSecondary,
+    this.inactiveColorSecondary = Colors.transparent,
+    this.opacity = 1.0,
+    this.filter,
+    this.textStyle = const TextStyle(
+      color: CupertinoColors.systemGrey,
+      fontWeight: FontWeight.w400,
+      fontSize: 12,
+    ),
+    this.iconSize = 26.0,
+  })  : inactiveIcon = inactiveIcon ?? icon,
+        activeColorSecondary =
+            activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
+        assert(opacity >= 0 && opacity <= 1.0, "Opacity must be between 0 and 1.0");
+
   /// Icon for the bar item.
   final Widget icon;
 
@@ -39,30 +60,22 @@ class ItemConfig {
   final TextStyle textStyle;
 
   final double iconSize;
-
-  ItemConfig({
-    required this.icon,
-    Icon? inactiveIcon,
-    this.title,
-    this.activeColorPrimary = CupertinoColors.activeBlue,
-    this.inactiveColorPrimary = CupertinoColors.systemGrey,
-    Color? activeColorSecondary,
-    this.inactiveColorSecondary = Colors.transparent,
-    this.opacity = 1.0,
-    this.filter,
-    this.textStyle = const TextStyle(
-      color: CupertinoColors.systemGrey,
-      fontWeight: FontWeight.w400,
-      fontSize: 12.0,
-    ),
-    this.iconSize = 26.0,
-  })  : inactiveIcon = inactiveIcon ?? icon,
-        activeColorSecondary =
-            activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
-        assert(opacity >= 0 && opacity <= 1.0);
 }
 
 class PersistentTabConfig {
+  PersistentTabConfig({
+    required this.screen,
+    required this.item,
+    this.navigatorConfig = const NavigatorConfig(),
+    this.onSelectedTabPressWhenNoScreensPushed,
+  }) : onPressed = null;
+
+  PersistentTabConfig.noScreen({
+    required this.item,
+    required this.onPressed,
+    this.navigatorConfig = const NavigatorConfig(),
+    this.onSelectedTabPressWhenNoScreensPushed,
+  }) : screen = Container();
   final Widget screen;
 
   final ItemConfig item;
@@ -77,54 +90,47 @@ class PersistentTabConfig {
   /// Use it when you want to run some code when user presses the NavBar when on the initial screen of that respective tab. The inspiration was taken from the native iOS navigation bar behavior where when performing similar operation, you taken to the top of the list.
   ///
   /// NOTE: This feature is experimental at the moment and might not work as intended for some.
-  final Function? onSelectedTabPressWhenNoScreensPushed;
-
-  PersistentTabConfig({
-    required this.screen,
-    required this.item,
-    this.navigatorConfig = const NavigatorConfig(),
-    this.onSelectedTabPressWhenNoScreensPushed,
-  }) : onPressed = null;
-
-  PersistentTabConfig.noScreen({
-    required this.item,
-    required this.onPressed,
-    this.navigatorConfig = const NavigatorConfig(),
-    this.onSelectedTabPressWhenNoScreensPushed,
-  }) : screen = Container();
+  final Function()? onSelectedTabPressWhenNoScreensPushed;
 }
 
 class NavBarConfig {
-  final int selectedIndex;
-  final List<ItemConfig> items;
-  final void Function(int) onItemSelected;
-  final double navBarHeight;
-
   const NavBarConfig({
     required this.selectedIndex,
     required this.items,
     required this.onItemSelected,
     this.navBarHeight = kBottomNavigationBarHeight,
   });
+  final int selectedIndex;
+  final List<ItemConfig> items;
+  final void Function(int) onItemSelected;
+  final double navBarHeight;
 
-  ItemConfig get selectedItem => this.items[this.selectedIndex];
+  ItemConfig get selectedItem => items[selectedIndex];
 
   NavBarConfig copyWith({
     int? selectedIndex,
     List<ItemConfig>? items,
     bool Function(int)? onItemSelected,
     double? navBarHeight,
-  }) {
-    return NavBarConfig(
-      selectedIndex: selectedIndex ?? this.selectedIndex,
-      items: items ?? this.items,
-      onItemSelected: onItemSelected ?? this.onItemSelected,
-      navBarHeight: navBarHeight ?? this.navBarHeight,
-    );
-  }
+  }) =>
+      NavBarConfig(
+        selectedIndex: selectedIndex ?? this.selectedIndex,
+        items: items ?? this.items,
+        onItemSelected: onItemSelected ?? this.onItemSelected,
+        navBarHeight: navBarHeight ?? this.navBarHeight,
+      );
 }
 
 class NavigatorConfig {
+  const NavigatorConfig({
+    this.defaultTitle,
+    this.routes = const {},
+    this.onGenerateRoute,
+    this.onUnknownRoute,
+    this.initialRoute,
+    this.navigatorObservers = const <NavigatorObserver>[],
+    this.navigatorKey,
+  });
   final String? defaultTitle;
 
   final Map<String, WidgetBuilder> routes;
@@ -139,16 +145,6 @@ class NavigatorConfig {
 
   final GlobalKey<NavigatorState>? navigatorKey;
 
-  const NavigatorConfig({
-    this.defaultTitle,
-    this.routes = const {},
-    this.onGenerateRoute,
-    this.onUnknownRoute,
-    this.initialRoute,
-    this.navigatorObservers = const <NavigatorObserver>[],
-    this.navigatorKey,
-  });
-
   NavigatorConfig copyWith({
     String? defaultTitle,
     Map<String, WidgetBuilder>? routes,
@@ -157,15 +153,14 @@ class NavigatorConfig {
     String? initialRoute,
     List<NavigatorObserver>? navigatorObservers,
     GlobalKey<NavigatorState>? navigatorKeys,
-  }) {
-    return NavigatorConfig(
-      defaultTitle: defaultTitle ?? this.defaultTitle,
-      routes: routes ?? this.routes,
-      onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,
-      onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
-      initialRoute: initialRoute ?? this.initialRoute,
-      navigatorObservers: navigatorObservers ?? this.navigatorObservers,
-      navigatorKey: navigatorKey ?? this.navigatorKey,
-    );
-  }
+  }) =>
+      NavigatorConfig(
+        defaultTitle: defaultTitle ?? this.defaultTitle,
+        routes: routes ?? this.routes,
+        onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,
+        onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
+        initialRoute: initialRoute ?? this.initialRoute,
+        navigatorObservers: navigatorObservers ?? this.navigatorObservers,
+        navigatorKey: navigatorKey ?? navigatorKey,
+      );
 }

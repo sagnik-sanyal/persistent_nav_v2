@@ -1,16 +1,16 @@
 part of persistent_bottom_nav_bar_v2;
 
 class NeumorphicBottomNavBar extends StatelessWidget {
-  final NavBarConfig navBarConfig;
-  final NeumorphicProperties neumorphicProperties;
-  final NavBarDecoration navBarDecoration;
-
-  NeumorphicBottomNavBar({
-    Key? key,
+  const NeumorphicBottomNavBar({
     required this.navBarConfig,
+    Key? key,
     this.navBarDecoration = const NavBarDecoration(),
     this.neumorphicProperties = const NeumorphicProperties(),
   }) : super(key: key);
+
+  final NavBarConfig navBarConfig;
+  final NeumorphicProperties neumorphicProperties;
+  final NavBarDecoration navBarDecoration;
 
   Widget _getNavItem(
     ItemConfig item,
@@ -18,25 +18,26 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   ) =>
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           IconTheme(
             data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary),
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeColorPrimary
+                  : item.inactiveColorPrimary,
+            ),
             child: isSelected ? item.icon : item.inactiveIcon,
           ),
-          if (this.neumorphicProperties.showSubtitleText)
+          if (neumorphicProperties.showSubtitleText)
             FittedBox(
               child: Text(
                 item.title!,
                 style: item.textStyle.apply(
-                    color: isSelected
-                        ? item.activeColorPrimary
-                        : item.inactiveColorPrimary),
+                  color: isSelected
+                      ? item.activeColorPrimary
+                      : item.inactiveColorPrimary,
+                ),
               ),
             ),
         ],
@@ -49,59 +50,56 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   ) =>
       item.opacity == 1.0
           ? NeumorphicContainer(
-              decoration: this.neumorphicProperties.decoration?.copyWith(
-                    color: this.neumorphicProperties.decoration?.color ??
-                        this.navBarDecoration.color,
-                  ),
-              bevel: this.neumorphicProperties.bevel,
+              decoration: neumorphicProperties.decoration?.copyWith(
+                color: neumorphicProperties.decoration?.color ??
+                    navBarDecoration.color,
+              ),
+              bevel: neumorphicProperties.bevel,
               curveType: isSelected
                   ? CurveType.emboss
-                  : this.neumorphicProperties.curveType,
-              padding: EdgeInsets.all(6.0),
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+                  : neumorphicProperties.curveType,
+              padding: const EdgeInsets.all(6),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               child: _getNavItem(item, isSelected),
             )
           : Container(
               decoration: BoxDecoration(
-                borderRadius:
-                    this.neumorphicProperties.decoration?.borderRadius,
+                borderRadius: neumorphicProperties.decoration?.borderRadius,
                 color: getBackgroundColor(
-                    context,
-                    this.navBarConfig.items,
-                    this.navBarDecoration.color,
-                    this.navBarConfig.selectedIndex),
+                  context,
+                  navBarConfig.items,
+                  navBarDecoration.color,
+                  navBarConfig.selectedIndex,
+                ),
               ),
-              padding: EdgeInsets.all(6.0),
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              padding: const EdgeInsets.all(6),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               child: _getNavItem(item, isSelected),
             );
 
   @override
-  Widget build(BuildContext context) {
-    return DecoratedNavBar(
-      decoration: this.navBarDecoration,
-      filter: this.navBarConfig.selectedItem.filter,
-      opacity: this.navBarConfig.selectedItem.opacity,
-      height: this.navBarConfig.navBarHeight,
+  Widget build(BuildContext context) => DecoratedNavBar(
+      decoration: navBarDecoration,
+      filter: navBarConfig.selectedItem.filter,
+      opacity: navBarConfig.selectedItem.opacity,
+      height: navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarConfig.items.map((item) {
-          int index = this.navBarConfig.items.indexOf(item);
+        children: navBarConfig.items.map((item) {
+          final int index = navBarConfig.items.indexOf(item);
           return Expanded(
             child: GestureDetector(
               onTap: () {
-                this.navBarConfig.onItemSelected(index);
+                navBarConfig.onItemSelected(index);
               },
               child: _buildItem(
                 context,
                 item,
-                this.navBarConfig.selectedIndex == index,
+                navBarConfig.selectedIndex == index,
               ),
             ),
           );
         }).toList(),
       ),
     );
-  }
 }
