@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:persistent_bottom_nav_bar_v2_example_project/modal_screen.dart";
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -90,7 +89,13 @@ class MainScreen extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  pushWithNavBar(context, SampleModalScreen());
+                  pushWithNavBar(
+                    context,
+                    DialogRoute(
+                      context: context,
+                      builder: (context) => const ExampleDialog(),
+                    ),
+                  );
                 },
                 child: const Text(
                   "Push Dynamic/Modal Screen",
@@ -156,6 +161,44 @@ class MainScreen3 extends StatelessWidget {
               "Go Back to Second Screen",
               style: TextStyle(color: Colors.white),
             ),
+          ),
+        ),
+      );
+}
+
+class ExampleDialog extends StatelessWidget {
+  const ExampleDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Dialog(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.6,
+          width: MediaQuery.of(context).size.width * 0.3,
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          color: Colors.amber,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                "This is a modal screen",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 26,
+                ),
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Return",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );

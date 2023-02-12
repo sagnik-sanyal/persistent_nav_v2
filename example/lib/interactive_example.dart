@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:persistent_bottom_nav_bar_v2_example_project/modal_screen.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/settings.dart";
 
@@ -42,7 +41,13 @@ class _InteractiveExampleState extends State<InteractiveExample> {
             inactiveColorPrimary: Colors.grey,
           ),
           onPressed: (context) {
-            pushWithNavBar(context, SampleModalScreen());
+            pushWithNavBar(
+              context,
+              DialogRoute(
+                context: context,
+                builder: (context) => const ExampleDialog(),
+              ),
+            );
           },
         ),
         PersistentTabConfig(
@@ -101,16 +106,14 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         onWillPop: (context) async {
           await showDialog(
             context: context,
-            useSafeArea: true,
-            builder: (context) => Container(
-              height: 50,
-              width: 50,
-              color: Colors.white,
-              child: ElevatedButton(
-                child: const Text("Close"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+            builder: (context) => Dialog(
+              child: Center(
+                child: ElevatedButton(
+                  child: const Text("Close"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ),
           );
