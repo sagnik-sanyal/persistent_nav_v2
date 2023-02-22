@@ -5,14 +5,9 @@ on:
       - "v*"
 
 jobs:
-  test:
-    name: Test and format
-    uses: jb3rndt/PersistentBottomNavBarV2/.github/workflows/tests.yaml@master
-
   release:
     name: "Release"
     runs-on: "ubuntu-latest"
-    needs: test
 
     steps:
       - name: Create tagged Release

@@ -1,6 +1,7 @@
 # V4 -> V5 Migration Guide
 
 All PRs on how to improve this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/edit/master/MigrationGuide.md) are very welcome :)
+**Important**: Dont wrap the `PersistentTabView` in a Scaffold.
 
 ## **Remove all Scaffolds that wrap PersistentTabView**
 
@@ -205,6 +206,7 @@ Some of the parameters of these constructors have been removed, some changed in 
 ### Added
 
 - **`floatingActionButtonLocation`**: Can be used to set the location of the `floatingActionButton` like in a Scaffold
+- **`drawer`**: Can be used like in a Scaffold. To open and close the drawer, use the function that is provided by `PersistentTabController`
 - **`navBarOverlap`**: Can be used to specify to which extend the navbar should overlap the content
 
 ## PersistentBottomNavBarItem
@@ -273,7 +275,7 @@ PersistentBottomNavBarItem(
 <td>
 
 ```dart
-PersistentTabConfig.noScreen(
+PersistentTabConfig.tapAction(
   item: ItemConfig(
     ...,
   ),

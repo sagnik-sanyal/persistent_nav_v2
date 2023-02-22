@@ -4,30 +4,35 @@ part of persistent_bottom_nav_bar_v2;
 class PersistentTabController extends ChangeNotifier {
   PersistentTabController({int initialIndex = 0})
       : _index = initialIndex,
-        assert(initialIndex >= 0);
+        assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0");
 
   int get index => _index;
   int _index;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   ValueChanged<int>? onIndexChanged;
 
   set index(int value) {
-    assert(value >= 0);
+    assert(value >= 0, "Nav Bar item index cannot be less than 0");
     if (_index == value) {
       return;
     }
     _index = value;
-    this.onIndexChanged?.call(value);
+    onIndexChanged?.call(value);
     notifyListeners();
   }
 
-  jumpToTab(int value) {
-    assert(value >= 0);
+  void jumpToTab(int value) {
+    assert(value >= 0, "Nav Bar item index cannot be less than 0");
     if (_index == value) {
       return;
     }
     _index = value;
-    this.onIndexChanged?.call(value);
+    onIndexChanged?.call(value);
     notifyListeners();
+  }
+
+  void openDrawer() {
+    scaffoldKey.currentState?.openDrawer();
   }
 }

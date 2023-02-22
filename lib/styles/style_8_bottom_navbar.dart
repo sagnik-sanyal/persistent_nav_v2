@@ -1,6 +1,14 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style8BottomNavBar extends StatelessWidget {
+  const Style8BottomNavBar({
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
+    this.itemAnimationProperties = const ItemAnimation(),
+    this.itemPadding = const EdgeInsets.all(5),
+    Key? key,
+  }) : super(key: key);
+
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
   final EdgeInsets itemPadding;
@@ -8,82 +16,69 @@ class Style8BottomNavBar extends StatelessWidget {
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
 
-  Style8BottomNavBar({
-    Key? key,
-    required this.navBarConfig,
-    this.navBarDecoration = const NavBarDecoration(),
-    this.itemAnimationProperties = const ItemAnimation(),
-    this.itemPadding = const EdgeInsets.all(5.0),
-  });
-
-  Widget _buildItem(ItemConfig item, bool isSelected) {
-    return AnimatedContainer(
-      width: isSelected ? 120 : 50,
-      duration: this.itemAnimationProperties.duration,
-      curve: this.itemAnimationProperties.curve,
-      padding: itemPadding,
-      decoration: BoxDecoration(
-        color: isSelected
-            ? item.activeColorSecondary
-            : item.inactiveColorSecondary,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
+  Widget _buildItem(ItemConfig item, bool isSelected) => AnimatedContainer(
+        width: isSelected ? 120 : 50,
+        duration: itemAnimationProperties.duration,
+        curve: itemAnimationProperties.curve,
+        padding: itemPadding,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? item.activeColorSecondary
+              : item.inactiveColorSecondary,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary,
+              ),
+              child: isSelected ? item.icon : item.inactiveIcon,
             ),
-            child: isSelected ? item.icon : item.inactiveIcon,
-          ),
-          if (item.title != null && isSelected)
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: FittedBox(
-                  child: Text(
-                    item.title!,
-                    style: item.textStyle.apply(
+            if (item.title != null && isSelected)
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: FittedBox(
+                    child: Text(
+                      item.title!,
+                      style: item.textStyle.apply(
                         color: isSelected
                             ? item.activeColorPrimary
-                            : item.inactiveColorPrimary),
+                            : item.inactiveColorPrimary,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return DecoratedNavBar(
-      decoration: this.navBarDecoration,
-      filter: this.navBarConfig.selectedItem.filter,
-      opacity: this.navBarConfig.selectedItem.opacity,
-      height: this.navBarConfig.navBarHeight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarConfig.items.map((item) {
-          int index = this.navBarConfig.items.indexOf(item);
-          return GestureDetector(
-            onTap: () {
-              this.navBarConfig.onItemSelected(index);
-            },
-            child: _buildItem(
-              item,
-              this.navBarConfig.selectedIndex == index,
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => DecoratedNavBar(
+        decoration: navBarDecoration,
+        filter: navBarConfig.selectedItem.filter,
+        opacity: navBarConfig.selectedItem.opacity,
+        height: navBarConfig.navBarHeight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: navBarConfig.items.map((item) {
+            final int index = navBarConfig.items.indexOf(item);
+            return GestureDetector(
+              onTap: () {
+                navBarConfig.onItemSelected(index);
+              },
+              child: _buildItem(
+                item,
+                navBarConfig.selectedIndex == index,
+              ),
+            );
+          }).toList(),
+        ),
+      );
 }

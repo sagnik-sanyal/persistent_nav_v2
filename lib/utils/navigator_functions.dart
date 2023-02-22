@@ -9,22 +9,20 @@ Future<T?> pushScreen<T extends Object?>(
       PageTransitionAnimation.cupertino,
   PageRoute? customPageRoute,
   RouteSettings? settings,
-}) {
-  return Navigator.of(context, rootNavigator: !withNavBar)
-      .push<T>(customPageRoute as Route<T>? ??
+}) =>
+    Navigator.of(context, rootNavigator: !withNavBar).push<T>(
+      customPageRoute as Route<T>? ??
           getPageRoute(
             pageTransitionAnimation,
             enterPage: screen,
             settings: settings,
-          ));
-}
+          ),
+    );
 
 @optionalTypeArgs
-Future<T?> pushWithNavBar<T>(BuildContext context, Route<T> route) {
-  return Navigator.of(context, rootNavigator: false).push<T>(route);
-}
+Future<T?> pushWithNavBar<T>(BuildContext context, Route<T> route) =>
+    Navigator.of(context).push<T>(route);
 
 @optionalTypeArgs
-Future<T?> pushWithoutNavBar<T>(BuildContext context, Route<T> route) {
-  return Navigator.of(context, rootNavigator: true).push<T>(route);
-}
+Future<T?> pushWithoutNavBar<T>(BuildContext context, Route<T> route) =>
+    Navigator.of(context, rootNavigator: true).push<T>(route);

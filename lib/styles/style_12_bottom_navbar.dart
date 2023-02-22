@@ -1,21 +1,21 @@
 part of persistent_bottom_nav_bar_v2;
 
 class Style12BottomNavBar extends StatefulWidget {
+  const Style12BottomNavBar({
+    required this.navBarConfig,
+    this.navBarDecoration = const NavBarDecoration(),
+    this.itemAnimationProperties = const ItemAnimation(),
+    Key? key,
+  }) : super(key: key);
+
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
 
-  Style12BottomNavBar({
-    Key? key,
-    required this.navBarConfig,
-    this.navBarDecoration = const NavBarDecoration(),
-    this.itemAnimationProperties = const ItemAnimation(),
-  });
-
   @override
-  _Style12BottomNavBarState createState() => _Style12BottomNavBarState();
+  State<Style12BottomNavBar> createState() => _Style12BottomNavBarState();
 }
 
 class _Style12BottomNavBarState extends State<Style12BottomNavBar>
@@ -33,13 +33,20 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
     _animationList = List<Animation<Offset>>.empty(growable: true);
 
     for (int i = 0; i < widget.navBarConfig.items.length; ++i) {
-      _animationControllerList.add(AnimationController(
-          duration: widget.itemAnimationProperties.duration, vsync: this));
-      _animationList.add(Tween(
-              begin: Offset(0, widget.navBarConfig.navBarHeight / 1.5),
-              end: Offset(0, 0.0))
-          .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
-          .animate(_animationControllerList[i]));
+      _animationControllerList.add(
+        AnimationController(
+          duration: widget.itemAnimationProperties.duration,
+          vsync: this,
+        ),
+      );
+      _animationList.add(
+        Tween(
+          begin: Offset(0, widget.navBarConfig.navBarHeight / 1.5),
+          end: Offset.zero,
+        )
+            .chain(CurveTween(curve: widget.itemAnimationProperties.curve))
+            .animate(_animationControllerList[i]),
+      );
     }
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
@@ -48,14 +55,13 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
   }
 
   Widget _buildItem(ItemConfig item, bool isSelected, int itemIndex) {
-    double itemWidth = ((MediaQuery.of(context).size.width -
+    final double itemWidth = (MediaQuery.of(context).size.width -
             widget.navBarDecoration.padding.horizontal) /
-        widget.navBarConfig.items.length);
+        widget.navBarConfig.items.length;
     return AnimatedBuilder(
       animation: _animationList[itemIndex],
       builder: (context, child) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: IconTheme(
@@ -70,14 +76,15 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
           ),
           if (item.title != null)
             Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
+              padding: const EdgeInsets.only(bottom: 2),
               child: FittedBox(
                 child: Text(
                   item.title!,
                   style: item.textStyle.apply(
-                      color: isSelected
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary),
+                    color: isSelected
+                        ? item.activeColorPrimary
+                        : item.inactiveColorPrimary,
+                  ),
                 ),
               ),
             ),
@@ -87,11 +94,12 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
             child: Transform.translate(
               offset: _animationList[itemIndex].value,
               child: Container(
-                height: 5.0,
+                height: 5,
                 width: itemWidth * 0.8,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: item.activeColorSecondary),
+                  borderRadius: BorderRadius.circular(100),
+                  color: item.activeColorSecondary,
+                ),
               ),
             ),
           ),
@@ -124,9 +132,8 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
       height: widget.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: widget.navBarConfig.items.map((item) {
-          int index = widget.navBarConfig.items.indexOf(item);
+          final int index = widget.navBarConfig.items.indexOf(item);
           return Expanded(
             child: InkWell(
               onTap: () {
