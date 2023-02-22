@@ -248,6 +248,9 @@ PersistentTabView(
 
 _controller.jumpToTab(2);
 
+// Navigate to the previously selected Table
+_controller.jumpToPreviousTab();
+
 ```
 
 ## Navigation

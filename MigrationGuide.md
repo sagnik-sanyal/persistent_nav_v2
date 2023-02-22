@@ -21,6 +21,10 @@ AppBar(
 )
 ```
 
+## `PersistentTabController`
+
+- The setter for the index got removed, use `jumpToTab` instead.
+
 ## Using Predefined Navigation Bar Styles
 
 To specify the style you want to use, you now have to use the corresponding widget directly, instead of `NavBarStyle.style1`. Also notice that the parameter is named differently:

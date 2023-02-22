@@ -275,7 +275,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
         ),
         onPageChanged: (i) {
           FocusManager.instance.primaryFocus?.unfocus();
-          widget.controller.index = i;
+          widget.controller.jumpToTab(i);
         },
       );
 }

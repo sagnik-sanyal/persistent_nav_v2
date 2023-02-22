@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Tab history when using android back button
+
 ## [5.0.0-beta.4] - 2023-02-12
 ### Added
 - Support `drawerEdgeDragWidth`
@@ -480,6 +484,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.4...HEAD
 [5.0.0-beta.4]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.3...5.0.0-beta.4
 [5.0.0-beta.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.2...5.0.0-beta.3
 [5.0.0-beta.2]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...5.0.0-beta.2

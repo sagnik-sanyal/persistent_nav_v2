@@ -216,7 +216,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                     _controller.index == index) {
                   popAllScreens();
                 }
-                _controller.index = index;
+                _controller.jumpToTab(index);
               }
             },
           ),
@@ -235,7 +235,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             !widget.handleAndroidBackButtonPress && widget.onWillPop != null
                 ? () => widget.onWillPop!(_contextList[_controller.index]!)
                 : () async {
-                    if (_controller.index == 0 &&
+                    if (_controller.isOnInitialTab() &&
                         !Navigator.canPop(_contextList.first!)) {
                       if (widget.handleAndroidBackButtonPress &&
                           widget.onWillPop != null) {
@@ -246,7 +246,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                       if (Navigator.canPop(_contextList[_controller.index]!)) {
                         Navigator.pop(_contextList[_controller.index]!);
                       } else {
-                        _controller.index = 0;
+                        _controller.jumpToPreviousTab();
                       }
                       return false;
                     }

@@ -9,13 +9,16 @@ class PersistentTabController extends ChangeNotifier {
   int get index => _index;
   int _index;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final List<int> _tabHistory = [];
   ValueChanged<int>? onIndexChanged;
 
-  set index(int value) {
+  void _updateIndex(int value, [bool isUndo = false]) {
     assert(value >= 0, "Nav Bar item index cannot be less than 0");
     if (_index == value) {
       return;
+    }
+    if (!isUndo) {
+      _tabHistory.add(_index);
     }
     _index = value;
     onIndexChanged?.call(value);
@@ -23,14 +26,16 @@ class PersistentTabController extends ChangeNotifier {
   }
 
   void jumpToTab(int value) {
-    assert(value >= 0, "Nav Bar item index cannot be less than 0");
-    if (_index == value) {
-      return;
-    }
-    _index = value;
-    onIndexChanged?.call(value);
-    notifyListeners();
+    _updateIndex(value);
   }
+
+  void jumpToPreviousTab() {
+    if (!isOnInitialTab()) {
+      _updateIndex(_tabHistory.removeLast(), true);
+    }
+  }
+
+  bool isOnInitialTab() => _tabHistory.isEmpty;
 
   void openDrawer() {
     scaffoldKey.currentState?.openDrawer();
