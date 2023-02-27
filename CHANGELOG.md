@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Tab history when using android back button
 
+### Fixed
+- ScreenTransitionAnimation with Duration.zero was throwing an error in the animation phase
+
+### Removed
+- Remove unused attribute `_animateTabTransition` on `ScreenTransitionAnimation`
+
 ## [5.0.0-beta.4] - 2023-02-12
 ### Added
 - Support `drawerEdgeDragWidth`

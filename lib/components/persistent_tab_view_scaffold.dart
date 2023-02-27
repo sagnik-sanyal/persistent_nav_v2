@@ -14,7 +14,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.resizeToAvoidBottomInset = true,
     this.stateManagement = false,
     this.gestureNavigationEnabled = false,
-    this.screenTransitionAnimation,
+    this.screenTransitionAnimation = const ScreenTransitionAnimation(),
     this.hideNavigationBar = false,
     this.navBarOverlap = const NavBarOverlap.full(),
     this.floatingActionButton,
@@ -53,7 +53,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
 
   final NavBarOverlap navBarOverlap;
 
-  final ScreenTransitionAnimation? screenTransitionAnimation;
+  final ScreenTransitionAnimation screenTransitionAnimation;
 
   final Widget? floatingActionButton;
 
@@ -217,7 +217,7 @@ class _TabSwitchingView extends StatefulWidget {
   final int tabCount;
   final IndexedWidgetBuilder tabBuilder;
   final bool stateManagement;
-  final ScreenTransitionAnimation? screenTransitionAnimation;
+  final ScreenTransitionAnimation screenTransitionAnimation;
   final PersistentTabController controller;
   final bool gestureNavigationEnabled;
 
@@ -239,11 +239,15 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
     super.didUpdateWidget(oldWidget);
     if (widget.currentTabIndex != oldWidget.currentTabIndex &&
         _pageController.page == _pageController.page?.roundToDouble()) {
-      _pageController.animateToPage(
-        widget.currentTabIndex,
-        duration: widget.screenTransitionAnimation?.duration ?? Duration.zero,
-        curve: widget.screenTransitionAnimation?.curve ?? Curves.easeInOut,
-      );
+      if (widget.screenTransitionAnimation.duration == Duration.zero) {
+        _pageController.jumpToPage(widget.currentTabIndex);
+      } else {
+        _pageController.animateToPage(
+          widget.currentTabIndex,
+          duration: widget.screenTransitionAnimation.duration,
+          curve: widget.screenTransitionAnimation.curve,
+        );
+      }
     }
   }
 
