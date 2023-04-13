@@ -227,6 +227,8 @@ class _TabSwitchingView extends StatefulWidget {
 
 class _TabSwitchingViewState extends State<_TabSwitchingView> {
   late PageController _pageController;
+  bool isSwiping = false;
+  bool pageUpdateCausedBySwipe = false;
 
   @override
   void initState() {
@@ -237,8 +239,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
   @override
   void didUpdateWidget(_TabSwitchingView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.currentTabIndex != oldWidget.currentTabIndex &&
-        _pageController.page == _pageController.page?.roundToDouble()) {
+    if (widget.currentTabIndex != oldWidget.currentTabIndex && !pageUpdateCausedBySwipe) {
+      isSwiping = false;
       if (widget.screenTransitionAnimation.duration == Duration.zero) {
         _pageController.jumpToPage(widget.currentTabIndex);
       } else {
@@ -249,6 +251,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
         );
       }
     }
+    pageUpdateCausedBySwipe = false;
   }
 
   @override
@@ -258,29 +261,40 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
   }
 
   @override
-  Widget build(BuildContext context) => PageView(
-        controller: _pageController,
-        scrollBehavior: const ScrollBehavior().copyWith(
-          overscroll: false,
-        ),
-        physics: widget.gestureNavigationEnabled
-            ? null
-            : const NeverScrollableScrollPhysics(),
-        children: List.generate(
-          widget.tabCount,
-          (index) => FocusScope(
-            node: FocusScopeNode(),
-            child: widget.stateManagement
-                ? KeepAlivePage(
-                    child: widget.tabBuilder(context, index),
-                  )
-                : widget.tabBuilder(context, index),
-          ),
-        ),
-        onPageChanged: (i) {
-          FocusManager.instance.primaryFocus?.unfocus();
-          widget.controller.jumpToTab(i);
+  Widget build(BuildContext context) => Listener(
+        onPointerDown: (event) {
+          isSwiping = true;
+          pageUpdateCausedBySwipe = true;
+          widget.controller.jumpToTab(_pageController.page!.round());
+          pageUpdateCausedBySwipe = false;
         },
+        child: PageView(
+          controller: _pageController,
+          scrollBehavior: const ScrollBehavior().copyWith(
+            overscroll: false,
+          ),
+          physics: widget.gestureNavigationEnabled
+              ? null
+              : const NeverScrollableScrollPhysics(),
+          children: List.generate(
+            widget.tabCount,
+            (index) => FocusScope(
+              node: FocusScopeNode(),
+              child: widget.stateManagement
+                  ? KeepAlivePage(
+                      child: widget.tabBuilder(context, index),
+                    )
+                  : widget.tabBuilder(context, index),
+            ),
+          ),
+          onPageChanged: (i) {
+            FocusManager.instance.primaryFocus?.unfocus();
+            if (isSwiping) {
+              pageUpdateCausedBySwipe = true;
+              widget.controller.jumpToTab(i);
+            }
+          },
+        ),
       );
 }
 
