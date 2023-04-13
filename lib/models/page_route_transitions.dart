@@ -1,6 +1,7 @@
 part of persistent_bottom_nav_bar_v2;
 
 enum PageTransitionAnimation {
+  platform,
   cupertino,
   slideRight,
   scale,
@@ -181,6 +182,7 @@ Widget _getAnimation(
 ) {
   switch (transitionAnimation) {
     case PageTransitionAnimation.cupertino:
+    case PageTransitionAnimation.platform:
       break;
     case PageTransitionAnimation.slideRight:
       return _slideRightRoute(context, animation, secondaryAnimation, child);
@@ -211,6 +213,13 @@ dynamic getPageRoute(
       return settings == null
           ? CupertinoPageRoute(builder: (context) => enterPage!)
           : CupertinoPageRoute(
+              settings: settings,
+              builder: (context) => enterPage!,
+            );
+    case PageTransitionAnimation.platform:
+      return settings == null
+          ? MaterialPageRoute(builder: (context) => enterPage!)
+          : MaterialPageRoute(
               settings: settings,
               builder: (context) => enterPage!,
             );
