@@ -12,6 +12,15 @@ class ScreenTransitionAnimation {
 
   final Duration duration;
   final Curve curve;
+
+  @override
+  bool operator ==(Object other) =>
+      other is ScreenTransitionAnimation &&
+      other.duration == duration &&
+      other.curve == curve;
+
+  @override
+  int get hashCode => hashValues(duration, curve);
 }
 
 class ItemAnimation {
