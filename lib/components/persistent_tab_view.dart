@@ -45,7 +45,10 @@ class PersistentTabView extends StatefulWidget {
   /// Controller for persistent bottom navigation bar. Will be declared if left empty.
   final PersistentTabController? controller;
 
-  /// Background color of bottom navigation bar. `Colors.white` by default.
+  /// Background color of the Tab View. If your tabs have transparent background
+  /// or your navbar has rounded corners, this color will be visible.
+  /// If you want to change the navbar color, use [NavBarDecoration] directly
+  /// on your navbar.
   final Color backgroundColor;
 
   /// Callback when the tab changed. The index of the new tab is passed as a parameter.
