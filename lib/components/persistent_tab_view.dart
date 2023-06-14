@@ -36,6 +36,7 @@ class PersistentTabView extends StatefulWidget {
     this.drawer,
     this.drawerEdgeDragWidth,
     this.gestureNavigationEnabled = false,
+    this.animatedTabBuilder,
   }) : super(key: key);
 
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
@@ -44,7 +45,10 @@ class PersistentTabView extends StatefulWidget {
   /// Controller for persistent bottom navigation bar. Will be declared if left empty.
   final PersistentTabController? controller;
 
-  /// Background color of bottom navigation bar. `Colors.white` by default.
+  /// Background color of the Tab View. If your tabs have transparent background
+  /// or your navbar has rounded corners, this color will be visible.
+  /// If you want to change the navbar color, use [NavBarDecoration] directly
+  /// on your navbar.
   final Color backgroundColor;
 
   /// Callback when the tab changed. The index of the new tab is passed as a parameter.
@@ -140,6 +144,30 @@ class PersistentTabView extends StatefulWidget {
 
   final double? drawerEdgeDragWidth;
 
+  /// With this builder, you can customize the animation of the transition between tabs.
+  /// This is called everytime the tab changes and builds the transition for that.
+  /// You will be given
+  /// 1. a BuildContext
+  /// 2. the index of the tab that is currently built (while the animation is running, two tabs are built simultaneously, so you might need to change the behavior of your builder, depending on whether you are looking at the previous or the new tab)
+  /// 3. the animation value (so the progress of the animation between 0 and 1)
+  /// 4. the index of the old tab
+  /// 5. the index of the newly selected tab
+  /// 6. the child, so the tab itself
+  ///
+  /// The default animation builder looks like this:
+  /// ```dart
+  ///  final double yOffset = newIndex > index
+  ///      ? -animationValue
+  ///      : (newIndex < index
+  ///          ? animationValue
+  ///          : (index < oldIndex ? animationValue - 1 : 1 - animationValue));
+  ///  return FractionalTranslation(
+  ///    translation: Offset(yOffset, 0),
+  ///    child: child,
+  ///  );
+  /// ```
+  final AnimatedTabBuilder? animatedTabBuilder;
+
   @override
   State<PersistentTabView> createState() => _PersistentTabViewState();
 }
@@ -222,6 +250,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           ),
         ),
         tabBuilder: (context, index) => _buildScreen(index),
+        animatedTabBuilder: widget.animatedTabBuilder,
       );
 
   @override
