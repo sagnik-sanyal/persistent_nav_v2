@@ -20,7 +20,7 @@ class ScreenTransitionAnimation {
       other.curve == curve;
 
   @override
-  int get hashCode => hashValues(duration, curve);
+  int get hashCode => Object.hash(duration, curve);
 }
 
 class ItemAnimation {

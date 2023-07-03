@@ -7,7 +7,7 @@
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
-# include: package:flutter_lints/flutter.yaml
+include: package:flutter_lints/flutter.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -44,7 +44,6 @@ linter:
     - control_flow_in_finally
     - avoid_types_as_parameter_names
     - avoid_type_to_string
-    - avoid_returning_null_for_future
     - iterable_contains_unrelated_type
     - prefer_void_to_null
     - unnecessary_statements
@@ -52,7 +51,6 @@ linter:
     - always_declare_return_types
     - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
-    - always_require_non_null_named_parameters
     - annotate_overrides
     - avoid_annotating_with_dynamic
     - avoid_null_checks_in_equality_operators
@@ -68,7 +66,6 @@ linter:
     - avoid_redundant_argument_values
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null
     - avoid_returning_null_for_void
     - avoid_returning_this
     - avoid_setters_without_getters

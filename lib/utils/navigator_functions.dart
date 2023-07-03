@@ -33,4 +33,4 @@ Future<T?> pushScreenWithNavBar<T>(BuildContext context, Widget screen) =>
 
 @optionalTypeArgs
 Future<T?> pushScreenWithoutNavBar<T>(BuildContext context, Widget screen) =>
-    pushScreen<T>(context, screen: screen, withNavBar: false);
+    pushScreen<T>(context, screen: screen);
