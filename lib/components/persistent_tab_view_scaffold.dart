@@ -364,28 +364,21 @@ class _TabSwitchingView extends StatefulWidget {
 
 class _TabSwitchingViewState extends State<_TabSwitchingView>
     with TickerProviderStateMixin {
-  final List<bool> shouldBuildTab = <bool>[];
+  late final List<bool> shouldBuildTab =
+      List<bool>.filled(widget.tabCount, false);
   final List<FocusScopeNode> tabFocusNodes = <FocusScopeNode>[];
   final List<FocusScopeNode> discardedNodes = <FocusScopeNode>[];
   late AnimationController _animationController;
   late Animation<double> _animation;
-  late int _currentTabIndex;
-  late int _previousTabIndex;
-  late bool _showAnimation;
-  Key? key;
+  late int _currentTabIndex = widget.currentTabIndex;
+  late int _previousTabIndex = -1;
+  late final bool _showAnimation =
+      widget.screenTransitionAnimation.duration != Duration.zero;
+  late Key? key = widget.stateManagement ? null : UniqueKey();
 
   @override
   void initState() {
     super.initState();
-    shouldBuildTab.addAll(List<bool>.filled(widget.tabCount, false));
-    _currentTabIndex = widget.currentTabIndex;
-    _previousTabIndex = -1;
-    _showAnimation = widget.screenTransitionAnimation.duration != Duration.zero;
-
-    if (!widget.stateManagement) {
-      key = UniqueKey();
-    }
-
     _initAnimationControllers();
   }
 
@@ -413,9 +406,6 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _focusActiveTab() {
-    if (_showAnimation) {
-      _startAnimation();
-    }
     if (tabFocusNodes.length != widget.tabCount) {
       if (tabFocusNodes.length > widget.tabCount) {
         discardedNodes.addAll(tabFocusNodes.sublist(widget.tabCount));
@@ -543,6 +533,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       _currentTabIndex = widget.currentTabIndex;
       _previousTabIndex = oldWidget.currentTabIndex;
       _focusActiveTab();
+      if (_showAnimation) {
+        _startAnimation();
+      }
     }
   }
 
