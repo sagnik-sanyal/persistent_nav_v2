@@ -37,7 +37,38 @@ class PersistentTabView extends StatefulWidget {
     this.drawerEdgeDragWidth,
     this.gestureNavigationEnabled = false,
     this.animatedTabBuilder,
-  }) : super(key: key);
+  })  : navigationShell = null,
+        super(key: key);
+
+  const PersistentTabView.router({
+    required List<PersistentRouterTabConfig> this.tabs,
+    required this.navBarBuilder,
+    required StatefulNavigationShell this.navigationShell,
+    Key? key,
+    this.navBarHeight = kBottomNavigationBarHeight,
+    this.navBarOverlap = const NavBarOverlap.full(),
+    this.margin = EdgeInsets.zero,
+    this.backgroundColor = Colors.white,
+    this.onTabChanged,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.resizeToAvoidBottomInset = true,
+    this.selectedTabContext,
+    this.popAllScreensOnTapOfSelectedTab = true,
+    this.popAllScreensOnTapAnyTabs = false,
+    this.popActionScreens = PopActionScreensType.all,
+    this.avoidBottomPadding = true,
+    this.onWillPop,
+    this.stateManagement = true,
+    this.handleAndroidBackButtonPress = true,
+    this.hideNavigationBar = false,
+    this.drawer,
+    this.drawerEdgeDragWidth,
+    this.gestureNavigationEnabled = false,
+    this.animatedTabBuilder,
+  })  : screenTransitionAnimation = const ScreenTransitionAnimation(),
+        controller = null,
+        super(key: key);
 
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
   final List<PersistentTabConfig> tabs;
@@ -168,6 +199,8 @@ class PersistentTabView extends StatefulWidget {
   /// ```
   final AnimatedTabBuilder? animatedTabBuilder;
 
+  final StatefulNavigationShell? navigationShell;
+
   @override
   State<PersistentTabView> createState() => _PersistentTabViewState();
 }
@@ -181,7 +214,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   void initState() {
     super.initState();
 
-    _controller = widget.controller ?? PersistentTabController();
+    _controller = widget.controller ??
+        PersistentTabController(
+          initialIndex: widget.navigationShell?.currentIndex ?? 0,
+        );
     _controller.onIndexChanged = widget.onTabChanged;
 
     _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
@@ -200,6 +236,22 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         widget.selectedTabContext!(_contextList[_controller.index]!);
       });
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant PersistentTabView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.navigationShell != null &&
+        widget.navigationShell != oldWidget.navigationShell &&
+        widget.navigationShell!.currentIndex != _controller.index) {
+      _controller.jumpToTab(widget.navigationShell!.currentIndex);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Widget _buildScreen(int index) => CustomTabView(
@@ -240,17 +292,25 @@ class _PersistentTabViewState extends State<PersistentTabView> {
               if (widget.tabs[index].onPressed != null) {
                 widget.tabs[index].onPressed!(context);
               } else {
-                if (widget.popAllScreensOnTapOfSelectedTab &&
+                if (widget.navigationShell != null) {
+                  widget.navigationShell!.goBranch(
+                    index,
+                    initialLocation: widget.popAllScreensOnTapOfSelectedTab &&
+                        index == widget.navigationShell!.currentIndex,
+                  );
+                } else if (widget.popAllScreensOnTapOfSelectedTab &&
                     _controller.index == index) {
                   popAllScreens();
+                } else {
+                  _controller.jumpToTab(index);
                 }
-                _controller.jumpToTab(index);
               }
             },
           ),
         ),
         tabBuilder: (context, index) => _buildScreen(index),
         animatedTabBuilder: widget.animatedTabBuilder,
+        navigationShell: widget.navigationShell,
       );
 
   @override

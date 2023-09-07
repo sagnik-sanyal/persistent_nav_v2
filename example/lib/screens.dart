@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key, this.useRouter = false}) : super(key: key);
+
+  final bool useRouter;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -20,16 +23,41 @@ class MainScreen extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  pushScreen(
-                    context,
-                    settings: const RouteSettings(name: "/home"),
-                    screen: const MainScreen2(),
-                    pageTransitionAnimation:
-                        PageTransitionAnimation.scaleRotate,
-                  );
+                  if (useRouter) {
+                    context.go("/settings/detail");
+                  } else {
+                    pushScreen(
+                      context,
+                      settings: const RouteSettings(name: "/home"),
+                      screen: const MainScreen2(),
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.scaleRotate,
+                    );
+                  }
                 },
                 child: const Text(
-                  "Go to Second Screen ->",
+                  "Go to Second Screen with Navbar",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (useRouter) {
+                    context.go("/home/detail");
+                  } else {
+                    pushScreen(
+                      context,
+                      settings: const RouteSettings(name: "/home"),
+                      screen: const MainScreen2(),
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.scaleRotate,
+                    );
+                  }
+                },
+                child: const Text(
+                  "Go to Second Screen without Navbar",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -109,7 +137,9 @@ class MainScreen extends StatelessWidget {
 }
 
 class MainScreen2 extends StatelessWidget {
-  const MainScreen2({Key? key}) : super(key: key);
+  const MainScreen2({Key? key, this.useRouter = false}) : super(key: key);
+
+  final bool useRouter;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -121,10 +151,29 @@ class MainScreen2 extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  pushScreen(context, screen: const MainScreen3());
+                  if (useRouter) {
+                    context.go("/home/detail/super-detail");
+                  } else {
+                    pushScreen(context, screen: const MainScreen3());
+                  }
                 },
                 child: const Text(
-                  "Go to Third Screen",
+                  "Go to Third Screen with Navbar",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (useRouter) {
+                    context.go("/detail/super-detail");
+                  } else {
+                    pushScreen(context, screen: const MainScreen3());
+                  }
+                },
+                child: const Text(
+                  "Go to Second Screen without Navbar",
                   style: TextStyle(color: Colors.white),
                 ),
               ),

@@ -8,6 +8,7 @@ import "dart:ui";
 
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 
 part "components/custom_tab_view.dart";
 part "components/decorated_navbar.dart";

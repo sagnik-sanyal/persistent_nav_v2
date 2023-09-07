@@ -79,6 +79,7 @@ class PersistentTabConfig {
     this.navigatorConfig = const NavigatorConfig(),
     this.onSelectedTabPressWhenNoScreensPushed,
   }) : screen = Container();
+
   final Widget screen;
 
   final ItemConfig item;
@@ -94,6 +95,13 @@ class PersistentTabConfig {
   ///
   /// NOTE: This feature is experimental at the moment and might not work as intended for some.
   final Function()? onSelectedTabPressWhenNoScreensPushed;
+}
+
+class PersistentRouterTabConfig extends PersistentTabConfig {
+  PersistentRouterTabConfig({
+    required super.item,
+    super.onSelectedTabPressWhenNoScreensPushed,
+  }): super(screen: Container());
 }
 
 class NavBarConfig {

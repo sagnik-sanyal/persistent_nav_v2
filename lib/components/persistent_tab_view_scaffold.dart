@@ -22,6 +22,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.drawer,
     this.drawerEdgeDragWidth,
     this.animatedTabBuilder,
+    this.navigationShell,
   }) : super(key: key);
 
   final Widget tabBar;
@@ -61,6 +62,8 @@ class PersistentTabViewScaffold extends StatefulWidget {
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   final AnimatedTabBuilder? animatedTabBuilder;
+
+  final StatefulNavigationShell? navigationShell;
 
   @override
   State<PersistentTabViewScaffold> createState() =>
@@ -151,23 +154,24 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         drawer: widget.drawer,
-        body: widget.gestureNavigationEnabled
-            ? _SwipableTabSwitchingView(
-                currentTabIndex: widget.controller.index,
-                tabCount: widget.tabCount,
-                controller: widget.controller,
-                tabBuilder: buildTab,
-                stateManagement: widget.stateManagement,
-                screenTransitionAnimation: widget.screenTransitionAnimation,
-              )
-            : _TabSwitchingView(
-                currentTabIndex: widget.controller.index,
-                tabCount: widget.tabCount,
-                tabBuilder: buildTab,
-                stateManagement: widget.stateManagement,
-                screenTransitionAnimation: widget.screenTransitionAnimation,
-                animatedTabBuilder: widget.animatedTabBuilder,
-              ),
+        body: widget.navigationShell ??
+            (widget.gestureNavigationEnabled
+                ? _SwipableTabSwitchingView(
+                    currentTabIndex: widget.controller.index,
+                    tabCount: widget.tabCount,
+                    controller: widget.controller,
+                    tabBuilder: buildTab,
+                    stateManagement: widget.stateManagement,
+                    screenTransitionAnimation: widget.screenTransitionAnimation,
+                  )
+                : _TabSwitchingView(
+                    currentTabIndex: widget.controller.index,
+                    tabCount: widget.tabCount,
+                    tabBuilder: buildTab,
+                    stateManagement: widget.stateManagement,
+                    screenTransitionAnimation: widget.screenTransitionAnimation,
+                    animatedTabBuilder: widget.animatedTabBuilder,
+                  )),
         bottomNavigationBar: SlideTransition(
           position: slideAnimation,
           child: MediaQuery(
