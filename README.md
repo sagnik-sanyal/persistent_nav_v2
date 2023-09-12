@@ -143,7 +143,7 @@ You can customize the Navigation Bar with all the parameters, each style allows.
 
 ## Using a custom Navigation Bar
 
-You can replace the `Style1BottomNavBar` widget with your own custom widget. As you can see, the `navBarBuilder` gives you a `navBarConfig`, which should be everything you need to build your custom navigation bar. Here is an example:
+You can replace the `Style1BottomNavBar` widget with your own custom widget. As you can see, the `navBarBuilder` gives you a `navBarConfig`, which should be everything you need to build your custom navigation bar. Here is an example of a custom navigation bar widget:
 
 ```dart
 class CustomNavBar extends StatelessWidget {
@@ -289,7 +289,7 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
 
 ### Router API
 
-To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example]() for a full code example or the code snippet below:
+To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/rework_interface/example/lib/go_router_example.dart) for a full code example or the code snippet below:
 
 - use `PersistentTabView.router` instead of `PersistentTabView`
 - pass the `navigationShell` to the `PersistentTabView.router` (this will contain each tab view)
