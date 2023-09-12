@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add `animatedTabBuilder` to customize the transition when switching tabs
+- Support for Router API
 
 ### Fixed
 - Tab slide animation no longer shows intermediate tabs in the slide animation when switching to non adjacent tabs
