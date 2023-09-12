@@ -23,6 +23,7 @@ class PersistenBottomNavBarRouterDemo extends StatelessWidget {
   );
 
   late final GoRouter goRouter = GoRouter(
+    /// If you want the app to start on the first tab use this:
     // initialLocation: "/home",
     navigatorKey: _parentKey,
     routes: [
@@ -46,11 +47,6 @@ class PersistenBottomNavBarRouterDemo extends StatelessWidget {
           ),
         ),
         routes: [
-          subRoutes,
-          GoRoute(
-            path: "home/super-detail",
-            builder: (context, state) => const MainScreen3(),
-          ),
           StatefulShellRoute.indexedStack(
             builder: (context, state, navigationShell) =>
                 PersistentTabView.router(
@@ -90,6 +86,7 @@ class PersistenBottomNavBarRouterDemo extends StatelessWidget {
                       useRouter: true,
                     ),
                     routes: [
+                      /// When you use the navigator Key that of the root navigator, this and all the sub routes will be pushed to the root navigator (-> without the navbar)
                       GoRoute(
                         parentNavigatorKey: _parentKey,
                         path: "detail",

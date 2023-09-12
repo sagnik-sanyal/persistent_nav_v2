@@ -30,6 +30,7 @@ If you are migrating from Version 4.x.x to Version 5 please read this [migration
 - [Using a custom Navigation Bar](#using-a-custom-navigation-bar)
 - [Controlling the Navigation Bar programmatically](#controlling-the-navigation-bar-programmatically)
 - [Navigation](#navigation)
+  - [Router API](#router-api)
 - [Useful Tips](#useful-tips)
 
 </details>
@@ -64,13 +65,14 @@ Note: These do not include all style variations
 
 ## Features
 
-- New pages can be pushed below or above the navigation bar.
+- New pages can be pushed with or without showing the navigation bar.
 - 17 prebuilt navigation bar styles ready to use.
 - Each style is fully customizable ([see below](#styling))
 - Supports custom navigation bars
 - Persistent Tabs -> Navigation Stack is not discarded when switching to another tab
 - Supports transparency and blur effects
 - Handles hardware/software Android back button.
+- Supports [go_router](https://pub.dev/packages/go_router) to make use of flutters Router API
 
 ## Getting Started
 
@@ -285,6 +287,91 @@ By default, each of the tabs navigators will inherit all the settings of the roo
 
 The `PersistentTabView` has the ability to remember the navigation stack for each tab, so when you switch back to it you will see the exact same content when you left. This behavior can be toggled with the `PersistentTabView.stateManagement` parameter.
 
+### Router API
+
+To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example]() for a full code example or the code snippet below:
+
+- use `PersistentTabView.router` instead of `PersistentTabView`
+- pass the `navigationShell` to the `PersistentTabView.router` (this will contain each tab view)
+- use `PersistentRouterTabConfig` instead of `PersistentTabConfig`  (notice the missing `screen` argument because the screens are specified by the routes in each `StatefulShellBranch`)
+
+```dart
+StatefulShellRoute.indexedStack(
+  builder: (context, state, navigationShell) =>
+      PersistentTabView.router(
+    tabs: [
+      PersistentRouterTabConfig(
+        item: ItemConfig(
+          icon: const Icon(Icons.home),
+          title: "Home",
+        ),
+      ),
+      PersistentRouterTabConfig(
+        item: ItemConfig(
+          icon: const Icon(Icons.message),
+          title: "Messages",
+        ),
+      ),
+      PersistentRouterTabConfig(
+        item: ItemConfig(
+          icon: const Icon(Icons.settings),
+          title: "Settings",
+        ),
+      ),
+    ],
+    navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+      navBarConfig: navBarConfig,
+    ),
+    navigationShell: navigationShell,
+  ),
+  branches: [
+    // The route branch for the 1st Tab
+    StatefulShellBranch(
+      routes: <RouteBase>[
+        GoRoute(
+          path: "home",
+          builder: (context, state) => const MainScreen(
+            useRouter: true,
+          ),
+          routes: [
+            GoRoute(
+              path: "detail",
+              builder: (context, state) => const MainScreen2(
+                useRouter: true,
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+
+    // The route branch for 2nd Tab
+    StatefulShellBranch(
+      routes: <RouteBase>[
+        GoRoute(
+          path: "messages",
+          builder: (context, state) => const MainScreen(
+            useRouter: true,
+          ),
+        ),
+      ],
+    ),
+
+    // The route branch for 3rd Tab
+    StatefulShellBranch(
+      routes: <RouteBase>[
+        GoRoute(
+          path: "settings",
+          builder: (context, state) => const MainScreen(
+            useRouter: true,
+          ),
+        ),
+      ],
+    ),
+  ],
+),
+```
+
 ## Useful Tips
 
 - Try the [interactive example project](https://github.com/jb3rndt/PersistentBottomNavBarV2/tree/master/example) in the official git repo to get a better feeling for the package
@@ -304,6 +391,7 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
     ```
 
     In order for this to work, you will need your `PersistentNavBarItem` to be named '/' like:
+
     ```dart
       PersistentBottomNavBarItem(
           title: ("Home"),
