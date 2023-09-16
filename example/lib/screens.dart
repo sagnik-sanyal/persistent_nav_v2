@@ -28,6 +28,7 @@ class MainScreen extends StatelessWidget {
                   } else {
                     pushScreen(
                       context,
+                      withNavBar: true,
                       settings: const RouteSettings(name: "/home"),
                       screen: const MainScreen2(),
                       pageTransitionAnimation:
@@ -154,7 +155,11 @@ class MainScreen2 extends StatelessWidget {
                   if (useRouter) {
                     context.go("/home/detail/super-detail");
                   } else {
-                    pushScreen(context, screen: const MainScreen3());
+                    pushScreen(
+                      context,
+                      screen: const MainScreen3(),
+                      withNavBar: true,
+                    );
                   }
                 },
                 child: const Text(

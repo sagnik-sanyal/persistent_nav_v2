@@ -1,10 +1,9 @@
 import "package:flutter/material.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:persistent_bottom_nav_bar_v2_example_project/go_router_example.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/interactive_example.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
 
-void main() => runApp(PersistenBottomNavBarRouterDemo());
+void main() => runApp(const PersistenBottomNavBarDemo());
 
 class PersistenBottomNavBarDemo extends StatelessWidget {
   const PersistenBottomNavBarDemo({Key? key}) : super(key: key);
