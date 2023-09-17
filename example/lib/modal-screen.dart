@@ -16,7 +16,7 @@ class SampleModalScreen extends ModalRoute<void> {
   Color get barrierColor => Colors.black.withOpacity(0.5);
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   bool get maintainState => true;
@@ -28,12 +28,8 @@ class SampleModalScreen extends ModalRoute<void> {
     Animation<double> secondaryAnimation,
   ) {
     // This makes sure that text and other content follows the material style
-    return Material(
-      type: MaterialType.transparency,
-      // make sure that the overlay content is not cut off
-      child: SafeArea(
-        child: _buildOverlayContent(context),
-      ),
+    return SafeArea(
+      child: _buildOverlayContent(context),
     );
   }
 
