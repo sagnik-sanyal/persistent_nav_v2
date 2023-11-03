@@ -34,3 +34,19 @@ Future<T?> pushScreenWithNavBar<T>(BuildContext context, Widget screen) =>
 @optionalTypeArgs
 Future<T?> pushScreenWithoutNavBar<T>(BuildContext context, Widget screen) =>
     pushScreen<T>(context, screen: screen);
+
+@optionalTypeArgs
+Future<T?> pushReplacementWithNavBar<T extends Object?, TO extends Object?>(
+  BuildContext context,
+  Route<T> route, {
+  TO? result,
+}) =>
+    Navigator.of(context).pushReplacement<T, TO>(route);
+
+@optionalTypeArgs
+Future<T?> pushReplacementWithoutNavBar<T extends Object?, TO extends Object?>(
+  BuildContext context,
+  Route<T> route, {
+  TO? result,
+}) =>
+    Navigator.of(context, rootNavigator: true).pushReplacement<T, TO>(route);
