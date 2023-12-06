@@ -383,24 +383,24 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _initAnimationControllers() {
-    if (_showAnimation) {
-      _animationController = AnimationController(
-        vsync: this,
-        duration: widget.screenTransitionAnimation.duration,
-      );
-      _animationController.addListener(() {
-        if (_animationController.isCompleted) {
-          if (!widget.stateManagement) {
-            setState(() {
-              key = UniqueKey();
-            });
-          }
+    _animationController = AnimationController(
+      vsync: this,
+      duration: widget.screenTransitionAnimation.duration,
+    );
+    _animationController.addListener(() {
+      if (_animationController.isCompleted) {
+        if (!widget.stateManagement) {
+          setState(() {
+            key = UniqueKey();
+          });
         }
-      });
+      }
+    });
 
-      _animation = Tween<double>(begin: 1, end: 1)
-          .chain(CurveTween(curve: widget.screenTransitionAnimation.curve))
-          .animate(_animationController);
+    _animation = Tween<double>(begin: 1, end: 1)
+        .chain(CurveTween(curve: widget.screenTransitionAnimation.curve))
+        .animate(_animationController);
+    if (_showAnimation) {
       _animationController.animateTo(1, duration: Duration.zero);
     }
   }
