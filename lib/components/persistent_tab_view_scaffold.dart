@@ -1,4 +1,4 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class PersistentTabViewScaffold extends StatefulWidget {
   const PersistentTabViewScaffold({
@@ -6,7 +6,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
     required this.tabBuilder,
     required this.controller,
     required this.tabCount,
-    Key? key,
+    super.key,
     this.opacities = const [],
     this.backgroundColor,
     this.avoidBottomPadding = true,
@@ -23,7 +23,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.drawerEdgeDragWidth,
     this.animatedTabBuilder,
     this.navigationShell,
-  }) : super(key: key);
+  });
 
   final Widget tabBar;
 
@@ -199,10 +199,10 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
 
 class PersistentTab extends StatelessWidget {
   const PersistentTab({
-    Key? key,
+    super.key,
     this.child,
     this.bottomMargin = 0.0,
-  }) : super(key: key);
+  });
 
   final Widget? child;
   final double bottomMargin;
@@ -222,9 +222,7 @@ class _SwipableTabSwitchingView extends StatefulWidget {
     required this.tabBuilder,
     required this.screenTransitionAnimation,
     required this.controller,
-    Key? key,
-  })  : assert(tabCount > 0, "tabCount must be greater 0"),
-        super(key: key);
+  }) : assert(tabCount > 0, "tabCount must be greater 0");
 
   final int currentTabIndex;
   final int tabCount;
@@ -312,13 +310,13 @@ class _SwipableTabSwitchingViewState extends State<_SwipableTabSwitchingView> {
 class KeepAlivePage extends StatefulWidget {
   const KeepAlivePage({
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
 
   @override
-  _KeepAlivePageState createState() => _KeepAlivePageState();
+  State<KeepAlivePage> createState() => _KeepAlivePageState();
 }
 
 class _KeepAlivePageState extends State<KeepAlivePage>
@@ -351,9 +349,7 @@ class _TabSwitchingView extends StatefulWidget {
     required this.tabBuilder,
     required this.screenTransitionAnimation,
     this.animatedTabBuilder,
-    Key? key,
-  })  : assert(tabCount > 0, "tabCount must be greater 0"),
-        super(key: key);
+  }) : assert(tabCount > 0, "tabCount must be greater 0");
 
   final int currentTabIndex;
   final int tabCount;
@@ -453,13 +449,15 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
     int oldIndex,
     Widget child,
   ) {
-    final double yOffset = newIndex > index
-        ? -animationValue
-        : (newIndex < index
-            ? animationValue
-            : (index < oldIndex ? animationValue - 1 : 1 - animationValue));
+    final bool slideLeft = Directionality.of(context) == TextDirection.ltr
+        ? newIndex > oldIndex
+        : newIndex < oldIndex;
+    final bool isNewPage = index == newIndex;
+    final double offset = slideLeft
+        ? (isNewPage ? 1 - animationValue : -animationValue)
+        : (isNewPage ? animationValue - 1 : animationValue);
     return FractionalTranslation(
-      translation: Offset(yOffset, 0),
+      translation: Offset(offset, 0),
       child: child,
     );
   }
@@ -505,7 +503,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
                               child: widget.tabBuilder(context, index),
                             )
                           : widget.tabBuilder(context, index))
-                      : Container(color: Colors.red, height: 200, width: 200),
+                      : Container(),
                 ),
               ),
             ),
