@@ -467,7 +467,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
         children: List<Widget>.generate(widget.tabCount, (index) {
           final bool active = index == _currentTabIndex ||
               (!_animation.isCompleted && index == _previousTabIndex);
-          shouldBuildTab[index] = active || shouldBuildTab[index];
+          shouldBuildTab[index] =
+              active || (shouldBuildTab[index] && widget.stateManagement);
 
           return Offstage(
             offstage: !active,
@@ -479,10 +480,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
                   builder: (context) => shouldBuildTab[index]
                       ? (_showAnimation
                           ? AnimatedBuilder(
-                              animation: index == _previousTabIndex ||
-                                      index == _currentTabIndex
-                                  ? _animation
-                                  : Listenable.merge([]),
+                              animation: _animation,
                               builder: (context, child) =>
                                   widget.animatedTabBuilder?.call(
                                     context,

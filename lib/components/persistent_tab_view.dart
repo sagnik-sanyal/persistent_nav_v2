@@ -209,6 +209,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   late List<BuildContext?> _contextList;
   late PersistentTabController _controller;
   bool _sendScreenContext = false;
+  late final List<GlobalKey<CustomTabViewState>> _tabKeys = List.generate(
+    widget.tabs.length,
+    (index) => GlobalKey<CustomTabViewState>(),
+  );
 
   @override
   void initState() {
@@ -255,6 +259,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   Widget _buildScreen(int index) => CustomTabView(
+        key: _tabKeys[index],
         navigatorConfig: widget.tabs[index].navigatorConfig,
         home: (screenContext) {
           _contextList[index] = screenContext;
