@@ -23,6 +23,7 @@ call git commit pubspec.yaml CHANGELOG.md example/pubspec.lock -m "Version %new_
 call git tag -a v%new_ver% -m "Version %new_ver%"
 call git push
 call git push --tags
+call dart pub publish
 exit /B 0
 
 :usage
