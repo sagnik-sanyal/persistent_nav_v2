@@ -1,4 +1,4 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 /// A highly customizable persistent bottom navigation bar for flutter.
 ///
@@ -13,7 +13,7 @@ class PersistentTabView extends StatefulWidget {
   const PersistentTabView({
     required this.tabs,
     required this.navBarBuilder,
-    Key? key,
+    super.key,
     this.controller,
     this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.full(),
@@ -37,14 +37,13 @@ class PersistentTabView extends StatefulWidget {
     this.drawerEdgeDragWidth,
     this.gestureNavigationEnabled = false,
     this.animatedTabBuilder,
-  })  : navigationShell = null,
-        super(key: key);
+  }) : navigationShell = null;
 
   const PersistentTabView.router({
     required List<PersistentRouterTabConfig> this.tabs,
     required this.navBarBuilder,
     required StatefulNavigationShell this.navigationShell,
-    Key? key,
+    super.key,
     this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.full(),
     this.margin = EdgeInsets.zero,
@@ -67,8 +66,7 @@ class PersistentTabView extends StatefulWidget {
     this.gestureNavigationEnabled = false,
     this.animatedTabBuilder,
   })  : screenTransitionAnimation = const ScreenTransitionAnimation(),
-        controller = null,
-        super(key: key);
+        controller = null;
 
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
   final List<PersistentTabConfig> tabs;

@@ -1,4 +1,4 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 /// Configuration for an individual Item in the navbar.
 /// Styling depends on the styling of the navigation bar.
@@ -101,7 +101,7 @@ class PersistentRouterTabConfig extends PersistentTabConfig {
   PersistentRouterTabConfig({
     required super.item,
     super.onSelectedTabPressWhenNoScreensPushed,
-  }): super(screen: Container());
+  }) : super(screen: Container());
 }
 
 class NavBarConfig {

@@ -1,4 +1,4 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class Style2BottomNavBar extends StatelessWidget {
   const Style2BottomNavBar({
@@ -6,8 +6,8 @@ class Style2BottomNavBar extends StatelessWidget {
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
     this.itemPadding = const EdgeInsets.all(5),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;

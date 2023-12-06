@@ -1,15 +1,14 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class Style14BottomNavBar extends StatelessWidget {
   Style14BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
-    Key? key,
-  })  : assert(
+    super.key,
+  }) : assert(
           navBarConfig.items.length.isOdd,
           "The number of items must be odd for this style",
-        ),
-        super(key: key);
+        );
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;

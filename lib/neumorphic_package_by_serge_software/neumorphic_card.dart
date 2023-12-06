@@ -1,6 +1,6 @@
 /// Based on the code by Ivan Cherepanov
 /// https://medium.com/flutter-community/neumorphic-designs-in-flutter-eab9a4de2059
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 enum CurveType {
   concave,
@@ -23,13 +23,12 @@ class NeumorphicContainer extends StatelessWidget {
     this.margin,
     this.padding,
     this.transform,
-    Key? key,
+    super.key,
   })  : decoration = decoration ?? NeumorphicDecoration(color: color),
         constraints = (width != null || height != null)
             ? constraints?.tighten(width: width, height: height) ??
                 BoxConstraints.tightFor(width: width, height: height)
-            : constraints,
-        super(key: key);
+            : constraints;
 
   final Widget? child;
 

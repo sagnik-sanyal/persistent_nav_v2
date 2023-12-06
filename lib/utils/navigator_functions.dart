@@ -1,4 +1,4 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 @optionalTypeArgs
 Future<T?> pushScreen<T extends Object?>(

@@ -1,12 +1,12 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class Style7BottomNavBar extends StatefulWidget {
   const Style7BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;

@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_asserts_with_message
 
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class CustomTabView extends StatefulWidget {
   const CustomTabView({
     required this.navigatorConfig,
-    Key? key,
+    super.key,
     this.home,
-  }) : super(key: key);
+  });
 
   final NavigatorConfig navigatorConfig;
   final WidgetBuilder? home;

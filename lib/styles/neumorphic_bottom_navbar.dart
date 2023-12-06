@@ -1,12 +1,12 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class NeumorphicBottomNavBar extends StatelessWidget {
   const NeumorphicBottomNavBar({
     required this.navBarConfig,
-    Key? key,
+    super.key,
     this.navBarDecoration = const NavBarDecoration(),
     this.neumorphicProperties = const NeumorphicProperties(),
-  }) : super(key: key);
+  });
 
   final NavBarConfig navBarConfig;
   final NeumorphicProperties neumorphicProperties;

@@ -1,11 +1,11 @@
-part of persistent_bottom_nav_bar_v2;
+part of "../persistent_bottom_nav_bar_v2.dart";
 
 class Style5BottomNavBar extends StatelessWidget {
   const Style5BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
