@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-beta.7] - 2023-12-06
+### Fixed
+- Upgrade go\_router to 12.1.1
+- Make page switching transition rtl compatible
+- Fix \_animation not initialized error
+- Switching tabs without stateManagement caused re-initializations of all loaded pages
+
 ## [5.0.0-beta.6] - 2023-09-12
 ### Added
 - Add `animatedTabBuilder` to customize the transition when switching tabs
@@ -498,6 +505,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[5.0.0-beta.7]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.6...5.0.0-beta.7
 [5.0.0-beta.6]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.5...5.0.0-beta.6
 [5.0.0-beta.5]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.4...5.0.0-beta.5
 [5.0.0-beta.4]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.3...5.0.0-beta.4
