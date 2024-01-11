@@ -6,7 +6,7 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 class ItemConfig {
   ItemConfig({
     required this.icon,
-    Icon? inactiveIcon,
+    Widget? inactiveIcon,
     this.title,
     this.activeColorPrimary = CupertinoColors.activeBlue,
     this.inactiveColorPrimary = CupertinoColors.systemGrey,
