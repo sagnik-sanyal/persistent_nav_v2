@@ -74,8 +74,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
   Widget build(BuildContext context) => PersistentTabView(
         controller: _controller,
         tabs: _tabs(),
-        navBarBuilder: (essentials) => settings.navBarBuilder(
-          essentials,
+        navBarBuilder: (navBarConfig) => settings.navBarBuilder(
+          navBarConfig,
           NavBarDecoration(
             color: settings.navBarColor,
             borderRadius: BorderRadius.circular(10),
