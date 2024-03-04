@@ -19,7 +19,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`cider version`) DO (
 @echo Changes to release:
 call cider describe
 call cider release
-call git commit pubspec.yaml CHANGELOG.md example/pubspec.lock -m "Version %new_ver%"
+call git commit pubspec.yaml pubspec.lock CHANGELOG.md example/pubspec.lock -m "Version %new_ver%"
 call git tag -a v%new_ver% -m "Version %new_ver%"
 call git push
 call git push --tags
