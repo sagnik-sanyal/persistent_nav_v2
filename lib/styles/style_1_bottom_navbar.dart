@@ -25,7 +25,7 @@ class Style1BottomNavBar extends StatelessWidget {
           ),
           if (item.title != null)
             Padding(
-              padding: const EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.only(top: 4),
               child: Material(
                 type: MaterialType.transparency,
                 child: FittedBox(

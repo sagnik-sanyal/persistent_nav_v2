@@ -13,14 +13,16 @@ class Style3BottomNavBar extends StatelessWidget {
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          IconTheme(
-            data: IconThemeData(
-              size: item.iconSize,
-              color: isSelected
-                  ? item.activeColorPrimary
-                  : item.inactiveColorPrimary,
+          Flexible(
+            child: IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeColorPrimary
+                    : item.inactiveColorPrimary,
+              ),
+              child: isSelected ? item.icon : item.inactiveIcon,
             ),
-            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             FittedBox(
