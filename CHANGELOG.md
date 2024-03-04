@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-beta.9] - 2024-03-04
 ## [5.0.0-beta.8] - 2024-01-15
 ### Fixed
 - Make ItemConfig inactiveIcon of Type Widget
@@ -509,6 +510,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[5.0.0-beta.9]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.8...5.0.0-beta.9
 [5.0.0-beta.8]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.7...5.0.0-beta.8
 [5.0.0-beta.7]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.6...5.0.0-beta.7
 [5.0.0-beta.6]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.5...5.0.0-beta.6
