@@ -27,7 +27,9 @@ class MainScreen extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0, vertical: 20.0),
+                  horizontal: 30.0,
+                  vertical: 20.0,
+                ),
                 child: TextField(
                   decoration: InputDecoration(hintText: "Test Text Field"),
                 ),
@@ -43,10 +45,7 @@ class MainScreen extends StatelessWidget {
                           PageTransitionAnimation.scaleRotate,
                     );
                   },
-                  child: Text(
-                    "Go to Second Screen ->",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text("Go to Second Screen ->"),
                 ),
               ),
               Center(
@@ -61,18 +60,12 @@ class MainScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text(
-                            "Exit",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          child: Text("Exit"),
                         ),
                       ),
                     );
                   },
-                  child: Text(
-                    "Push bottom sheet on TOP of Nav Bar",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text("Push bottom sheet on TOP of Nav Bar"),
                 ),
               ),
               Center(
@@ -87,18 +80,12 @@ class MainScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text(
-                            "Exit",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          child: Text("Exit"),
                         ),
                       ),
                     );
                   },
-                  child: Text(
-                    "Push bottom sheet BEHIND the Nav Bar",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text("Push bottom sheet BEHIND the Nav Bar"),
                 ),
               ),
               Center(
@@ -107,10 +94,7 @@ class MainScreen extends StatelessWidget {
                     pushDynamicScreen(context,
                         screen: SampleModalScreen(), withNavBar: true);
                   },
-                  child: Text(
-                    "Push Dynamic/Modal Screen",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text("Push Dynamic/Modal Screen"),
                 ),
               ),
               Center(
@@ -122,7 +106,6 @@ class MainScreen extends StatelessWidget {
                     this.hideStatus
                         ? "Unhide Navigation Bar"
                         : "Hide Navigation Bar",
-                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -131,15 +114,10 @@ class MainScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop();
                   },
-                  child: Text(
-                    "<- Main Menu",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text("<- Main Menu"),
                 ),
               ),
-              SizedBox(
-                height: 60.0,
-              ),
+              SizedBox(height: 60.0),
             ],
           ),
         ),
@@ -164,19 +142,13 @@ class MainScreen2 extends StatelessWidget {
                 onPressed: () {
                   pushNewScreen(context, screen: MainScreen3());
                 },
-                child: Text(
-                  "Go to Third Screen",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text("Go to Third Screen"),
               ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(
-                  "Go Back to First Screen",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text("Go Back to First Screen"),
               ),
             ],
           ),
@@ -199,10 +171,7 @@ class MainScreen3 extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text(
-              "Go Back to Second Screen",
-              style: TextStyle(color: Colors.white),
-            ),
+            child: Text("Go Back to Second Screen"),
           ),
         ),
       ),
