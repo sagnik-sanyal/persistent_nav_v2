@@ -2,6 +2,10 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 
 enum PopActionScreensType { once, all }
 
+/// Decoration configuration for the persistent navigation bar.
+/// It is suggested to be used in conjunction with [DecoratedNavBar]
+/// to style the navigation bar. Serves as a container for commonly
+/// used styling properties.
 class NavBarDecoration extends BoxDecoration {
   const NavBarDecoration({
     Color super.color = Colors.white,

@@ -18,8 +18,8 @@ class Style3BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -30,8 +30,8 @@ class Style3BottomNavBar extends StatelessWidget {
                 isSelected ? item.title! : " ",
                 style: item.textStyle.apply(
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
               ),
             ),

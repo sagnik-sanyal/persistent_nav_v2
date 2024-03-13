@@ -59,8 +59,8 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -75,8 +75,8 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
                     item.title!,
                     style: item.textStyle.apply(
                       color: isSelected
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary,
+                          ? item.activeForegroundColor
+                          : item.inactiveForegroundColor,
                     ),
                   ),
                 ),

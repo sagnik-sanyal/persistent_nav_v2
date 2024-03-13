@@ -23,8 +23,8 @@ class Style8BottomNavBar extends StatelessWidget {
         padding: itemPadding,
         decoration: BoxDecoration(
           color: isSelected
-              ? item.activeColorSecondary
-              : item.inactiveColorSecondary,
+              ? item.activeBackgroundColor
+              : item.inactiveBackgroundColor,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: Row(
@@ -34,8 +34,8 @@ class Style8BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -48,8 +48,8 @@ class Style8BottomNavBar extends StatelessWidget {
                       item.title!,
                       style: item.textStyle.apply(
                         color: isSelected
-                            ? item.activeColorPrimary
-                            : item.inactiveColorPrimary,
+                            ? item.activeForegroundColor
+                            : item.inactiveForegroundColor,
                       ),
                     ),
                   ),

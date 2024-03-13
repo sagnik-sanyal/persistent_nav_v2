@@ -65,8 +65,8 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
                 data: IconThemeData(
                   size: item.iconSize,
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
                 child: isSelected ? item.icon : item.inactiveIcon,
               ),
@@ -81,7 +81,7 @@ class _Style10BottomNavBarState extends State<Style10BottomNavBar>
                   width: 5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                    color: item.activeColorPrimary,
+                    color: item.activeForegroundColor,
                   ),
                 ),
               ),

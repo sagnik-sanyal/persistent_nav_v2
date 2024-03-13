@@ -68,8 +68,8 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -82,8 +82,8 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
                   item.title!,
                   style: item.textStyle.apply(
                     color: isSelected
-                        ? item.activeColorPrimary
-                        : item.inactiveColorPrimary,
+                        ? item.activeForegroundColor
+                        : item.inactiveForegroundColor,
                   ),
                 ),
               ),
@@ -98,7 +98,7 @@ class _Style12BottomNavBarState extends State<Style12BottomNavBar>
                 width: itemWidth * 0.8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: item.activeColorSecondary,
+                  color: item.activeBackgroundColor,
                 ),
               ),
             ),

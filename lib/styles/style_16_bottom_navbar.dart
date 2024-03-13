@@ -21,8 +21,8 @@ class Style16BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -33,8 +33,8 @@ class Style16BottomNavBar extends StatelessWidget {
                 item.title!,
                 style: item.textStyle.apply(
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
               ),
             )
@@ -49,7 +49,7 @@ class Style16BottomNavBar extends StatelessWidget {
       Container(
         margin: const EdgeInsets.only(left: 5, right: 5),
         decoration: BoxDecoration(
-          color: item.activeColorPrimary,
+          color: item.activeForegroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.transparent, width: 5),
         ),
@@ -61,8 +61,8 @@ class Style16BottomNavBar extends StatelessWidget {
                 data: IconThemeData(
                   size: item.iconSize,
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
                 child: isSelected ? item.icon : item.inactiveIcon,
               ),

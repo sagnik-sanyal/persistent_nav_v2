@@ -22,8 +22,8 @@ class Style14BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -34,8 +34,8 @@ class Style14BottomNavBar extends StatelessWidget {
                 item.title!,
                 style: item.textStyle.apply(
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
               ),
             ),
@@ -56,14 +56,14 @@ class Style14BottomNavBar extends StatelessWidget {
             height: navBarConfig.navBarHeight,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: item.activeColorPrimary,
+              color: item.activeForegroundColor,
               boxShadow: navBarDecoration.boxShadow,
             ),
             child: Center(
               child: IconTheme(
                 data: IconThemeData(
                   size: item.iconSize,
-                  color: item.inactiveColorPrimary,
+                  color: item.inactiveForegroundColor,
                 ),
                 child: isSelected ? item.icon : item.inactiveIcon,
               ),
@@ -79,8 +79,8 @@ class Style14BottomNavBar extends StatelessWidget {
                     item.title!,
                     style: item.textStyle.apply(
                       color: isSelected
-                          ? item.activeColorPrimary
-                          : item.inactiveColorPrimary,
+                          ? item.activeForegroundColor
+                          : item.inactiveForegroundColor,
                     ),
                   ),
                 ),

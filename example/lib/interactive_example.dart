@@ -20,8 +20,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           item: ItemConfig(
             icon: const Icon(Icons.home),
             title: "Home",
-            activeColorPrimary: Colors.blue,
-            inactiveColorPrimary: Colors.grey,
+            activeForegroundColor: Colors.blue,
+            inactiveForegroundColor: Colors.grey,
           ),
         ),
         PersistentTabConfig(
@@ -29,16 +29,16 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           item: ItemConfig(
             icon: const Icon(Icons.search),
             title: "Search",
-            activeColorPrimary: Colors.teal,
-            inactiveColorPrimary: Colors.grey,
+            activeForegroundColor: Colors.teal,
+            inactiveForegroundColor: Colors.grey,
           ),
         ),
         PersistentTabConfig.noScreen(
           item: ItemConfig(
             icon: const Icon(Icons.add),
             title: "Add",
-            activeColorPrimary: Colors.blueAccent,
-            inactiveColorPrimary: Colors.grey,
+            activeForegroundColor: Colors.blueAccent,
+            inactiveForegroundColor: Colors.grey,
           ),
           onPressed: (context) {
             pushWithNavBar(
@@ -55,8 +55,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           item: ItemConfig(
             icon: const Icon(Icons.message),
             title: "Messages",
-            activeColorPrimary: Colors.deepOrange,
-            inactiveColorPrimary: Colors.grey,
+            activeForegroundColor: Colors.deepOrange,
+            inactiveForegroundColor: Colors.grey,
           ),
         ),
         PersistentTabConfig(
@@ -64,8 +64,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           item: ItemConfig(
             icon: const Icon(Icons.settings),
             title: "Settings",
-            activeColorPrimary: Colors.indigo,
-            inactiveColorPrimary: Colors.grey,
+            activeForegroundColor: Colors.indigo,
+            inactiveForegroundColor: Colors.grey,
           ),
         ),
       ];

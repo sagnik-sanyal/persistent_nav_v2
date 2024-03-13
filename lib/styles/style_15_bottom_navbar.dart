@@ -21,8 +21,8 @@ class Style15BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -33,8 +33,8 @@ class Style15BottomNavBar extends StatelessWidget {
                 item.title!,
                 style: item.textStyle.apply(
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
               ),
             ),
@@ -45,7 +45,7 @@ class Style15BottomNavBar extends StatelessWidget {
         margin: const EdgeInsets.only(left: 5, right: 5),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: item.activeColorPrimary,
+          color: item.activeForegroundColor,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -55,8 +55,8 @@ class Style15BottomNavBar extends StatelessWidget {
                 data: IconThemeData(
                   size: item.iconSize,
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
                 child: isSelected ? item.icon : item.inactiveIcon,
               ),

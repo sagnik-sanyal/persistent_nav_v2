@@ -18,8 +18,8 @@ class Style5BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -30,7 +30,7 @@ class Style5BottomNavBar extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color:
-                  isSelected ? item.activeColorSecondary : Colors.transparent,
+                  isSelected ? item.activeBackgroundColor : Colors.transparent,
             ),
           ),
         ],

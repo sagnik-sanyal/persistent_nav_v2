@@ -1,6 +1,6 @@
 part of "../persistent_bottom_nav_bar_v2.dart";
 
-/// Configuration for an individual Item in the navbar.
+/// Configuration for an individual Tab Item in the navbar.
 /// Styling depends on the styling of the navigation bar.
 /// Needs to be passed to the [PersistentTabView] widget via [PersistentTabConfig].
 class ItemConfig {
@@ -8,10 +8,10 @@ class ItemConfig {
     required this.icon,
     Widget? inactiveIcon,
     this.title,
-    this.activeColorPrimary = CupertinoColors.activeBlue,
-    this.inactiveColorPrimary = CupertinoColors.systemGrey,
+    this.activeForegroundColor = CupertinoColors.activeBlue,
+    this.inactiveForegroundColor = CupertinoColors.systemGrey,
     Color? activeColorSecondary,
-    this.inactiveColorSecondary = Colors.transparent,
+    this.inactiveBackgroundColor = Colors.transparent,
     this.opacity = 1.0,
     this.filter,
     this.textStyle = const TextStyle(
@@ -21,8 +21,8 @@ class ItemConfig {
     ),
     this.iconSize = 26.0,
   })  : inactiveIcon = inactiveIcon ?? icon,
-        activeColorSecondary =
-            activeColorSecondary ?? activeColorPrimary.withOpacity(0.2),
+        activeBackgroundColor =
+            activeColorSecondary ?? activeForegroundColor.withOpacity(0.2),
         assert(
           opacity >= 0 && opacity <= 1.0,
           "Opacity must be between 0 and 1.0",
@@ -38,16 +38,16 @@ class ItemConfig {
   final String? title;
 
   /// Color for `icon` and `title` if item is selected. Defaults to `CupertinoColors.activeBlue`
-  final Color activeColorPrimary;
+  final Color activeForegroundColor;
 
   /// Color for `icon` and `title` if item is unselected. Defaults to `CupertinoColors.systemGrey`
-  final Color inactiveColorPrimary;
+  final Color inactiveForegroundColor;
 
-  /// Color for the item background if selected. Defaults to `activeColorPrimary.withOpacity(0.2)`
-  final Color activeColorSecondary;
+  /// Color for the item background if selected (not used in every prebuilt style). Defaults to `activeColorPrimary.withOpacity(0.2)`
+  final Color activeBackgroundColor;
 
-  /// Color for the item background if unselected. Defaults to `Colors.transparent`
-  final Color inactiveColorSecondary;
+  /// Color for the item background if unselected (not used in every prebuilt style). Defaults to `Colors.transparent`
+  final Color inactiveBackgroundColor;
 
   /// Enables and controls the transparency effect of the entire NavBar when this tab is selected.
   ///
@@ -65,6 +65,11 @@ class ItemConfig {
   final double iconSize;
 }
 
+/// Configuration for an individual Tab, including the screen to
+/// be displayed and the item in the navbar.
+/// Use `PersistentTabConfig.noScreen` if you want to use custom
+/// behavior on a press of a NavBar item like display a modal
+/// screen instead of switching the tab.
 class PersistentTabConfig {
   PersistentTabConfig({
     required this.screen,
@@ -104,6 +109,9 @@ class PersistentRouterTabConfig extends PersistentTabConfig {
   }) : super(screen: Container());
 }
 
+/// This is automatically generated. This is used to be passed to the
+/// NavBar Widget and includes all the necessary configurations
+/// for the NavBar.
 class NavBarConfig {
   const NavBarConfig({
     required this.selectedIndex,
@@ -142,6 +150,7 @@ class NavigatorConfig {
     this.navigatorObservers = const <NavigatorObserver>[],
     this.navigatorKey,
   });
+
   final String? defaultTitle;
 
   final Map<String, WidgetBuilder> routes;

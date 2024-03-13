@@ -22,8 +22,8 @@ class Style4BottomNavBar extends StatelessWidget {
               data: IconThemeData(
                 size: item.iconSize,
                 color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary,
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
               ),
               child: isSelected ? item.icon : item.inactiveIcon,
             ),
@@ -34,8 +34,8 @@ class Style4BottomNavBar extends StatelessWidget {
                 item.title!,
                 style: item.textStyle.apply(
                   color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
               ),
             ),
@@ -69,7 +69,7 @@ class Style4BottomNavBar extends StatelessWidget {
                 height: 4,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: navBarConfig.selectedItem.activeColorPrimary,
+                  color: navBarConfig.selectedItem.activeForegroundColor,
                   borderRadius: BorderRadius.circular(100),
                 ),
               )
