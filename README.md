@@ -12,7 +12,7 @@ A highly customizable bottom navigation bar for Flutter. It is shipped with 17 p
 NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.dev/packages/persistent_bottom_nav_bar).
 
 > [!IMPORTANT]
-> If you are migrating from Version 4.x.x to Version 5 read this [MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/rework_interface/MigrationGuide.md).
+> If you are migrating from Version 4.x.x to Version 5 read this [MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md).
 
 <p align="center">
 <img src="gifs/preview.gif" alt="Preview" style="height:400px;"/>
@@ -287,7 +287,7 @@ The `PersistentTabView` has the ability to remember the navigation stack for eac
 
 ### Router API
 
-To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/rework_interface/example/lib/go_router_example.dart) for a full code example or the code snippet below:
+To utilize flutters Router API for navigation in combination with this package, [go_router](https://pub.dev/packages/go_router) must be used. Follow the setup in the [go_router](https://pub.dev/packages/go_router) documentation to get started with declarative routing. To integrate your Persistent Navigation Bar, you have to setup a `StatefulShellRoute.indexedStack` as one of your routes, which will contain the `PersistentTabView`. See the [example](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/example/lib/go_router_example.dart) for a full code example or the code snippet below:
 
 - use `PersistentTabView.router` instead of `PersistentTabView`
 - pass the `navigationShell` to the `PersistentTabView.router` (this will contain each tab view)
