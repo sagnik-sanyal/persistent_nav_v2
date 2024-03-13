@@ -36,10 +36,7 @@ class MainScreen extends StatelessWidget {
                     );
                   }
                 },
-                child: const Text(
-                  "Go to Second Screen with Navbar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Go to Second Screen with Navbar"),
               ),
             ),
             Center(
@@ -57,10 +54,7 @@ class MainScreen extends StatelessWidget {
                     );
                   }
                 },
-                child: const Text(
-                  "Go to Second Screen without Navbar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Go to Second Screen without Navbar"),
               ),
             ),
             Center(
@@ -75,18 +69,12 @@ class MainScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text(
-                          "Exit",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: const Text("Exit"),
                       ),
                     ),
                   );
                 },
-                child: const Text(
-                  "Push bottom sheet on TOP of Nav Bar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Push bottom sheet on TOP of Nav Bar"),
               ),
             ),
             Center(
@@ -101,18 +89,12 @@ class MainScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text(
-                          "Exit",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: const Text("Exit"),
                       ),
                     ),
                   );
                 },
-                child: const Text(
-                  "Push bottom sheet BEHIND the Nav Bar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Push bottom sheet BEHIND the Nav Bar"),
               ),
             ),
             Center(
@@ -126,10 +108,7 @@ class MainScreen extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text(
-                  "Push Dynamic/Modal Screen",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Push Dynamic/Modal Screen"),
               ),
             ),
           ],
@@ -162,10 +141,7 @@ class MainScreen2 extends StatelessWidget {
                     );
                   }
                 },
-                child: const Text(
-                  "Go to Third Screen with Navbar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Go to Third Screen with Navbar"),
               ),
             ),
             Center(
@@ -177,10 +153,7 @@ class MainScreen2 extends StatelessWidget {
                     pushScreen(context, screen: const MainScreen3());
                   }
                 },
-                child: const Text(
-                  "Go to Second Screen without Navbar",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Go to Second Screen without Navbar"),
               ),
             ),
             Center(
@@ -188,10 +161,7 @@ class MainScreen2 extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  "Go Back to First Screen",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text("Go Back to First Screen"),
               ),
             ),
           ],
@@ -211,10 +181,7 @@ class MainScreen3 extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text(
-              "Go Back to Second Screen",
-              style: TextStyle(color: Colors.white),
-            ),
+            child: const Text("Go Back to Second Screen"),
           ),
         ),
       );
@@ -246,10 +213,7 @@ class ExampleDialog extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text(
-                    "Return",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const Text("Return"),
                 ),
               ),
             ],
