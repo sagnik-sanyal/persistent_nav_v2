@@ -1,5 +1,5 @@
 name: persistent_bottom_nav_bar_v2
-description: A highly customizable bottom navigation bar for Flutter. It is shipped with 17 prebuilt styles you can choose from, but can also be used with your very own style without sacrificing any features. Based on persistent_bottom_nav_bar which currently is not continued.
+description: A highly customizable bottom navigation bar for Flutter. Includes 17 prebuilt styles but can also be used with your custom style.
 
 homepage: https://github.com/jb3rndt/PersistentBottomNavBarV2
 repository: https://github.com/jb3rndt/PersistentBottomNavBarV2
