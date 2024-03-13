@@ -1,29 +1,13 @@
 # V4 -> V5 Migration Guide
 
 All PRs on how to improve this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/edit/master/MigrationGuide.md) are very welcome :)
-**Important**: Dont wrap the `PersistentTabView` in a Scaffold.
 
-## **Remove all Scaffolds that wrap PersistentTabView**
-
-## Drawers
-
-```dart
-AppBar(
-    leading: Builder(
-        builder: (BuildContext context) {
-            return IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () { Scaffold.of(context).openDrawer(); },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
-        },
-    ),
-)
-```
+> [!WARNING]
+> Don't wrap the `PersistentTabView` in a Scaffold. The `PersistentTabView` is the container for all your tabs. ([See here](#drawers) to transfer a Drawer if you used one)
 
 ## `PersistentTabController`
 
-- The setter for the index got removed, use `jumpToTab` instead.
+- The setter for the index got removed, use the `jumpToTab` method instead.
 
 ## Using Predefined Navigation Bar Styles
 
@@ -61,7 +45,7 @@ PersistentTabView(
 
 ## Using Custom Navigation Bar Styles
 
-The additional constructor `PersistentTabView.custom` is now gone, so you now can also use the main one. Also, in your `onItemSelected` function you dont need to call `setState` anymore, just call the `navBarConfig.onItemSelected` (either by passing the function to your navigation bar (like here) or by passing `navBarConfig` into your navigation bar (like in the example in the main Readme)):
+The additional constructor `PersistentTabView.custom` got removed, so you have to use the main one. Also, in your `onItemSelected` function you dont need to call `setState` anymore, just call the `navBarConfig.onItemSelected` (either by passing the function to your navigation bar (like in the example below) or by passing `navBarConfig` into your navigation bar ([like in the example above](#using-predefined-navigation-bar-styles))):
 
 <table>
 <tr>
@@ -109,14 +93,10 @@ PersistentTabView(
 </tr>
 </table>
 
-
-<details>
-  <summary>Removed Parameters</summary>
+### Removed Parameters
 
 - itemCount
-- routeAndNavigatorSettings: They are now applied inside `ItemConfig` if you need. By default they are inherited from the root navigator. More on that [here](#navigator)
-
-</details>
+- routeAndNavigatorSettings: They are now applied inside `ItemConfig` if you need. By default they are inherited from the root navigator. More on that [here](#routeandnavigatorsettings-1)
 
 ## Tabs and Screens
 
@@ -191,6 +171,7 @@ PersistentTabView(
 
 ## `PersistentTabView` and `PersistentTabView.custom`
 
+The `PersistentTabView.custom` constructor is removed. Instead, you should apply your custom NavBar in the unnamed constructor ([see here](#using-custom-navigation-bar-styles)).
 Some of the parameters of these constructors have been removed, some changed in behavior and some got added. So everything that changed is listed here:
 
 ### Removed
@@ -223,7 +204,7 @@ This argument was only used in styles 1, 7, 9 and 10. It now has to be applied t
 
 ### Colors
 
-The behavior of primary and secondary colors and their defaults got changed (hopefully in favor of better understandability). Without going into too much detail, the roles of primary and secondary colors swapped. Also the `activeColorPrimary` no longer serves as a default for `activeColorSecondary` (but the other way around).
+The behavior of primary and secondary colors, the names and their defaults got changed (hopefully in favor of better understandability). Without going into too much detail, the roles of primary and secondary colors swapped. They are now called `...background` and `...foreground` while the foreground applies to text and icon colors and background applies to the background of the navigation bar item (which is not used in all styles). Also, the `activeColorPrimary` (now `activeBackgroundColor`) no longer serves as a default for `activeColorSecondary` (now `activeForegroundColor`), but the other way around.
 
 <table>
 <tr>
@@ -247,10 +228,10 @@ PersistentBottomNavBarItem(
 ```dart
 ItemConfig(
   ...,
-  activeColorPrimary: Colors.blue,
-  inactiveColorPrimary: Colors.grey,
-  activeColorSecondary: Colors.red,
-  inactiveColorSecondary: Colors.white,
+  activeForegroundColor: Colors.blue,
+  inactiveForegroundColor: Colors.grey,
+  activeBackgroundColor: Colors.red,
+  inactiveBackgroundColor: Colors.white,
 ),
 ```
 
@@ -260,7 +241,7 @@ ItemConfig(
 
 ### `onPressed`
 
-This argument moved to the `PersistentTabConfig`. There you can set a method to invoke (-> `onPressed`) instead of switching to that screen:
+This argument moved to the `PersistentTabConfig`. There you can set a method to call (`onPressed`) instead of switching to that screen:
 
 <table>
 <tr>
@@ -279,7 +260,7 @@ PersistentBottomNavBarItem(
 <td>
 
 ```dart
-PersistentTabConfig.tapAction(
+PersistentTabConfig.noScreen(
   item: ItemConfig(
     ...,
   ),
@@ -383,3 +364,22 @@ PersistentTabView(
 - `BottomNavStyle17` (`NavBarStyle.style17`) -> `Style15BottomNavBar`
 - `BottomNavStyle18` (`NavBarStyle.style18`) -> `Style16BottomNavBar`
 
+## Drawers
+
+Instead of including a Drawer in a Scaffold that wraps the `PersistentTabView` (which is discouraged), you can pass a Drawer to the `PersistentTabView` directly. To open it from one of your Tabs or anywhere else, use the snippet below.
+
+-> Create an AppBar including a Drawer Button to open the Drawer.
+
+```dart
+AppBar(
+    leading: Builder(
+        builder: (BuildContext context) {
+            return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () { Scaffold.of(context).openDrawer(); },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+        },
+    ),
+)
+```
