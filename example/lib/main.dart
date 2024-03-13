@@ -1,9 +1,21 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/interactive_example.dart";
 import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
 
-void main() => runApp(const PersistenBottomNavBarDemo());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // make navigation bar transparent
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
+  // make flutter draw behind navigation bar
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  runApp(const PersistenBottomNavBarDemo());
+}
 
 class PersistenBottomNavBarDemo extends StatelessWidget {
   const PersistenBottomNavBarDemo({Key? key}) : super(key: key);
