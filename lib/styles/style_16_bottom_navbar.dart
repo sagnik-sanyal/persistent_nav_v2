@@ -37,7 +37,7 @@ class Style16BottomNavBar extends StatelessWidget {
                       : item.inactiveForegroundColor,
                 ),
               ),
-            )
+            ),
         ],
       );
 

@@ -150,7 +150,7 @@ class _SettingsViewState extends State<SettingsView> {
                                   color: Colors.grey,
                                   spreadRadius: 2,
                                   blurRadius: 2,
-                                )
+                                ),
                               ],
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -204,7 +204,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -227,7 +227,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -251,7 +251,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -275,7 +275,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                     onChanged: (value) {
                       setState(() {

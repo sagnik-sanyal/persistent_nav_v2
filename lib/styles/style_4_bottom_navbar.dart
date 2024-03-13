@@ -72,7 +72,7 @@ class Style4BottomNavBar extends StatelessWidget {
                   color: navBarConfig.selectedItem.activeForegroundColor,
                   borderRadius: BorderRadius.circular(100),
                 ),
-              )
+              ),
             ],
           ),
           Expanded(

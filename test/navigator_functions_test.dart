@@ -18,7 +18,7 @@ Widget screenWithButton(int id, void Function(BuildContext) onTap) => Column(
             onPressed: () => onTap(context),
             child: const Text("SubPage"),
           ),
-        )
+        ),
       ],
     );
 

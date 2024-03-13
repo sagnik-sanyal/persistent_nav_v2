@@ -174,22 +174,18 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
                   )),
         bottomNavigationBar: SlideTransition(
           position: slideAnimation,
-          child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-            child: Padding(
-              padding: widget.margin,
-              child: MediaQuery.removePadding(
-                context: context,
-                // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
-                removeBottom: !widget.avoidBottomPadding,
-                child: SafeArea(
-                  top: false,
-                  right: false,
-                  left: false,
-                  bottom:
-                      widget.avoidBottomPadding && widget.margin.bottom != 0,
-                  child: widget.tabBar,
-                ),
+          child: Padding(
+            padding: widget.margin,
+            child: MediaQuery.removePadding(
+              context: context,
+              // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
+              removeBottom: !widget.avoidBottomPadding,
+              child: SafeArea(
+                top: false,
+                right: false,
+                left: false,
+                bottom: widget.avoidBottomPadding && widget.margin.bottom != 0,
+                child: widget.tabBar,
               ),
             ),
           ),

@@ -322,31 +322,43 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
     }
     if (widget.handleAndroidBackButtonPress || widget.onWillPop != null) {
-      return WillPopScope(
-        onWillPop:
-            !widget.handleAndroidBackButtonPress && widget.onWillPop != null
-                ? () => widget.onWillPop!(_contextList[_controller.index]!)
-                : () async {
-                    if (_controller.isOnInitialTab() &&
-                        !Navigator.canPop(_contextList.first!)) {
-                      if (widget.handleAndroidBackButtonPress &&
-                          widget.onWillPop != null) {
-                        return widget.onWillPop!(_contextList.first!);
-                      }
-                      return true;
-                    } else {
-                      if (Navigator.canPop(_contextList[_controller.index]!)) {
-                        Navigator.pop(_contextList[_controller.index]!);
-                      } else {
-                        _controller.jumpToPreviousTab();
-                      }
-                      return false;
-                    }
-                  },
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) {
+            return;
+          }
+          final NavigatorState navigator = Navigator.of(context);
+          final bool shouldPop = await _canPopTabView();
+          if (shouldPop) {
+            navigator.pop();
+          }
+        },
         child: navigationBarWidget(),
       );
     } else {
       return navigationBarWidget();
+    }
+  }
+
+  Future<bool> _canPopTabView() async {
+    if (!widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
+      return widget.onWillPop!(_contextList[_controller.index]!);
+    } else {
+      if (_controller.isOnInitialTab() &&
+          !Navigator.canPop(_contextList.first!)) {
+        if (widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
+          return widget.onWillPop!(_contextList.first!);
+        }
+        return true;
+      } else {
+        if (Navigator.canPop(_contextList[_controller.index]!)) {
+          Navigator.pop(_contextList[_controller.index]!);
+        } else {
+          _controller.jumpToPreviousTab();
+        }
+        return false;
+      }
     }
   }
 

@@ -6,6 +6,7 @@ class Style1BottomNavBar extends StatelessWidget {
     super.key,
     this.navBarDecoration = const NavBarDecoration(),
   });
+
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 

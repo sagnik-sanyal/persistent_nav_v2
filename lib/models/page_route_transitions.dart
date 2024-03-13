@@ -132,7 +132,7 @@ class _AnimatedPageRoute extends PageRouteBuilder {
                 secondaryAnimation,
                 enterPage,
                 transitionAnimation,
-              )
+              ),
             ],
           ),
         );

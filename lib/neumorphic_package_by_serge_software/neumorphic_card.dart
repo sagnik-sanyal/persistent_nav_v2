@@ -68,7 +68,7 @@ class NeumorphicContainer extends StatelessWidget {
         color: _getAdjustColor(color, emboss ? bevel : 0 - bevel),
         offset: Offset(bevel, bevel),
         blurRadius: bevel,
-      )
+      ),
     ];
 
     if (emboss) {
@@ -126,7 +126,7 @@ class NeumorphicContainer extends StatelessWidget {
     Map<String, int> colors = {
       "r": baseColor.red,
       "g": baseColor.green,
-      "b": baseColor.blue
+      "b": baseColor.blue,
     };
 
     colors = colors.map((key, value) {
