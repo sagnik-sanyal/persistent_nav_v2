@@ -75,7 +75,7 @@ class PersistentTabConfig {
 
   PersistentTabConfig.noScreen({
     required this.item,
-    required this.onPressed,
+    required void Function(BuildContext) this.onPressed,
     this.navigatorConfig = const NavigatorConfig(),
     this.onSelectedTabPressWhenNoScreensPushed,
   }) : screen = Container();
