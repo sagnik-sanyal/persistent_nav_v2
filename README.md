@@ -4,14 +4,15 @@
 [![Coverage](https://codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jb3rndt/PersistentBottomNavBarV2/)
 [![Pub package version](https://img.shields.io/pub/v/persistent_bottom_nav_bar_v2)](https://pub.dev/packages/persistent_bottom_nav_bar_v2)
 [![License](https://img.shields.io/github/license/jb3rndt/PersistentBottomNavBarV2)](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/LICENSE)
-[![GitHub issues](https://badgen.net/github/issues/jb3rndt/PersistentBottomNavBarV2/)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/issues/)
-[![GitHub stars](https://img.shields.io/github/stars/jb3rndt/PersistentBottomNavBarV2?logo=github&colorB=dargreen)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/stargazers/)
+[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/jb3rndt/PersistentBottomNavBarV2)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/issues/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/jb3rndt/PersistentBottomNavBarV2?style=flat)](https://gitHub.com/jb3rndt/PersistentBottomNavBarV2/stargazers/)
 
 A highly customizable bottom navigation bar for Flutter. It is shipped with 17 prebuilt styles you can choose from (see below), but can also be used with your very own style without sacrificing any features. [View on `pub.dev`](https://pub.dev/packages/persistent_bottom_nav_bar_v2)
 
 NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.dev/packages/persistent_bottom_nav_bar).
 
-If you are migrating from Version 4.x.x to Version 5 please read this [migration guide](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/rework_interface/MigrationGuide.md).
+> [!IMPORTANT]
+> If you are migrating from Version 4.x.x to Version 5 read this [MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/rework_interface/MigrationGuide.md).
 
 <p align="center">
 <img src="gifs/preview.gif" alt="Preview" style="height:400px;"/>
@@ -37,28 +38,28 @@ If you are migrating from Version 4.x.x to Version 5 please read this [migration
 
 ## Styles
 
-| Style1                      | Style2                       | Style3                       |
-| ---------------------------- | ----------------------------- | ---------------------------- |
+| Style1                     | Style2                     | Style3                     |
+| -------------------------- | -------------------------- | -------------------------- |
 | ![style1](gifs/style1.gif) | ![style2](gifs/style2.gif) | ![style3](gifs/style3.gif) |
 
-| Style4                      | Style5                       | Style6                       |
-| ---------------------------- | ----------------------------- | ---------------------------- |
+| Style4                     | Style5                     | Style6                     |
+| -------------------------- | -------------------------- | -------------------------- |
 | ![style4](gifs/style4.gif) | ![style5](gifs/style5.gif) | ![style6](gifs/style6.gif) |
 
-| Style7                      | Style8                       | Style9                       |
-| ---------------------------- | ----------------------------- | ---------------------------- |
+| Style7                     | Style8                     | Style9                     |
+| -------------------------- | -------------------------- | -------------------------- |
 | ![style7](gifs/style7.gif) | ![style8](gifs/style8.gif) | ![style9](gifs/style9.gif) |
 
-| Style10                      | Style11                       | Style12                       |
-| ---------------------------- | ----------------------------- | ---------------------------- |
+| Style10                      | Style11                      | Style12                      |
+| ---------------------------- | ---------------------------- | ---------------------------- |
 | ![style12](gifs/style10.gif) | ![style11](gifs/style11.gif) | ![style12](gifs/style12.gif) |
 
-| Style13                      | Style14                       | Style15                       |
-| ---------------------------- | ----------------------------- | ---------------------------- |
+| Style13                      | Style14                      | Style15                      |
+| ---------------------------- | ---------------------------- | ---------------------------- |
 | ![style13](gifs/style13.gif) | ![style14](gifs/style14.gif) | ![style15](gifs/style15.gif) |
 
-| Style16                      | Neumorphic                       |
-| ---------------------------- | ----------------------------- |
+| Style16                      | Neumorphic                         |
+| ---------------------------- | ---------------------------------- |
 | ![style16](gifs/style16.gif) | ![neumorphic](gifs/neumorphic.gif) |
 
 Note: These do not include all style variations
@@ -78,10 +79,7 @@ Note: These do not include all style variations
 
 ### 1. Install the package
 
-```yaml
-dependencies:
-  persistent_bottom_nav_bar_v2: any
-```
+Follow the [install instructions](https://pub.dev/packages/persistent_bottom_nav_bar_v2/install).
 
 ### 2. Import the package
 
