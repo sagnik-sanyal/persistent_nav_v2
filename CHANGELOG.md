@@ -4,10 +4,81 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0-beta.10] - 2024-03-13
+### Changed
+- Rename ItemConfig color attributes
+
+### Fixed
+- Make PersistentTabConfig.noScreen onPressed mandatory
+
+## [5.0.0-beta.9] - 2024-03-04
+## [5.0.0-beta.8] - 2024-01-15
+### Fixed
+- Make ItemConfig inactiveIcon of Type Widget
+
+## [5.0.0-beta.7] - 2023-12-06
+### Fixed
+- Upgrade go\_router to 12.1.1
+- Make page switching transition rtl compatible
+- Fix \_animation not initialized error
+- Switching tabs without stateManagement caused re-initializations of all loaded pages
+
+## [5.0.0-beta.6] - 2023-09-12
+### Added
+- Add `animatedTabBuilder` to customize the transition when switching tabs
+- Support for Router API
+
+### Fixed
+- Tab slide animation no longer shows intermediate tabs in the slide animation when switching to non adjacent tabs
+
 ## [4.2.8] - 2023-03-27
 ### Fixed
 - Remove label padding in simple style
 - Check if context is non-null before popping all screens
+
+## [5.0.0-beta.5] - 2023-02-27
+### Added
+- Tab history when using android back button
+
+### Fixed
+- ScreenTransitionAnimation with Duration.zero was throwing an error in the animation phase
+
+### Removed
+- Remove unused attribute `_animateTabTransition` on `ScreenTransitionAnimation`
+
+## [5.0.0-beta.4] - 2023-02-12
+### Added
+- Support `drawerEdgeDragWidth`
+
+## [5.0.0-beta.3] - 2023-02-12
+### Added
+- A drawer can be passed to the PersistentTabView to be usable in every tab
+
+### Changed
+- Renamed ItemAnimationProperties to ItemAnimation
+- Made ScreenTransitionAnimation.animateTabTransition private
+- Improved Example
+
+## [5.0.0-beta.2] - 2022-11-28
+### Fixed
+- Migration Guide Link in the Readme
+
+## [5.0.0-beta.1] - 2022-11-19
+### Breaking Changes
+- `itemAnimationProperties`, `neumorphicProperties` and `navBarDecoration` now have to be applied to the NavBar Widget directly
+- navBarStyle now is a widget builder which also allows to pass a custom Widget instead of only the predefined ones
+- Remove `PersistenTabView.custom` (use `PersistentTabView` instead) constructor
+- Make items primary color the title and icon color and secondary the background color
+- `backgroundColor` now changes the color of the background
+- `NavBarOverlap` replaces the `buttomScreenMargin`
+
+### Changed
+- Remove PersistentTabViewBase
+- Replace `CupertinoPageScaffold` with `Scaffold`
+- Trimmed the styles
+- Make inactiveIcon default to icon globally
+- Tabs Navigators inherit the settings of the root Navigator
+- Make null-safety safer
 
 ## [4.2.7] - 2022-11-13
 ### Fixed
@@ -451,7 +522,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10
+[5.0.0-beta.9]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.8...5.0.0-beta.9
+[5.0.0-beta.8]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.7...5.0.0-beta.8
+[5.0.0-beta.7]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.6...5.0.0-beta.7
+[5.0.0-beta.6]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.5...5.0.0-beta.6
 [4.2.8]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...4.2.8
+[5.0.0-beta.5]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.4...5.0.0-beta.5
+[5.0.0-beta.4]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.3...5.0.0-beta.4
+[5.0.0-beta.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.2...5.0.0-beta.3
+[5.0.0-beta.2]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...5.0.0-beta.2
+[5.0.0-beta.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.7...5.0.0-beta.1
 [4.2.7]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.6...4.2.7
 [4.2.6]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.5...4.2.6
 [4.2.5]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/4.2.4...4.2.5

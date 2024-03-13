@@ -1,18 +1,13 @@
-name: Publish
+name: Release
 on:
   push:
     tags:
       - "v*"
 
 jobs:
-  test:
-    name: Test and format
-    uses: jb3rndt/PersistentBottomNavBarV2/.github/workflows/tests.yaml@master
-
   release:
     name: "Release"
     runs-on: "ubuntu-latest"
-    needs: test
 
     steps:
       - name: Create tagged Release
@@ -20,11 +15,3 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-
-      - name: Publish package to pub.dev
-        uses: sakebook/actions-flutter-pub-publisher@v1.4.0
-        with:
-          credential: ${{ secrets.PUB_CREDENTIALS }}
-          flutter_package: true
-          skip_test: true
-          dry_run: true

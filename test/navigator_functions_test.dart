@@ -1,216 +1,165 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import "package:flutter/material.dart";
+import "package:flutter_test/flutter_test.dart";
+import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
-List<PersistentBottomNavBarItem> items = [
-  PersistentBottomNavBarItem(title: "Item1", icon: Icon(Icons.add)),
-  PersistentBottomNavBarItem(title: "Item2", icon: Icon(Icons.add)),
-  PersistentBottomNavBarItem(title: "Item3", icon: Icon(Icons.add)),
-];
+PersistentTabConfig tabConfig(int id, Widget screen) => PersistentTabConfig(
+      screen: screen,
+      item: ItemConfig(title: "Item$id", icon: const Icon(Icons.add)),
+    );
 
-Widget defaultScreen(int id) => Container(child: Text("Screen$id"));
+Widget defaultScreen(int id) => Text("Screen$id");
 
-Widget screenWithButton(int id, void Function(BuildContext) onTap) => Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          defaultScreen(id),
-          Builder(builder: (context) {
-            return ElevatedButton(
-              onPressed: () => onTap(context),
-              child: Text("SubPage"),
-            );
-          })
-        ],
-      ),
+Widget screenWithButton(int id, void Function(BuildContext) onTap) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        defaultScreen(id),
+        Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () => onTap(context),
+            child: const Text("SubPage"),
+          ),
+        ),
+      ],
     );
 
 void main() {
-  Widget wrapTabView(WidgetBuilder builder) {
-    return MaterialApp(
-      home: Builder(
-        builder: (context) => builder(context),
+  Widget wrapTabView(WidgetBuilder builder) => MaterialApp(
+        home: Builder(
+          builder: (context) => builder(context),
+        ),
+      );
+
+  group("pushScreen", () {
+    testWidgets("pushes with navBar", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map(
+                  (id) => tabConfig(
+                    id,
+                    screenWithButton(
+                      id,
+                      (context) => pushScreen(
+                        context,
+                        screen: defaultScreen(id * 10 + (id % 10)),
+                        withNavBar: true,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+    });
+
+    testWidgets("pushes without navBar", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map(
+                  (id) => tabConfig(
+                    id,
+                    screenWithButton(
+                      id,
+                      (context) => pushScreen(
+                        context,
+                        screen: defaultScreen(id * 10 + (id % 10)),
+                        withNavBar: false,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
+    });
+  });
+
+  testWidgets("pushWithNavBar pushes with navBar", (tester) async {
+    await tester.pumpWidget(
+      wrapTabView(
+        (context) => PersistentTabView(
+          tabs: [1, 2, 3]
+              .map(
+                (id) => tabConfig(
+                  id,
+                  screenWithButton(
+                    id,
+                    (context) => pushWithNavBar(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            defaultScreen(id * 10 + (id % 10)),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+          navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+        ),
       ),
     );
-  }
 
-  group("pushNewScreen", () {
-    testWidgets("pushes with navBar", (WidgetTester tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            context,
-            screens: [1, 2, 3]
-                .map((id) => screenWithButton(
-                    id,
-                    (context) => pushNewScreen(
-                          context,
-                          screen: defaultScreen(id * 10 + (id % 10)),
-                          withNavBar: true,
-                        )))
-                .toList(),
-            items: items,
-            navBarStyle: NavBarStyle.style3,
-          ),
-        ),
-      );
+    expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
 
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-    });
-
-    testWidgets("pushes without navBar", (WidgetTester tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            context,
-            screens: [1, 2, 3]
-                .map((id) => screenWithButton(
-                    id,
-                    (context) => pushNewScreen(
-                          context,
-                          screen: defaultScreen(id * 10 + (id % 10)),
-                          withNavBar: false,
-                        )))
-                .toList(),
-            items: items,
-            navBarStyle: NavBarStyle.style3,
-          ),
-        ),
-      );
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsNothing);
-    });
+    expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
   });
 
-  group("pushDynamicScreen", () {
-    testWidgets("pushes with navBar", (WidgetTester tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            context,
-            screens: [1, 2, 3]
-                .map((id) => screenWithButton(
+  testWidgets("pushWithoutNavBar pushes without navBar", (tester) async {
+    await tester.pumpWidget(
+      wrapTabView(
+        (context) => PersistentTabView(
+          tabs: [1, 2, 3]
+              .map(
+                (id) => tabConfig(
+                  id,
+                  screenWithButton(
                     id,
-                    (context) => pushDynamicScreen(
-                          context,
-                          screen: MaterialPageRoute(
-                              builder: (context) =>
-                                  defaultScreen(id * 10 + (id % 10))),
-                          withNavBar: true,
-                        )))
-                .toList(),
-            items: items,
-            navBarStyle: NavBarStyle.style3,
-          ),
+                    (context) => pushWithoutNavBar(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            defaultScreen(id * 10 + (id % 10)),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+          navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
         ),
-      );
+      ),
+    );
 
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
+    expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
+    await tester.tap(find.byType(ElevatedButton));
+    await tester.pumpAndSettle();
 
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-    });
-
-    testWidgets("pushes without navBar", (WidgetTester tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            context,
-            screens: [1, 2, 3]
-                .map((id) => screenWithButton(
-                    id,
-                    (context) => pushDynamicScreen(
-                          context,
-                          screen: MaterialPageRoute(
-                              builder: (context) =>
-                                  defaultScreen(id * 10 + (id % 10))),
-                          withNavBar: false,
-                        )))
-                .toList(),
-            items: items,
-            navBarStyle: NavBarStyle.style3,
-          ),
-        ),
-      );
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsNothing);
-    });
-  });
-
-  group("pushNewScreenWithRouteSettings", () {
-    testWidgets("pushes with navBar", (WidgetTester tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            context,
-            screens: [1, 2, 3]
-                .map((id) => screenWithButton(
-                    id,
-                    (context) => pushNewScreenWithRouteSettings(
-                          context,
-                          screen: defaultScreen(id * 10 + (id % 10)),
-                          withNavBar: true,
-                          settings: RouteSettings(),
-                        )))
-                .toList(),
-            items: items,
-            navBarStyle: NavBarStyle.style3,
-          ),
-        ),
-      );
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-    });
-
-    testWidgets("pushes without navBar", (WidgetTester tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            context,
-            screens: [1, 2, 3]
-                .map((id) => screenWithButton(
-                    id,
-                    (context) => pushNewScreenWithRouteSettings(
-                          context,
-                          screen: defaultScreen(id * 10 + (id % 10)),
-                          withNavBar: false,
-                          settings: RouteSettings(),
-                        )))
-                .toList(),
-            items: items,
-            navBarStyle: NavBarStyle.style3,
-          ),
-        ),
-      );
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsOneWidget);
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(PersistentBottomNavBar).hitTestable(), findsNothing);
-    });
+    expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
   });
 }
