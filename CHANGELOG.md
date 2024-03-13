@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2024-03-13
+### Added
+- Easier and less error-prone usage api ([MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md))
+- Support for go\_router
+- Change the tab by sliding left/right (if enabled)
+
+### Fixed
+- A ton of internal improvements
+
 ## [5.0.0-beta.10] - 2024-03-13
 ### Changed
 - Rename ItemConfig color attributes
@@ -522,6 +531,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[5.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.10...5.0.0
 [5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10
 [5.0.0-beta.9]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.8...5.0.0-beta.9
 [5.0.0-beta.8]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.7...5.0.0-beta.8

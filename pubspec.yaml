@@ -3,7 +3,7 @@ description: A highly customizable bottom navigation bar for Flutter. It is ship
 
 homepage: https://github.com/jb3rndt/PersistentBottomNavBarV2
 repository: https://github.com/jb3rndt/PersistentBottomNavBarV2
-version: 5.0.0-beta.10
+version: 5.0.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
