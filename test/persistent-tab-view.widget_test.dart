@@ -24,7 +24,7 @@ Widget screenWithSubPages(int id) => id > 99
               ),
               child: const Text("SubPage"),
             ),
-          )
+          ),
         ],
       );
 
@@ -70,24 +70,24 @@ void main() {
         ),
       );
 
-      expect(find.text("Screen1"), findsOneWidget);
-      expect(find.text("Screen2"), findsNothing);
-      expect(find.text("Screen3"), findsNothing);
+      expect(find.text("Screen1").hitTestable(), findsOneWidget);
+      expect(find.text("Screen2").hitTestable(), findsNothing);
+      expect(find.text("Screen3").hitTestable(), findsNothing);
       await tester.tap(find.text("Item2"));
       await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen2"), findsOneWidget);
-      expect(find.text("Screen3"), findsNothing);
+      expect(find.text("Screen2").hitTestable(), findsOneWidget);
+      expect(find.text("Screen1").hitTestable(), findsNothing);
+      expect(find.text("Screen3").hitTestable(), findsNothing);
       await tester.tap(find.text("Item3"));
       await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen2"), findsNothing);
-      expect(find.text("Screen3"), findsOneWidget);
+      expect(find.text("Screen1").hitTestable(), findsNothing);
+      expect(find.text("Screen2").hitTestable(), findsNothing);
+      expect(find.text("Screen3").hitTestable(), findsOneWidget);
       await tester.tap(find.text("Item1"));
       await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsOneWidget);
-      expect(find.text("Screen2"), findsNothing);
-      expect(find.text("Screen3"), findsNothing);
+      expect(find.text("Screen1").hitTestable(), findsOneWidget);
+      expect(find.text("Screen2").hitTestable(), findsNothing);
+      expect(find.text("Screen3").hitTestable(), findsNothing);
     });
 
     testWidgets("hides the navbar when hideNavBar is true", (tester) async {
@@ -283,17 +283,17 @@ void main() {
           ),
         );
 
-        expect(find.text("Screen1"), findsOneWidget);
-        expect(find.text("Screen2"), findsNothing);
+        expect(find.text("Screen1").hitTestable(), findsOneWidget);
+        expect(find.text("Screen2").hitTestable(), findsNothing);
         await tester.tap(find.text("Item2"));
         await tester.pumpAndSettle();
-        expect(find.text("Screen1"), findsNothing);
-        expect(find.text("Screen2"), findsOneWidget);
+        expect(find.text("Screen1").hitTestable(), findsNothing);
+        expect(find.text("Screen2").hitTestable(), findsOneWidget);
 
         await tapAndroidBackButton(tester);
 
-        expect(find.text("Screen1"), findsOneWidget);
-        expect(find.text("Screen2"), findsNothing);
+        expect(find.text("Screen1").hitTestable(), findsOneWidget);
+        expect(find.text("Screen2").hitTestable(), findsNothing);
       });
 
       testWidgets("pops one screen on back button press", (tester) async {
@@ -337,17 +337,17 @@ void main() {
           ),
         );
 
-        expect(find.text("Screen1"), findsOneWidget);
-        expect(find.text("Screen2"), findsNothing);
+        expect(find.text("Screen1").hitTestable(), findsOneWidget);
+        expect(find.text("Screen2").hitTestable(), findsNothing);
         await tester.tap(find.text("Item2"));
         await tester.pumpAndSettle();
-        expect(find.text("Screen1"), findsNothing);
-        expect(find.text("Screen2"), findsOneWidget);
+        expect(find.text("Screen1").hitTestable(), findsNothing);
+        expect(find.text("Screen2").hitTestable(), findsOneWidget);
 
         await tapAndroidBackButton(tester);
 
-        expect(find.text("Screen1"), findsNothing);
-        expect(find.text("Screen2"), findsOneWidget);
+        expect(find.text("Screen1").hitTestable(), findsNothing);
+        expect(find.text("Screen2").hitTestable(), findsOneWidget);
       });
 
       testWidgets("pops no screen on back button press", (tester) async {
@@ -661,16 +661,16 @@ void main() {
 
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
+      expect(find.text("Screen1").hitTestable(), findsNothing);
+      expect(find.text("Screen11").hitTestable(), findsOneWidget);
       await tester.tap(find.text("Item2"));
       await tester.pumpAndSettle();
-      expect(find.text("Screen2"), findsOneWidget);
-      expect(find.text("Screen11"), findsNothing);
+      expect(find.text("Screen2").hitTestable(), findsOneWidget);
+      expect(find.text("Screen11").hitTestable(), findsNothing);
       await tester.tap(find.text("Item1"));
       await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
+      expect(find.text("Screen1").hitTestable(), findsNothing);
+      expect(find.text("Screen11").hitTestable(), findsOneWidget);
     });
 
     testWidgets("trashes screens while switching if stateManagement turned off",
