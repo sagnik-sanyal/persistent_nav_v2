@@ -60,8 +60,8 @@ class MinimalExample extends StatelessWidget {
             title: "Home",
           ),
         ),
-        PersistentTabConfig(
-          screen: const MainScreen(),
+        PersistentTabConfig.noScreen(
+          onPressed: print,
           item: ItemConfig(
             icon: const Icon(Icons.message),
             title: "Messages",
