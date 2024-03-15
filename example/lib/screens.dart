@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key, this.useRouter = false}) : super(key: key);
+  const MainScreen({super.key, this.useRouter = false});
 
   final bool useRouter;
 
@@ -117,7 +117,7 @@ class MainScreen extends StatelessWidget {
 }
 
 class MainScreen2 extends StatelessWidget {
-  const MainScreen2({Key? key, this.useRouter = false}) : super(key: key);
+  const MainScreen2({super.key, this.useRouter = false});
 
   final bool useRouter;
 
@@ -170,7 +170,7 @@ class MainScreen2 extends StatelessWidget {
 }
 
 class MainScreen3 extends StatelessWidget {
-  const MainScreen3({Key? key}) : super(key: key);
+  const MainScreen3({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -188,7 +188,7 @@ class MainScreen3 extends StatelessWidget {
 }
 
 class ExampleDialog extends StatelessWidget {
-  const ExampleDialog({Key? key}) : super(key: key);
+  const ExampleDialog({super.key});
 
   @override
   Widget build(BuildContext context) => Dialog(

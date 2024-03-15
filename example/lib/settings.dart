@@ -93,8 +93,8 @@ class SettingsView extends StatefulWidget {
   const SettingsView({
     required this.settings,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Settings settings;
   final void Function(Settings) onChanged;

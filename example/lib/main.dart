@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:persistent_bottom_nav_bar_v2_example_project/interactive_example.dart";
-import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
+import "package:example/interactive_example.dart";
+import "package:example/screens.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ void main() {
 }
 
 class PersistenBottomNavBarDemo extends StatelessWidget {
-  const PersistenBottomNavBarDemo({Key? key}) : super(key: key);
+  const PersistenBottomNavBarDemo({super.key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -50,7 +50,7 @@ class PersistenBottomNavBarDemo extends StatelessWidget {
 }
 
 class MinimalExample extends StatelessWidget {
-  const MinimalExample({Key? key}) : super(key: key);
+  const MinimalExample({super.key});
 
   List<PersistentTabConfig> _tabs() => [
         PersistentTabConfig(
@@ -60,8 +60,8 @@ class MinimalExample extends StatelessWidget {
             title: "Home",
           ),
         ),
-        PersistentTabConfig.noScreen(
-          onPressed: print,
+        PersistentTabConfig(
+          screen: const MainScreen(),
           item: ItemConfig(
             icon: const Icon(Icons.message),
             title: "Messages",

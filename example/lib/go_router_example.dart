@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:persistent_bottom_nav_bar_v2_example_project/screens.dart";
+import "package:example/screens.dart";
 
-class PersistenBottomNavBarRouterDemo extends StatelessWidget {
-  PersistenBottomNavBarRouterDemo({Key? key}) : super(key: key);
+class PersistentBottomNavBarRouterDemo extends StatelessWidget {
+  PersistentBottomNavBarRouterDemo({super.key});
 
   final _parentKey = GlobalKey<NavigatorState>();
   final _shellKey = GlobalKey<NavigatorState>();
