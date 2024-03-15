@@ -15,7 +15,7 @@ NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.
 > If you are migrating from Version 4.x.x to Version 5 read this [MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md).
 
 <p align="center">
-<img src="gifs/preview.gif" alt="Preview" style="height:400px;"/>
+<img src="https://raw.githubusercontent.com/jb3rndt/PersistentBottomNavBarV2/master/gifs/preview.gif" alt="Preview" style="height:400px;"/>
 </p>
 
 <details>
