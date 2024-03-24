@@ -72,7 +72,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
 
 class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
     with TickerProviderStateMixin {
-  late bool _navBarFullyShown;
+  late bool _navBarFullyShown = !widget.hideNavigationBar;
   late final AnimationController _hideNavBarAnimationController =
       AnimationController(
     vsync: this,
@@ -91,7 +91,6 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   @override
   void initState() {
     super.initState();
-    _navBarFullyShown = !widget.hideNavigationBar;
     if (widget.hideNavigationBar) {
       _hideNavBarAnimationController.value = 1.0;
     }
@@ -149,7 +148,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         key: widget.controller.scaffoldKey,
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         backgroundColor: widget.backgroundColor,
-        extendBody: true,
+        extendBody: widget.navBarOverlap.overlap != 0 || !_navBarFullyShown,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
