@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Fix deprecation of colorScheme.background
+- The Main Scaffold only extends its body if necessary (full overlap or hidden navbar) to prevent unnecessary padding (equal to navbar height)
+- Replace NavBar SlideTransition with SizeTransition to correctly report its size to the Main Scaffold
+- Pass on the source padding to the Main Scaffold Body if the navbar is hidden
+- Pass the source viewPadding if navbar is hidden and the new body padding of the Main Scaffold as a new viewPadding to the tabs to ensure better placement of FABs on individual screens
 
 ## [5.0.0] - 2024-03-13
 ### Added

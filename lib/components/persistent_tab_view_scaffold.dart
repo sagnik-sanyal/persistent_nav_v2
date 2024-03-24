@@ -153,6 +153,39 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         drawer: widget.drawer,
+        body: Builder(
+          builder: (bodyContext) => MediaQuery(
+            data: MediaQuery.of(bodyContext).copyWith(
+              padding:
+                  _navBarFullyShown ? null : MediaQuery.of(context).padding,
+              viewPadding: !_navBarFullyShown
+                  ? MediaQuery.of(context).viewPadding
+                  : widget.navBarOverlap.overlap != 0
+                      ? MediaQuery.of(bodyContext).padding
+                      : null,
+            ),
+            child: widget.navigationShell ??
+                (widget.gestureNavigationEnabled
+                    ? _SwipableTabSwitchingView(
+                        currentTabIndex: widget.controller.index,
+                        tabCount: widget.tabCount,
+                        controller: widget.controller,
+                        tabBuilder: buildTab,
+                        stateManagement: widget.stateManagement,
+                        screenTransitionAnimation:
+                            widget.screenTransitionAnimation,
+                      )
+                    : _TabSwitchingView(
+                        currentTabIndex: widget.controller.index,
+                        tabCount: widget.tabCount,
+                        tabBuilder: buildTab,
+                        stateManagement: widget.stateManagement,
+                        screenTransitionAnimation:
+                            widget.screenTransitionAnimation,
+                        animatedTabBuilder: widget.animatedTabBuilder,
+                      )),
+          ),
+        ),
         bottomNavigationBar: SizeTransition(
           sizeFactor: _animation,
           axisAlignment: -1,
