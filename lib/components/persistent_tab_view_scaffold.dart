@@ -78,9 +78,9 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
     vsync: this,
     duration: const Duration(milliseconds: 500),
   );
-  late final Animation<Offset> slideAnimation = Tween<Offset>(
-    begin: Offset.zero,
-    end: const Offset(0, 1),
+  late final Animation<double> _animation = Tween<double>(
+    begin: 1,
+    end: 0,
   ).animate(
     CurvedAnimation(
       parent: _hideNavBarAnimationController,
@@ -92,7 +92,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   void initState() {
     super.initState();
     if (widget.hideNavigationBar) {
-      _hideNavBarAnimationController.value = 1.0;
+      _hideNavBarAnimationController.value = 1;
     }
   }
 
@@ -153,26 +153,9 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         drawer: widget.drawer,
-        body: widget.navigationShell ??
-            (widget.gestureNavigationEnabled
-                ? _SwipableTabSwitchingView(
-                    currentTabIndex: widget.controller.index,
-                    tabCount: widget.tabCount,
-                    controller: widget.controller,
-                    tabBuilder: buildTab,
-                    stateManagement: widget.stateManagement,
-                    screenTransitionAnimation: widget.screenTransitionAnimation,
-                  )
-                : _TabSwitchingView(
-                    currentTabIndex: widget.controller.index,
-                    tabCount: widget.tabCount,
-                    tabBuilder: buildTab,
-                    stateManagement: widget.stateManagement,
-                    screenTransitionAnimation: widget.screenTransitionAnimation,
-                    animatedTabBuilder: widget.animatedTabBuilder,
-                  )),
-        bottomNavigationBar: SlideTransition(
-          position: slideAnimation,
+        bottomNavigationBar: SizeTransition(
+          sizeFactor: _animation,
+          axisAlignment: -1,
           child: Padding(
             padding: widget.margin,
             child: MediaQuery.removePadding(
