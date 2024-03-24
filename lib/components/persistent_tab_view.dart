@@ -16,7 +16,7 @@ class PersistentTabView extends StatefulWidget {
     super.key,
     this.controller,
     this.navBarHeight = kBottomNavigationBarHeight,
-    this.navBarOverlap = const NavBarOverlap.full(),
+    this.navBarOverlap = const NavBarOverlap.none(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
     this.onTabChanged,
@@ -45,7 +45,7 @@ class PersistentTabView extends StatefulWidget {
     required StatefulNavigationShell this.navigationShell,
     super.key,
     this.navBarHeight = kBottomNavigationBarHeight,
-    this.navBarOverlap = const NavBarOverlap.full(),
+    this.navBarOverlap = const NavBarOverlap.none(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
     this.onTabChanged,
@@ -100,8 +100,20 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to `kBottomNavigationBarHeight` which is `56.0`.
   final double navBarHeight;
 
-  /// Specifies how much the navBar should float above
-  /// the tab content. Defaults to [NavBarOverlap.full].
+  /// Works similar to [Scaffold.extendBody].
+  ///
+  /// If set to [NavBarOverlap.full], the tabs will extend to the bottom of
+  /// the screen, so the [bottomNavigationBar] will overlap the tab content.
+  ///
+  /// If set to [NavBarOverlap.none], the tabs will only extend to the top of
+  /// the [bottomNavigationBar], so it will not overlap the tab content.
+  ///
+  /// This is useful when the [bottomNavigationBar] has a non-rectangular shape,
+  /// like rounded corners or [CircularNotchedRectangle]. In this case
+  /// specifying `NavBarOverlap.full` ensures that the tab content will be
+  /// visible through the exposed spaces.
+  ///
+  /// Defaults to [NavBarOverlap.none].
   final NavBarOverlap navBarOverlap;
 
   /// The margin around the navigation bar.
@@ -112,7 +124,9 @@ class PersistentTabView extends StatefulWidget {
   /// Widget or choose one of the predefined Navigation Bars.
   final Widget Function(NavBarConfig) navBarBuilder;
 
-  /// If `true`, the navBar will be positioned so the content does not overlap with the bottom padding caused by system elements. If ``false``, the navBar will be positioned at the bottom of the screen. Defaults to `true`.
+  /// If `true`, the navBar will be positioned so the content does not overlap
+  /// with the bottom padding caused by system elements. If `false`, the navBar
+  /// will be positioned at the bottom of the screen. Defaults to `true`.
   final bool avoidBottomPadding;
 
   /// Handles android back button actions. Defaults to `true`.
