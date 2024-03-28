@@ -481,7 +481,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
         fit: StackFit.expand,
         children: List<Widget>.generate(widget.tabCount, (index) {
           final bool active = index == _currentTabIndex ||
-              (!_animation.isCompleted && index == _previousTabIndex);
+              (!_animation.isCompleted &&
+                  index == _previousTabIndex &&
+                  _showAnimation);
           shouldBuildTab[index] =
               active || (shouldBuildTab[index] && widget.stateManagement);
 
