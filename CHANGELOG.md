@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [5.1.0] - 2024-03-28
 ### Fixed
 - Fix deprecation of colorScheme.background
 - The Main Scaffold only extends its body if necessary (full overlap or hidden navbar) to prevent unnecessary padding (equal to navbar height)
@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pass the source viewPadding if navbar is hidden and the new body padding of the Main Scaffold as a new viewPadding to the tabs to ensure better placement of FABs on individual screens
 - Prevent Navbar jumping when keyboard opens because the keyboard consumes the MediaQuery.padding.bottom
 - Prevent Navbar jumping when keyboard opens because the keyboard consumes the MediaQuery.padding.bottom
+- Fix tabs overlaying each other if no transition animation should be shown
 
 ## [5.0.0] - 2024-03-13
 ### Added
@@ -541,7 +542,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
-[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...HEAD
+[5.1.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.10...5.0.0
 [5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10
 [5.0.0-beta.9]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.8...5.0.0-beta.9
