@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] - 2024-04-03
+### Changed
+- Mark onWillPop as deprecated
+
+### Fixed
+- Navigator.copyWith didn't properly copy the navigatorKey
+- Rewrite usage of PopScope by providing `canPop: true` when all child navigators are clear and the initial tab is selected to the give pop control to the ancestors or correctly pop/close the app if no parent PopScope exists (thus maintaining natural PopScope behavior)
+- PopScope now just blocks popping until the initial tab is selected and the child navigator cant be popped anymore
+
 ## [5.1.0] - 2024-03-28
 ### Fixed
 - Fix deprecation of colorScheme.background
@@ -542,6 +551,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[5.2.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.10...5.0.0
 [5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10

@@ -172,7 +172,7 @@ class NavigatorConfig {
     RouteFactory? onUnknownRoute,
     String? initialRoute,
     List<NavigatorObserver>? navigatorObservers,
-    GlobalKey<NavigatorState>? navigatorKeys,
+    GlobalKey<NavigatorState>? navigatorKey,
   }) =>
       NavigatorConfig(
         defaultTitle: defaultTitle ?? this.defaultTitle,
@@ -181,6 +181,6 @@ class NavigatorConfig {
         onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
         initialRoute: initialRoute ?? this.initialRoute,
         navigatorObservers: navigatorObservers ?? this.navigatorObservers,
-        navigatorKey: navigatorKey ?? navigatorKey,
+        navigatorKey: navigatorKey ?? this.navigatorKey,
       );
 }
