@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Navigator.copyWith didnt properly copy the navigatorKey
+
 ## [5.1.0] - 2024-03-28
 ### Fixed
 - Fix deprecation of colorScheme.background
@@ -542,6 +546,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.1.0...HEAD
 [5.1.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.10...5.0.0
 [5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10
