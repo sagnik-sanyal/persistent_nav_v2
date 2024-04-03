@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
-- Navigator.copyWith didnt properly copy the navigatorKey
+- Navigator.copyWith didn't properly copy the navigatorKey
+- Rewrite usage of PopScope by providing `canPop: true` when all child navigators are clear and the initial tab is selected to the give pop control to the ancestors or correctly pop/close the app if no parent PopScope exists (thus maintaining natural PopScope behavior)
+- PopScope now just blocks popping until the initial tab is selected and the child navigator cant be popped anymore
 
 ## [5.1.0] - 2024-03-28
 ### Fixed

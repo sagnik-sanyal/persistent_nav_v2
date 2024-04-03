@@ -49,3 +49,17 @@ Color getBackgroundColor(
 /// We use this so that APIs that have become non-nullable can still be used
 /// with `!` and `?` to support older versions of the API as well.
 T? _ambiguate<T>(T? value) => value;
+
+extension IterableSeparatorExtension<T extends Object> on Iterable<T?> {
+  Iterable<T> fillNullsWith(T Function(int) generator) sync* {
+    var index = 0;
+    for (var element in this) {
+      if (element == null) {
+        yield generator(index);
+      } else {
+        yield element;
+      }
+      index++;
+    }
+  }
+}
