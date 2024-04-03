@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Mark onWillPop as deprecated
+
 ### Fixed
 - Navigator.copyWith didn't properly copy the navigatorKey
 - Rewrite usage of PopScope by providing `canPop: true` when all child navigators are clear and the initial tab is selected to the give pop control to the ancestors or correctly pop/close the app if no parent PopScope exists (thus maintaining natural PopScope behavior)

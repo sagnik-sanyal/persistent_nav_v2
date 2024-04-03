@@ -28,6 +28,9 @@ class PersistentTabView extends StatefulWidget {
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
+    @Deprecated(
+      "Wrap [PersistentTabView] with [PopScope] instead. Look here for migration: https://docs.flutter.dev/release/breaking-changes/android-predictive-back",
+    )
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -57,6 +60,9 @@ class PersistentTabView extends StatefulWidget {
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
+    @Deprecated(
+      "Wrap [PersistentTabView] with [PopScope] instead. Look here for migration: https://docs.flutter.dev/release/breaking-changes/android-predictive-back",
+    )
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -141,6 +147,9 @@ class PersistentTabView extends StatefulWidget {
 
   /// If you want to perform a custom action on Android when exiting the app,
   /// you can write your logic here. Returns context of the selected screen.
+  @Deprecated(
+    "Wrap [PersistentTabView] with [PopScope] instead. Look here for migration: https://docs.flutter.dev/release/breaking-changes/android-predictive-back",
+  )
   final Future<bool> Function(BuildContext)? onWillPop;
 
   /// Returns the context of the selected tab.
