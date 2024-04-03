@@ -1,10 +1,10 @@
+import "package:example/screens.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:example/screens.dart";
 
-class PersistentBottomNavBarRouterDemo extends StatelessWidget {
-  PersistentBottomNavBarRouterDemo({super.key});
+class GoRouterExample extends StatelessWidget {
+  GoRouterExample({super.key});
 
   final _parentKey = GlobalKey<NavigatorState>();
   final _shellKey = GlobalKey<NavigatorState>();
@@ -39,8 +39,11 @@ class PersistentBottomNavBarRouterDemo extends StatelessWidget {
                   child: const Text("Show Router Example"),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  "This screen could be something you require the user to do before entering the main app content (like a login form)",
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    "This screen could be something you require the user to do before entering the main app content (like a login form)",
+                  ),
                 ),
               ],
             ),
