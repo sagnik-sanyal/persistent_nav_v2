@@ -430,6 +430,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       widget.handleAndroidBackButtonPress &&
       widget.onWillPop == null &&
       _controller.isOnInitialTab() &&
+      _navigatorKeys[_controller.index].currentState != null &&
       (subtreeCantHandlePop ??
           !_navigatorKeys[_controller.index].currentState!.canPop());
 }

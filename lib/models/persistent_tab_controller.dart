@@ -4,14 +4,15 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 class PersistentTabController extends ChangeNotifier {
   PersistentTabController({
     int initialIndex = 0,
-    bool uniqueHistory = false,
+    int historyLength = 5,
   })  : _initialIndex = initialIndex,
-        _uniqueHistory = uniqueHistory,
+        _historyLength = historyLength,
         _index = initialIndex,
-        assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0");
+        assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0"),
+        assert(historyLength >= 0, "Nav Bar history length cannot be less than 0");
 
   final int _initialIndex;
-  final bool _uniqueHistory;
+  final int _historyLength;
   int get index => _index;
   int _index;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -24,16 +25,15 @@ class PersistentTabController extends ChangeNotifier {
       return;
     }
     if (!isUndo) {
-      if (_uniqueHistory) {
-        if (_index != _initialIndex) {
-          _tabHistory.remove(_index);
-        }
-        if (value != _initialIndex) {
-          _tabHistory.remove(value);
-        }
-      }
-      if (_tabHistory.isEmpty || !_uniqueHistory || _index != _initialIndex) {
+      if (_historyLength > 0) {
         _tabHistory.add(_index);
+      }
+
+      if (_tabHistory.length > _historyLength) {
+        _tabHistory.removeRange(1, _tabHistory.length - _historyLength + 1);
+        if (_tabHistory.length > 1 && _tabHistory[0] == _tabHistory[1]) {
+          _tabHistory.removeAt(1);
+        }
       }
     }
     _index = value;
