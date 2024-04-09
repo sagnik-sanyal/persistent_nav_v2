@@ -186,9 +186,8 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
                       )),
           ),
         ),
-        bottomNavigationBar: SizeTransition(
+        bottomNavigationBar: NCSizeTransition(
           sizeFactor: _animation,
-          axisAlignment: -1,
           child: Padding(
             padding: widget.margin,
             child: MediaQuery(
@@ -575,4 +574,23 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
           key: key,
           child: _buildScreens(),
         );
+}
+
+class NCSizeTransition extends AnimatedWidget {
+  const NCSizeTransition({
+    required Animation<double> sizeFactor,
+    super.key,
+    this.child,
+  }) : super(listenable: sizeFactor);
+
+  Animation<double> get sizeFactor => listenable as Animation<double>;
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) => Align(
+        alignment: Alignment.topCenter,
+        heightFactor: max(sizeFactor.value, 0),
+        child: child,
+      );
 }
