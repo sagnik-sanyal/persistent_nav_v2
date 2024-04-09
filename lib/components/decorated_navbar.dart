@@ -19,21 +19,20 @@ class DecoratedNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          Positioned.fill(
-            child: ClipRect(
-              child: BackdropFilter(
-                filter: filter,
-                child: Container(
-                  color: Colors.transparent,
+          if (opacity < 1)
+            Positioned.fill(
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: filter,
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
                 ),
               ),
             ),
-          ),
           DecoratedBox(
             decoration: decoration.copyWith(
               color: decoration.color?.withOpacity(opacity),
-              borderRadius:
-                  decoration.borderRadius as BorderRadius? ?? BorderRadius.zero,
             ),
             child: SafeArea(
               top: false,
