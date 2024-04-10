@@ -13,12 +13,20 @@ class DecoratedNavBar extends StatelessWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) => ClipRRect(
-        borderRadius:
-            decoration.borderRadius as BorderRadius? ?? BorderRadius.zero,
-        child: BackdropFilter(
-          filter: decoration.filter ?? ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: DecoratedBox(
+  Widget build(BuildContext context) => Stack(
+        children: [
+          if ((decoration.color?.opacity ?? 1) < 1 && decoration.filter != null)
+            Positioned.fill(
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: decoration.filter!,
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+            ),
+          DecoratedBox(
             decoration: decoration,
             child: SafeArea(
               top: false,
@@ -31,6 +39,6 @@ class DecoratedNavBar extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ],
       );
 }

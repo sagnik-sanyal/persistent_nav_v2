@@ -12,7 +12,8 @@ class MainScreen extends StatelessWidget {
         appBar: AppBar(title: const Text("Tab Main Screen")),
         backgroundColor: Colors.indigo,
         body: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16)
+              .copyWith(bottom: MediaQuery.of(context).padding.bottom),
           children: <Widget>[
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -126,7 +127,8 @@ class MainScreen2 extends StatelessWidget {
         appBar: AppBar(title: const Text("Secondary Screen")),
         backgroundColor: Colors.teal,
         body: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16)
+              .copyWith(bottom: MediaQuery.of(context).padding.bottom),
           children: <Widget>[
             Center(
               child: ElevatedButton(

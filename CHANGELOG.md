@@ -11,6 +11,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
 - Removed default value of NavBarDecoration.filter to allow no filter at all
 
+## [5.2.1] - 2024-04-10
+### Fixed
+- Navbar got clipped and thus didnt show a boxShadow
+
+## [5.2.0] - 2024-04-03
+### Changed
+- Mark onWillPop as deprecated
+
+### Fixed
+- Navigator.copyWith didn't properly copy the navigatorKey
+- Rewrite usage of PopScope by providing `canPop: true` when all child navigators are clear and the initial tab is selected to the give pop control to the ancestors or correctly pop/close the app if no parent PopScope exists (thus maintaining natural PopScope behavior)
+- PopScope now just blocks popping until the initial tab is selected and the child navigator cant be popped anymore
+
+## [5.1.0] - 2024-03-28
+### Fixed
+- Fix deprecation of colorScheme.background
+- The Main Scaffold only extends its body if necessary (full overlap or hidden navbar) to prevent unnecessary padding (equal to navbar height)
+- Replace NavBar SlideTransition with SizeTransition to correctly report its size to the Main Scaffold
+- Pass on the source padding to the Main Scaffold Body if the navbar is hidden
+- Pass the source viewPadding if navbar is hidden and the new body padding of the Main Scaffold as a new viewPadding to the tabs to ensure better placement of FABs on individual screens
+- Prevent Navbar jumping when keyboard opens because the keyboard consumes the MediaQuery.padding.bottom
+- Prevent Navbar jumping when keyboard opens because the keyboard consumes the MediaQuery.padding.bottom
+- Fix tabs overlaying each other if no transition animation should be shown
+
 ## [5.0.0] - 2024-03-13
 ### Added
 - Easier and less error-prone usage api ([MIGRATION GUIDE](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/master/MigrationGuide.md))
@@ -538,7 +562,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
-[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...HEAD
+[5.2.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.0...5.2.1
+[5.2.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.1.0...5.2.0
+[5.1.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.10...5.0.0
 [5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10
 [5.0.0-beta.9]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.8...5.0.0-beta.9
