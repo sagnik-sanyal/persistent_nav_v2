@@ -39,8 +39,6 @@ class Style5BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        filter: navBarConfig.selectedItem.filter,
-        opacity: navBarConfig.selectedItem.opacity,
         height: navBarConfig.navBarHeight,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

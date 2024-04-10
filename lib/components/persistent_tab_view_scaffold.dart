@@ -7,7 +7,6 @@ class PersistentTabViewScaffold extends StatefulWidget {
     required this.controller,
     required this.tabCount,
     super.key,
-    this.opacities = const [],
     this.backgroundColor,
     this.avoidBottomPadding = true,
     this.margin = EdgeInsets.zero,
@@ -44,8 +43,6 @@ class PersistentTabViewScaffold extends StatefulWidget {
   final bool avoidBottomPadding;
 
   final EdgeInsets margin;
-
-  final List<double> opacities;
 
   final bool hideNavigationBar;
 
@@ -124,12 +121,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
 
   Widget buildTab(BuildContext context, int index) {
     double overlap = 0;
-    final bool isNotOpaque = index > widget.opacities.length
-        ? false
-        : widget.opacities[index] != 1.0;
-    if ((isNotOpaque && widget.navBarOverlap.fullOverlapWhenNotOpaque) ||
-        !_navBarFullyShown ||
-        widget.margin.bottom != 0) {
+    if (!_navBarFullyShown || widget.margin.bottom != 0) {
       overlap = double.infinity;
     } else {
       overlap = widget.navBarOverlap.overlap;

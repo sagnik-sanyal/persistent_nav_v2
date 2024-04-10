@@ -290,7 +290,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         stateManagement: widget.stateManagement,
         backgroundColor: widget.backgroundColor,
         navBarOverlap: widget.navBarOverlap,
-        opacities: widget.tabs.map((e) => e.item.opacity).toList(),
         screenTransitionAnimation: widget.screenTransitionAnimation,
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         avoidBottomPadding: widget.avoidBottomPadding,

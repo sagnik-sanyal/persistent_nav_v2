@@ -101,8 +101,6 @@ class Style14BottomNavBar extends StatelessWidget {
             const SizedBox(height: 23),
             DecoratedNavBar(
               decoration: navBarDecoration,
-              filter: navBarConfig.selectedItem.filter,
-              opacity: navBarConfig.selectedItem.opacity,
               height: navBarConfig.navBarHeight,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
