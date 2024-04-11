@@ -19,7 +19,7 @@ class CustomTabView extends StatefulWidget {
 class CustomTabViewState extends State<CustomTabView> {
   final HeroController _heroController =
       CupertinoApp.createCupertinoHeroController();
-  late List<NavigatorObserver?> _navigatorObservers;
+  late List<NavigatorObserver> _navigatorObservers;
 
   @override
   void initState() {
@@ -47,9 +47,10 @@ class CustomTabViewState extends State<CustomTabView> {
   @override
   Widget build(BuildContext context) => Navigator(
         key: widget.navigatorConfig.navigatorKey,
+        initialRoute: widget.navigatorConfig.initialRoute,
         onGenerateRoute: _onGenerateRoute,
         onUnknownRoute: _onUnknownRoute,
-        observers: _navigatorObservers as List<NavigatorObserver>,
+        observers: _navigatorObservers,
       );
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
