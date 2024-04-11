@@ -17,11 +17,17 @@ class NavBarDecoration extends BoxDecoration {
     super.backgroundBlendMode,
     super.shape,
     this.padding = const EdgeInsets.all(5),
+    this.filter,
   });
 
   /// `padding` for the persistent navigation bar content.
   @override
   final EdgeInsets padding;
+
+  /// Filter used when the opacity of the NavBarDecoration.color is < 1.
+  /// Can be used to create 'frosted glass' effect with
+  /// `ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0)`.
+  final ImageFilter? filter;
 
   double borderHeight() => border?.dimensions.vertical ?? 0.0;
 
