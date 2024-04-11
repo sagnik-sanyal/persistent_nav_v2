@@ -381,10 +381,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     if (!widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
       return widget.onWillPop!(_contextList[_controller.index]!);
     } else {
-      if (_controller.isOnInitialTab() &&
-          !_navigatorKeys.first.currentState!.canPop()) {
+      if (_controller.historyIsEmpty() &&
+          !_navigatorKeys[_controller.index].currentState!.canPop()) {
         if (widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
-          return widget.onWillPop!(_contextList.first!);
+          return widget.onWillPop!(_contextList[_controller.index]!);
         }
         // CanPop should be true in this case, so we dont return true because the pop already happened
         return false;
@@ -429,8 +429,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   bool calcCanPop({bool? subtreeCantHandlePop}) =>
       widget.handleAndroidBackButtonPress &&
       widget.onWillPop == null &&
-      _controller.isOnInitialTab() &&
-      _navigatorKeys[_controller.index].currentState != null &&
+      _controller.historyIsEmpty() &&
+      _navigatorKeys[_controller.index].currentState != null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ??
           !_navigatorKeys[_controller.index].currentState!.canPop());
 }

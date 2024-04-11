@@ -35,10 +35,31 @@ Future<void> tapAndroidBackButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+void expectScreen(int? id, {int screenCount = 3}) {
+  if (id == null) {
+    expect(find.text("MainScreen"), findsOne);
+  }
+
+  for (int i = 1; i <= screenCount; i++) {
+    expect(find.text("Screen$i").hitTestable(), id == i ? findsOneWidget : findsNothing);
+  }
+}
+
 void main() {
   Widget wrapTabView(WidgetBuilder builder) => MaterialApp(
         home: Builder(
           builder: (context) => builder(context),
+        ),
+      );
+
+  Widget wrapTabViewWithMainScreen(WidgetBuilder builder) => wrapTabView(
+        (context) => ElevatedButton(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => builder(context),
+            ),
+          ),
+          child: const Text("MainScreen"),
         ),
       );
 
@@ -318,6 +339,199 @@ void main() {
 
         expect(find.text("Screen1"), findsOneWidget);
         expect(find.text("Screen11"), findsNothing);
+      });
+
+      testWidgets("pops main screen when historyLength is 0", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller:
+                  PersistentTabController(initialIndex: 1, historyLength: 0),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tester.tap(find.text("Item1"));
+        await tester.pumpAndSettle();
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(null);
+      });
+
+      testWidgets("pops main screen when historyLength is 1", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+                (context) => PersistentTabView(
+              controller:
+              PersistentTabController(initialIndex: 1, historyLength: 1),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tester.tap(find.text("Item1"));
+        await tester.pumpAndSettle();
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(null);
+      });
+
+      testWidgets("pops main screen when historyLength is 1 and switched to initial tab", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+                (context) => PersistentTabView(
+              controller:
+              PersistentTabController(initialIndex: 1, historyLength: 1),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tester.tap(find.text("Item1"));
+        await tester.pumpAndSettle();
+        expectScreen(1);
+
+        await tester.tap(find.text("Item2"));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(null);
+      });
+
+      testWidgets("pops main screen when historyLength is 1 and initial tab has subpage", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+                (context) => PersistentTabView(
+              controller:
+              PersistentTabController(initialIndex: 1, historyLength: 1),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, id == 2 ? screenWithSubPages(id) : defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expect(find.text("SubPage"), findsOne);
+
+        await tester.tap(find.text("Item1"));
+        await tester.pumpAndSettle();
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expect(find.text("SubPage"), findsOne);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(null);
+      });
+
+      testWidgets("pops main screen when historyLength is 2", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+                (context) => PersistentTabView(
+              controller:
+              PersistentTabController(initialIndex: 1, historyLength: 2),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tester.tap(find.text("Item1"));
+        await tester.pumpAndSettle();
+        expectScreen(1);
+
+        await tester.tap(find.text("Item3"));
+        await tester.pumpAndSettle();
+        expectScreen(3);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(null);
+      });
+
+      testWidgets("pops main screen when historyLength is 2 and clearing history", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+                (context) => PersistentTabView(
+              controller:
+              PersistentTabController(initialIndex: 1, historyLength: 2, clearHistoryOnInitialIndex: true),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tester.tap(find.text("Item1"));
+        await tester.pumpAndSettle();
+        expectScreen(1);
+
+        await tester.tap(find.text("Item2"));
+        await tester.pumpAndSettle();
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(null);
       });
     });
 
