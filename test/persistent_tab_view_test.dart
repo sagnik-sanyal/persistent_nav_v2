@@ -41,7 +41,8 @@ void expectScreen(int? id, {int screenCount = 3}) {
   }
 
   for (int i = 1; i <= screenCount; i++) {
-    expect(find.text("Screen$i").hitTestable(), id == i ? findsOneWidget : findsNothing);
+    expect(find.text("Screen$i").hitTestable(),
+        id == i ? findsOneWidget : findsNothing);
   }
 }
 
@@ -371,9 +372,9 @@ void main() {
       testWidgets("pops main screen when historyLength is 1", (tester) async {
         await tester.pumpWidget(
           wrapTabViewWithMainScreen(
-                (context) => PersistentTabView(
+            (context) => PersistentTabView(
               controller:
-              PersistentTabController(initialIndex: 1, historyLength: 1),
+                  PersistentTabController(initialIndex: 1, historyLength: 1),
               tabs: [1, 2, 3]
                   .map((id) => tabConfig(id, defaultScreen(id)))
                   .toList(),
@@ -398,12 +399,14 @@ void main() {
         expectScreen(null);
       });
 
-      testWidgets("pops main screen when historyLength is 1 and switched to initial tab", (tester) async {
+      testWidgets(
+          "pops main screen when historyLength is 1 and switched to initial tab",
+          (tester) async {
         await tester.pumpWidget(
           wrapTabViewWithMainScreen(
-                (context) => PersistentTabView(
+            (context) => PersistentTabView(
               controller:
-              PersistentTabController(initialIndex: 1, historyLength: 1),
+                  PersistentTabController(initialIndex: 1, historyLength: 1),
               tabs: [1, 2, 3]
                   .map((id) => tabConfig(id, defaultScreen(id)))
                   .toList(),
@@ -429,14 +432,17 @@ void main() {
         expectScreen(null);
       });
 
-      testWidgets("pops main screen when historyLength is 1 and initial tab has subpage", (tester) async {
+      testWidgets(
+          "pops main screen when historyLength is 1 and initial tab has subpage",
+          (tester) async {
         await tester.pumpWidget(
           wrapTabViewWithMainScreen(
-                (context) => PersistentTabView(
+            (context) => PersistentTabView(
               controller:
-              PersistentTabController(initialIndex: 1, historyLength: 1),
+                  PersistentTabController(initialIndex: 1, historyLength: 1),
               tabs: [1, 2, 3]
-                  .map((id) => tabConfig(id, id == 2 ? screenWithSubPages(id) : defaultScreen(id)))
+                  .map((id) => tabConfig(
+                      id, id == 2 ? screenWithSubPages(id) : defaultScreen(id)))
                   .toList(),
               navBarBuilder: (config) =>
                   Style1BottomNavBar(navBarConfig: config),
@@ -469,9 +475,9 @@ void main() {
       testWidgets("pops main screen when historyLength is 2", (tester) async {
         await tester.pumpWidget(
           wrapTabViewWithMainScreen(
-                (context) => PersistentTabView(
+            (context) => PersistentTabView(
               controller:
-              PersistentTabController(initialIndex: 1, historyLength: 2),
+                  PersistentTabController(initialIndex: 1, historyLength: 2),
               tabs: [1, 2, 3]
                   .map((id) => tabConfig(id, defaultScreen(id)))
                   .toList(),
@@ -503,12 +509,16 @@ void main() {
         expectScreen(null);
       });
 
-      testWidgets("pops main screen when historyLength is 2 and clearing history", (tester) async {
+      testWidgets(
+          "pops main screen when historyLength is 2 and clearing history",
+          (tester) async {
         await tester.pumpWidget(
           wrapTabViewWithMainScreen(
-                (context) => PersistentTabView(
-              controller:
-              PersistentTabController(initialIndex: 1, historyLength: 2, clearHistoryOnInitialIndex: true),
+            (context) => PersistentTabView(
+              controller: PersistentTabController(
+                  initialIndex: 1,
+                  historyLength: 2,
+                  clearHistoryOnInitialIndex: true),
               tabs: [1, 2, 3]
                   .map((id) => tabConfig(id, defaultScreen(id)))
                   .toList(),

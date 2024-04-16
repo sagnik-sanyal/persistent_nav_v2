@@ -430,7 +430,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       widget.handleAndroidBackButtonPress &&
       widget.onWillPop == null &&
       _controller.historyIsEmpty() &&
-      _navigatorKeys[_controller.index].currentState != null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
+      _navigatorKeys[_controller.index].currentState !=
+          null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ??
           !_navigatorKeys[_controller.index].currentState!.canPop());
 }

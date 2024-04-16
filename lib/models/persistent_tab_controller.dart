@@ -22,7 +22,8 @@ class PersistentTabController extends ChangeNotifier {
         _clearHistoryOnInitialIndex = clearHistoryOnInitialIndex,
         _index = initialIndex,
         assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0"),
-        assert(historyLength >= 0, "Nav Bar history length cannot be less than 0");
+        assert(
+            historyLength >= 0, "Nav Bar history length cannot be less than 0");
 
   final int _initialIndex;
   final int _historyLength;
@@ -42,7 +43,9 @@ class PersistentTabController extends ChangeNotifier {
       if (_clearHistoryOnInitialIndex && value == _initialIndex) {
         _tabHistory.clear();
       } else {
-        if (_historyLength == 1 && _tabHistory.length == 1 && _tabHistory[0] == value) {
+        if (_historyLength == 1 &&
+            _tabHistory.length == 1 &&
+            _tabHistory[0] == value) {
           // Clear history when switching to initial tab and it is the only entry in history.
           _tabHistory.clear();
         } else if (_historyLength > 0) {
