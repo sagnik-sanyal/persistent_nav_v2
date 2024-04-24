@@ -410,7 +410,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         if (widget.popActionScreens == PopActionScreensType.once) {
           navigator.maybePop(context);
         } else {
-          navigator.popUntil(ModalRoute.withName(Navigator.defaultRouteName));
+          navigator.popUntil((route) => route.isFirst);
         }
       }
     }
