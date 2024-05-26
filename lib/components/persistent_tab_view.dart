@@ -77,7 +77,9 @@ class PersistentTabView extends StatefulWidget {
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
   final List<PersistentTabConfig> tabs;
 
-  /// Controller for persistent bottom navigation bar. Will be declared if left empty.
+  /// Controller for persistent bottom navigation bar. You can use this to e.g. change the selected tab programmatically. If you don't provide a controller, a new one will be created.
+  ///
+  /// **Important**: If you provide a controller, you are responsible for disposing it. If you don't provide a controller, the controller will be disposed automatically.
   final PersistentTabController? controller;
 
   /// Background color of the Tab View. If your tabs have transparent background
