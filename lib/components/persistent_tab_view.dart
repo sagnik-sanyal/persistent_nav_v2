@@ -404,15 +404,17 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   void popAllScreens() {
     if (widget.popAllScreensOnTapOfSelectedTab ||
         widget.popAllScreensOnTapAnyTabs) {
-      final navigator = _navigatorKeys[_controller.index].currentState!;
-      if (!navigator.canPop()) {
-        widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed
-            ?.call();
-      } else {
-        if (widget.popActionScreens == PopActionScreensType.once) {
-          navigator.maybePop(context);
+      final navigator = _navigatorKeys[_controller.index].currentState;
+      if (navigator != null) {
+        if (!navigator.canPop()) {
+          widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed
+              ?.call();
         } else {
-          navigator.popUntil((route) => route.isFirst);
+          if (widget.popActionScreens == PopActionScreensType.once) {
+            navigator.maybePop(context);
+          } else {
+            navigator.popUntil((route) => route.isFirst);
+          }
         }
       }
     }
@@ -425,5 +427,5 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       _navigatorKeys[_controller.index].currentState !=
           null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ??
-          !_navigatorKeys[_controller.index].currentState!.canPop());
+          !(_navigatorKeys[_controller.index].currentState?.canPop() ?? false));
 }
