@@ -326,9 +326,10 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                         index == widget.navigationShell!.currentIndex,
                   );
                 } else {
+                  final oldIndex = _controller.index;
                   _controller.jumpToTab(index);
                   if ((widget.popAllScreensOnTapOfSelectedTab &&
-                          _controller.index == index) ||
+                          oldIndex == index) ||
                       widget.popAllScreensOnTapAnyTabs) {
                     popAllScreens();
                   }
