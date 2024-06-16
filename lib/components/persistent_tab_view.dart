@@ -136,7 +136,9 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to `true`.
   final bool popAllScreensOnTapOfSelectedTab;
 
-  /// All the screens pushed on that particular tab will pop until the first screen in the stack, whether the tab is already selected or not. Defaults to `false`.
+  /// All the screens pushed on that particular tab will pop until the first
+  /// screen in the stack, whether the tab is already selected or not.
+  /// Defaults to `false`.
   final bool popAllScreensOnTapAnyTabs;
 
   /// If set all pop until to first screen else set once pop once
@@ -323,11 +325,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                     initialLocation: widget.popAllScreensOnTapOfSelectedTab &&
                         index == widget.navigationShell!.currentIndex,
                   );
-                } else if (widget.popAllScreensOnTapOfSelectedTab &&
-                    _controller.index == index) {
-                  popAllScreens();
                 } else {
                   _controller.jumpToTab(index);
+                  if ((widget.popAllScreensOnTapOfSelectedTab &&
+                          _controller.index == index) ||
+                      widget.popAllScreensOnTapAnyTabs) {
+                    popAllScreens();
+                  }
                 }
               }
             },
@@ -404,9 +408,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   void popAllScreens() {
-    if (widget.popAllScreensOnTapOfSelectedTab ||
-        widget.popAllScreensOnTapAnyTabs) {
-      final navigator = _navigatorKeys[_controller.index].currentState!;
+    final navigator = _navigatorKeys[_controller.index].currentState;
+    if (navigator != null) {
       if (!navigator.canPop()) {
         widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed
             ?.call();
@@ -427,5 +430,5 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       _navigatorKeys[_controller.index].currentState !=
           null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ??
-          !_navigatorKeys[_controller.index].currentState!.canPop());
+          !(_navigatorKeys[_controller.index].currentState?.canPop() ?? false));
 }
