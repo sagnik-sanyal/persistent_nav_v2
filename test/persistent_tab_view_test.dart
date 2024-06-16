@@ -798,28 +798,9 @@ void main() {
       );
     });
 
-    testWidgets("pops screens when tapping same tab if specified to do so",
+    testWidgets(
+        "doesnt pop all screens when tapping same tab when `popAllScreensOnTapOfSelectedTab: false`",
         (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: [1, 2, 3]
-                .map((id) => tabConfig(id, screenWithSubPages(id)))
-                .toList(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-          ),
-        ),
-      );
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsOneWidget);
-      expect(find.text("Screen11"), findsNothing);
-
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -868,6 +849,57 @@ void main() {
       expect(find.text("Screen1"), findsOneWidget);
       expect(find.text("Screen11"), findsNothing);
       expect(find.text("Screen111"), findsNothing);
+    });
+
+    testWidgets(
+        "doesnt pop all screens when tapping any tab when `popAllScreensOnTapAnyTabs: false`",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map((id) => tabConfig(id, screenWithSubPages(id)))
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+      expect(find.text("Screen1"), findsNothing);
+      expect(find.text("Screen11"), findsOneWidget);
+      await tester.tap(find.text("Item2"));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("Item1"));
+      await tester.pumpAndSettle();
+      expect(find.text("Screen1"), findsNothing);
+      expect(find.text("Screen11"), findsOneWidget);
+    });
+
+    testWidgets("pops all screens when tapping any tab when `popAllScreensOnTapAnyTabs: true`", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map((id) => tabConfig(id, screenWithSubPages(id)))
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            popAllScreensOnTapAnyTabs: true,
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+      expect(find.text("Screen1"), findsNothing);
+      expect(find.text("Screen11"), findsOneWidget);
+      await tester.tap(find.text("Item2"));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("Item1"));
+      await tester.pumpAndSettle();
+      expect(find.text("Screen1"), findsOneWidget);
+      expect(find.text("Screen11"), findsNothing);
     });
 
     testWidgets("persists screens while switching if stateManagement turned on",
