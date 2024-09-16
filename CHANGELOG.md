@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Improve documentation on the historyLength (https://github.com/jb3rndt/PersistentBottomNavBarV2/pull/138)
+
 ## [5.3.0] - 2024-07-06
 ### Fixed
 - Only dispose PersistentTabController if it is automatically created. If you pass your own, you are responsible to dispose it manually.
@@ -569,6 +573,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.0...HEAD
 [5.3.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.3...5.3.0
 [5.2.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.2...5.2.3
 [5.2.2]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.1...5.2.2

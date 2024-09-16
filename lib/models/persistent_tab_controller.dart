@@ -1,33 +1,35 @@
 part of "../persistent_bottom_nav_bar_v2.dart";
 
 /// Navigation bar controller for `PersistentTabView`.
-///
-/// [historyLength] is the number of tab switches that are kept in history.
-/// Switching to another tab will add another entry in history, overwriting previous entry if the history gets too big.
-/// Initial tab will always be on the first position in history.
-/// Pressing the back button will switch to previous tab from history.
-/// If [historyLength]=0 there will be no history, pressing back button will exit.
-/// If [historyLength]=1 there will be one entry kept in history, pressing back button will switch to initial tab, pressing again will exit.
-/// If [historyLength]=n there will be n entries kept in history, pressing back button will switch to previous tab.
-///
-/// [clearHistoryOnInitialIndex] specifies if history should be cleared when switching to initial tab.
-/// Clearing history means that next back button press will exit.
 class PersistentTabController extends ChangeNotifier {
+  /// Creates a navigation bar controller for `PersistentTabView`.
   PersistentTabController({
-    int initialIndex = 0,
-    int historyLength = 5,
-    bool clearHistoryOnInitialIndex = false,
-  })  : _initialIndex = initialIndex,
-        _historyLength = historyLength,
-        _clearHistoryOnInitialIndex = clearHistoryOnInitialIndex,
-        _index = initialIndex,
+    this.initialIndex = 0,
+    this.historyLength = 5,
+    this.clearHistoryOnInitialIndex = false,
+  })  : _index = initialIndex,
         assert(initialIndex >= 0, "Nav Bar item index cannot be less than 0"),
         assert(
-            historyLength >= 0, "Nav Bar history length cannot be less than 0");
+          historyLength >= 0,
+          "Nav Bar history length cannot be less than 0",
+        );
 
-  final int _initialIndex;
-  final int _historyLength;
-  final bool _clearHistoryOnInitialIndex;
+  final int initialIndex;
+
+  /// Number of tab switches that are kept in history.
+  /// When the history length is exceeded, the oldest entry after the initial tab is removed.
+  ///
+  /// Default is 5.
+  ///
+  /// If the history length is 0, the history is disabled. This effectively exits the app when the back button is pressed (and no pages are pushed on the current tab).
+  ///
+  /// If the history length is 1, the back button will switch to the initial tab and exit the app when pressed again.
+  ///
+  /// Any value greater than 1 will keep the history of the last [historyLength] - 1 tab switches and always return to the initial tab when the history is empty.
+  final int historyLength;
+
+  // This is used to clear the history when the initial index is selected. This way, the user can always immediately exit the app from the initial tab but keep the history when switching between tabs.
+  final bool clearHistoryOnInitialIndex;
   int get index => _index;
   int _index;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -40,19 +42,19 @@ class PersistentTabController extends ChangeNotifier {
       return;
     }
     if (!isUndo) {
-      if (_clearHistoryOnInitialIndex && value == _initialIndex) {
+      if (clearHistoryOnInitialIndex && value == initialIndex) {
         _tabHistory.clear();
       } else {
-        if (_historyLength == 1 &&
+        if (historyLength == 1 &&
             _tabHistory.length == 1 &&
             _tabHistory[0] == value) {
           // Clear history when switching to initial tab and it is the only entry in history.
           _tabHistory.clear();
-        } else if (_historyLength > 0) {
+        } else if (historyLength > 0) {
           _tabHistory.add(_index);
         }
 
-        if (_tabHistory.length > _historyLength) {
+        if (_tabHistory.length > historyLength) {
           _tabHistory.removeAt(1);
           if (_tabHistory.length > 1 && _tabHistory[0] == _tabHistory[1]) {
             _tabHistory.removeAt(1);

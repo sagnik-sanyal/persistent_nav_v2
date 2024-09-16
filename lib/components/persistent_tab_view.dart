@@ -126,9 +126,8 @@ class PersistentTabView extends StatefulWidget {
   /// Handles android back button actions. Defaults to `true`.
   ///
   /// Action based on scenarios:
-  /// 1. If the you are on the first tab with all screens popped of the given tab, the app will close.
-  /// 2. If you are on another tab with all screens popped of that given tab, you will be switched to first tab.
-  /// 3. If there are screens pushed on the selected tab, a screen will pop on a respective back button press.
+  /// 1. If there are screens pushed on the selected tab, it will pop one screen.
+  /// 2. If there are no screens pushed on the selected tab, it will go to the previous tab or exit the app, depending on what you set for [PersistentTabController.historyLength].
   final bool handleAndroidBackButtonPress;
 
   /// If an already selected tab is pressed/tapped again, all the screens pushed
