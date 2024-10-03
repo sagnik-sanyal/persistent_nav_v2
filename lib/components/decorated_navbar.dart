@@ -6,7 +6,7 @@ class DecoratedNavBar extends StatelessWidget {
     super.key,
     this.decoration = const NavBarDecoration(),
     ImageFilter? filter,
-    this.opacity = 1.0,
+    this.opacity = 1,
     this.height = kBottomNavigationBarHeight,
   }) : filter = filter ?? ImageFilter.blur(sigmaX: 3, sigmaY: 3);
 
@@ -32,7 +32,9 @@ class DecoratedNavBar extends StatelessWidget {
             ),
           DecoratedBox(
             decoration: decoration.copyWith(
-              color: decoration.color?.withOpacity(opacity),
+              color: opacity != 1
+                  ? decoration.color?.withOpacity(opacity)
+                  : decoration.color,
             ),
             child: SafeArea(
               top: false,
