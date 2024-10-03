@@ -23,6 +23,7 @@ if ! [[ -z $1 ]]; then
     git tag -a v$new_version -m "Version $new_version";
     git push;
     git push --tags;
+    dart pub publish;
     exit 0;
 else
     echo "Usage: $0 version number or major, minor, patch";
