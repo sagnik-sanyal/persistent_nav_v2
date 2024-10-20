@@ -828,36 +828,6 @@ void main() {
     });
 
     testWidgets(
-        "returns current screen context through selectedTabScreenContext",
-        (tester) async {
-      BuildContext? screenContext;
-
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            selectedTabContext: (context) => screenContext = context,
-          ),
-        ),
-      );
-
-      expect(
-        screenContext?.findAncestorWidgetOfExactType<Offstage>()?.offstage,
-        isFalse,
-      );
-      final BuildContext? oldContext = screenContext;
-      await tapItem(tester, 2);
-      expect(screenContext, isNot(equals(oldContext)));
-      expect(
-        screenContext?.findAncestorWidgetOfExactType<Offstage>()?.offstage,
-        isFalse,
-      );
-    });
-
-    testWidgets(
         "doesnt pop all screens when tapping same tab when `popAllScreensOnTapOfSelectedTab: false`",
         (tester) async {
       await tester.pumpWidget(

@@ -23,7 +23,6 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
-    this.selectedTabContext,
     this.popAllScreensOnTapOfSelectedTab = true,
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
@@ -55,7 +54,6 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
-    this.selectedTabContext,
     this.popAllScreensOnTapOfSelectedTab = true,
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
@@ -169,9 +167,6 @@ class PersistentTabView extends StatefulWidget {
   )
   final Future<bool> Function(BuildContext)? onWillPop;
 
-  /// Returns the context of the selected tab.
-  final Function(BuildContext)? selectedTabContext;
-
   /// Screen transition animation properties when switching tabs.
   final ScreenTransitionAnimation screenTransitionAnimation;
 
@@ -230,9 +225,7 @@ class PersistentTabView extends StatefulWidget {
 }
 
 class _PersistentTabViewState extends State<PersistentTabView> {
-  late List<BuildContext?> _contextList;
   late PersistentTabController _controller;
-  bool _sendScreenContext = false;
   late final List<GlobalKey<CustomTabViewState>> _tabKeys = List.generate(
     widget.tabs.length,
     (index) => GlobalKey<CustomTabViewState>(),
@@ -248,12 +241,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           initialIndex: widget.navigationShell?.currentIndex ?? 0,
         );
 
-    _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
-
     _controller.addListener(() {
-      if (widget.selectedTabContext != null) {
-        _sendScreenContext = true;
-      }
       if (mounted) {
         setState(() {
           canPop = calcCanPop();
@@ -261,12 +249,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       }
       widget.onTabChanged?.call(_controller.index);
     });
-
-    if (widget.selectedTabContext != null) {
-      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-        widget.selectedTabContext!(_contextList[_controller.index]!);
-      });
-    }
   }
 
   @override
@@ -290,14 +272,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   Widget _buildScreen(int index) => CustomTabView(
         key: _tabKeys[index],
         navigatorConfig: widget.tabs[index].navigatorConfig,
-        home: (screenContext) {
-          _contextList[index] = screenContext;
-          if (_sendScreenContext && index == _controller.index) {
-            _sendScreenContext = false;
-            widget.selectedTabContext!(_contextList[_controller.index]!);
-          }
-          return widget.tabs[index].screen;
-        },
+        home: (screenContext) => widget.tabs[index].screen,
       );
 
   Widget navigationBarWidget() => PersistentTabViewScaffold(
@@ -348,12 +323,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           ),
         ),
       );
-
   @override
   Widget build(BuildContext context) {
-    if (_contextList.length != widget.tabs.length) {
-      _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
-    }
     if (widget.navigationShell == null && widget.handleAndroidBackButtonPress) {
       return PopScope(
         canPop: canPop,

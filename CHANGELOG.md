@@ -1,17 +1,19 @@
-<!-- markdownlint-disable -->
-
-# Changelog
+<!-- markdownlint-disable --># Changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## \[Unreleased\]
 ### Changed
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
 - Removed ItemConfig.opacity. Use the opacity of NavBarDecoration.color instead
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
 - Removed default value of NavBarDecoration.filter to allow no filter at all
+
+## [Unreleased]
+### Removed
+- Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
 
 ## [5.3.1] - 2024-10-03
 ### Fixed
@@ -583,6 +585,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.1...HEAD
 [5.3.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.0...5.3.1
 [5.3.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.3...5.3.0
 [5.2.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.2...5.2.3

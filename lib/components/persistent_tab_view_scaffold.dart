@@ -386,10 +386,10 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   @override
   void initState() {
     super.initState();
-    _initAnimationControllers();
+    _initAnimationController();
   }
 
-  void _initAnimationControllers() {
+  void _initAnimationController() {
     _animationController = AnimationController(
       vsync: this,
       duration: widget.screenTransitionAnimation.duration,
@@ -531,8 +531,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
     if (lengthDiff != 0 ||
         oldWidget.screenTransitionAnimation !=
             widget.screenTransitionAnimation) {
-      //TODO: dispose old ones
-      _initAnimationControllers();
+      _animationController.dispose();
+      _initAnimationController();
       _focusActiveTab();
     }
     if (lengthDiff > 0) {
