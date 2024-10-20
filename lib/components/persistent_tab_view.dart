@@ -238,10 +238,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     (index) => GlobalKey<CustomTabViewState>(),
   );
   late bool canPop = widget.handleAndroidBackButtonPress;
-  late final _navigatorKeys = widget.tabs
-      .map((config) => config.navigatorConfig.navigatorKey)
-      .fillNullsWith((index) => GlobalKey<NavigatorState>())
-      .toList();
 
   @override
   void initState() {
@@ -293,8 +289,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
   Widget _buildScreen(int index) => CustomTabView(
         key: _tabKeys[index],
-        navigatorConfig: widget.tabs[index].navigatorConfig
-            .copyWith(navigatorKey: _navigatorKeys[index]),
+        navigatorConfig: widget.tabs[index].navigatorConfig,
         home: (screenContext) {
           _contextList[index] = screenContext;
           if (_sendScreenContext && index == _controller.index) {
@@ -397,7 +392,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   NavigatorState? _currentNavigatorState() =>
-      _navigatorKeys[_controller.index].currentState;
+      widget.tabs[_controller.index].navigatorConfig.navigatorKey.currentState;
 
   void popAllScreens() {
     final navigator = _currentNavigatorState();

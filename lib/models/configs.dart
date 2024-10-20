@@ -58,16 +58,18 @@ class PersistentTabConfig {
   PersistentTabConfig({
     required this.screen,
     required this.item,
-    this.navigatorConfig = const NavigatorConfig(),
+    NavigatorConfig? navigatorConfig,
     this.onSelectedTabPressWhenNoScreensPushed,
-  }) : onPressed = null;
+  })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
+        onPressed = null;
 
   PersistentTabConfig.noScreen({
     required this.item,
     required void Function(BuildContext) this.onPressed,
-    this.navigatorConfig = const NavigatorConfig(),
+    NavigatorConfig? navigatorConfig,
     this.onSelectedTabPressWhenNoScreensPushed,
-  }) : screen = Container();
+  })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
+        screen = Container();
 
   final Widget screen;
 
@@ -125,15 +127,15 @@ class NavBarConfig {
 }
 
 class NavigatorConfig {
-  const NavigatorConfig({
+  NavigatorConfig({
     this.defaultTitle,
     this.routes = const {},
     this.onGenerateRoute,
     this.onUnknownRoute,
     this.initialRoute,
     this.navigatorObservers = const <NavigatorObserver>[],
-    this.navigatorKey,
-  });
+    GlobalKey<NavigatorState>? navigatorKey,
+  }) : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>();
 
   final String? defaultTitle;
 
@@ -147,7 +149,7 @@ class NavigatorConfig {
 
   final List<NavigatorObserver> navigatorObservers;
 
-  final GlobalKey<NavigatorState>? navigatorKey;
+  final GlobalKey<NavigatorState> navigatorKey;
 
   NavigatorConfig copyWith({
     String? defaultTitle,
