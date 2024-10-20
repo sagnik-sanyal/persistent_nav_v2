@@ -266,27 +266,32 @@ void main() {
       expect(count, 2);
     });
 
-    testWidgets("executes onWillPop when exiting", (tester) async {
-      int count = 0;
+    testWidgets(
+        "executes onPopInvokedWithResult of enclosing PopScope when exiting",
+        (tester) async {
+      bool? popResult;
 
       await tester.pumpWidget(
         wrapTabView(
-          (context) => PersistentTabView(
-            tabs: [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            onWillPop: (context) async {
-              count++;
-              return true;
+          (context) => PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              popResult = didPop;
             },
+            child: PersistentTabView(
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
           ),
         ),
       );
 
       await tapAndroidBackButton(tester);
 
-      expect(count, 1);
+      expect(popResult, false);
     });
 
     group("should handle Android back button press and thus", () {
