@@ -569,6 +569,96 @@ void main() {
       });
     });
 
+    group("handles altering tabs at runtime when", () {
+      testWidgets("removing tabs", (tester) async {
+        final List<PersistentTabConfig> tabs = [
+          1,
+          2,
+          3,
+        ].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        expectScreen(1);
+        expect(find.byType(Icon), findsNWidgets(3));
+
+        tabs.removeAt(0);
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        expectScreen(2);
+        expect(find.byType(Icon), findsNWidgets(2));
+      });
+
+      testWidgets("removing and re-adding tabs", (tester) async {
+        final List<PersistentTabConfig> tabs = [
+          1,
+          2,
+          3,
+        ].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        expectScreen(1);
+        expect(find.byType(Icon), findsNWidgets(3));
+
+        tabs.removeAt(0);
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        expectScreen(2);
+        expect(find.byType(Icon), findsNWidgets(2));
+
+        tabs.insert(0, tabConfig(1, defaultScreen(1)));
+
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: tabs,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        expectScreen(1);
+        expect(find.byType(Icon), findsNWidgets(3));
+      });
+    });
+
     testWidgets("navBarPadding adds padding inside navBar", (tester) async {
       await tester.pumpWidget(
         wrapTabView(

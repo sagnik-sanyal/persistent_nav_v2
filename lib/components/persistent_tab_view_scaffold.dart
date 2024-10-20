@@ -372,7 +372,7 @@ class _TabSwitchingView extends StatefulWidget {
 class _TabSwitchingViewState extends State<_TabSwitchingView>
     with TickerProviderStateMixin {
   late final List<bool> shouldBuildTab =
-      List<bool>.filled(widget.tabCount, false);
+      List<bool>.filled(widget.tabCount, false, growable: true);
   final List<FocusScopeNode> tabFocusNodes = <FocusScopeNode>[];
   final List<FocusScopeNode> discardedNodes = <FocusScopeNode>[];
   late AnimationController _animationController;
@@ -527,11 +527,13 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   @override
   void didUpdateWidget(_TabSwitchingView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final int lengthDiff = widget.tabCount - shouldBuildTab.length;
+    final int lengthDiff = widget.tabCount - oldWidget.tabCount;
     if (lengthDiff != 0 ||
         oldWidget.screenTransitionAnimation !=
             widget.screenTransitionAnimation) {
+      //TODO: dispose old ones
       _initAnimationControllers();
+      _focusActiveTab();
     }
     if (lengthDiff > 0) {
       shouldBuildTab.addAll(List<bool>.filled(lengthDiff, false));
