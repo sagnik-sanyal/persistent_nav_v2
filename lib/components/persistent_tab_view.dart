@@ -234,7 +234,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         PersistentTabController(
           initialIndex: widget.navigationShell?.currentIndex ?? 0,
         );
-    _controller.onIndexChanged = widget.onTabChanged;
 
     _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
 
@@ -245,6 +244,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       if (mounted) {
         setState(() {});
       }
+      widget.onTabChanged?.call(_controller.index);
     });
 
     if (widget.selectedTabContext != null) {

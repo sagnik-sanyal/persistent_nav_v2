@@ -10,7 +10,6 @@ class PersistentTabController extends ChangeNotifier {
   int _index;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final List<int> _tabHistory = [];
-  ValueChanged<int>? onIndexChanged;
 
   void _updateIndex(int value, [bool isUndo = false]) {
     assert(value >= 0, "Nav Bar item index cannot be less than 0");
@@ -21,7 +20,6 @@ class PersistentTabController extends ChangeNotifier {
       _tabHistory.add(_index);
     }
     _index = value;
-    onIndexChanged?.call(value);
     notifyListeners();
   }
 
