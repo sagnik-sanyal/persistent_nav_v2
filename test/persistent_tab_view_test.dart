@@ -680,7 +680,7 @@ void main() {
 
       expect(
         tester.getSize(find.byType(CustomTabView).first).height,
-        equals(600),
+        equals(600 - kBottomNavigationBarHeight),
       );
     });
 
@@ -693,6 +693,7 @@ void main() {
                 .map((id) => tabConfig(id, defaultScreen(id)))
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            navBarOverlap: const NavBarOverlap.full(),
           ),
         ),
       );
@@ -709,7 +710,6 @@ void main() {
                 .map((id) => tabConfig(id, defaultScreen(id)))
                 .toList(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            navBarOverlap: const NavBarOverlap.none(),
           ),
         ),
       );

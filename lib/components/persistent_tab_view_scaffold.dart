@@ -155,6 +155,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
                   : widget.navBarOverlap.overlap != 0
                       ? MediaQuery.of(bodyContext).padding
                       : null,
+              viewInsets: EdgeInsets.zero,
             ),
             child: widget.navigationShell ??
                 (widget.gestureNavigationEnabled
