@@ -371,10 +371,8 @@ class _TabSwitchingView extends StatefulWidget {
 
 class _TabSwitchingViewState extends State<_TabSwitchingView>
     with TickerProviderStateMixin {
-  late final List<bool> shouldBuildTab =
-      List<bool>.filled(widget.tabCount, false, growable: true);
-  final List<FocusScopeNode> tabFocusNodes = <FocusScopeNode>[];
-  final List<FocusScopeNode> discardedNodes = <FocusScopeNode>[];
+  late final List<TabMetaData> tabMetaData =
+      List<TabMetaData>.generate(widget.tabCount, (index) => TabMetaData());
   late AnimationController _animationController;
   late Animation<double> _animation;
   late int _currentTabIndex = widget.currentTabIndex;
@@ -413,23 +411,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _focusActiveTab() {
-    if (tabFocusNodes.length != widget.tabCount) {
-      if (tabFocusNodes.length > widget.tabCount) {
-        discardedNodes.addAll(tabFocusNodes.sublist(widget.tabCount));
-        tabFocusNodes.removeRange(widget.tabCount, tabFocusNodes.length);
-      } else {
-        tabFocusNodes.addAll(
-          List<FocusScopeNode>.generate(
-            widget.tabCount - tabFocusNodes.length,
-            (index) => FocusScopeNode(
-              debugLabel:
-                  "$CupertinoTabScaffold Tab ${index + tabFocusNodes.length}",
-            ),
-          ),
-        );
-      }
-    }
-    FocusScope.of(context).setFirstFocus(tabFocusNodes[_currentTabIndex]);
+    FocusScope.of(context)
+        .setFirstFocus(tabMetaData[_currentTabIndex].focusNode);
   }
 
   void _startAnimation() {
@@ -476,17 +459,17 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
               (!_animation.isCompleted &&
                   index == _previousTabIndex &&
                   _showAnimation);
-          shouldBuildTab[index] =
-              active || (shouldBuildTab[index] && widget.stateManagement);
+          tabMetaData[index].shouldBuild = active ||
+              (tabMetaData[index].shouldBuild && widget.stateManagement);
 
           return Offstage(
             offstage: !active,
             child: TickerMode(
               enabled: active,
               child: FocusScope(
-                node: tabFocusNodes[index],
+                node: tabMetaData[index].focusNode,
                 child: Builder(
-                  builder: (context) => shouldBuildTab[index]
+                  builder: (context) => tabMetaData[index].shouldBuild
                       ? (_showAnimation
                           ? AnimatedBuilder(
                               animation: _animation,
@@ -533,30 +516,31 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
             widget.screenTransitionAnimation) {
       _animationController.dispose();
       _initAnimationController();
-      _focusActiveTab();
     }
     if (lengthDiff > 0) {
-      shouldBuildTab.addAll(List<bool>.filled(lengthDiff, false));
+      tabMetaData.addAll(
+        List<TabMetaData>.generate(lengthDiff, (index) => TabMetaData()),
+      );
     } else if (lengthDiff < 0) {
-      shouldBuildTab.removeRange(widget.tabCount, shouldBuildTab.length);
+      tabMetaData.skip(oldWidget.tabCount).forEach((tabMetaData) {
+        tabMetaData.focusNode.dispose();
+      });
+      tabMetaData.removeRange(widget.tabCount, tabMetaData.length);
     }
     if (widget.currentTabIndex != oldWidget.currentTabIndex) {
       _currentTabIndex = widget.currentTabIndex;
       _previousTabIndex = oldWidget.currentTabIndex;
-      _focusActiveTab();
       if (_showAnimation) {
         _startAnimation();
       }
     }
+    _focusActiveTab();
   }
 
   @override
   void dispose() {
-    for (FocusScopeNode focusScopeNode in tabFocusNodes) {
-      focusScopeNode.dispose();
-    }
-    for (FocusScopeNode focusScopeNode in discardedNodes) {
-      focusScopeNode.dispose();
+    for (final tabMetaData in tabMetaData) {
+      tabMetaData.focusNode.dispose();
     }
     _animationController.dispose();
     super.dispose();
@@ -588,4 +572,13 @@ class NCSizeTransition extends AnimatedWidget {
         heightFactor: max(sizeFactor.value, 0),
         child: child,
       );
+}
+
+class TabMetaData {
+  TabMetaData()
+      : shouldBuild = false,
+        focusNode = FocusScopeNode();
+
+  bool shouldBuild;
+  FocusScopeNode focusNode;
 }
