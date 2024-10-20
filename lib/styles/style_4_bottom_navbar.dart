@@ -49,8 +49,6 @@ class Style4BottomNavBar extends StatelessWidget {
         navBarConfig.items.length;
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      filter: navBarConfig.selectedItem.filter,
-      opacity: navBarConfig.selectedItem.opacity,
       height: navBarConfig.navBarHeight,
       child: Column(
         children: <Widget>[

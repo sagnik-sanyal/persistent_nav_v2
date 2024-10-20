@@ -109,8 +109,6 @@ class _Style9BottomNavBarState extends State<Style9BottomNavBar>
     }
     return DecoratedNavBar(
       decoration: widget.navBarDecoration,
-      filter: widget.navBarConfig.items[_selectedIndex].filter,
-      opacity: widget.navBarConfig.items[_selectedIndex].opacity,
       height: widget.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

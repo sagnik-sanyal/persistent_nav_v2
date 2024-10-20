@@ -12,8 +12,6 @@ class ItemConfig {
     this.inactiveForegroundColor = CupertinoColors.systemGrey,
     Color? activeColorSecondary,
     this.inactiveBackgroundColor = Colors.transparent,
-    this.opacity = 1.0,
-    this.filter,
     this.textStyle = const TextStyle(
       color: CupertinoColors.systemGrey,
       fontWeight: FontWeight.w400,
@@ -22,11 +20,7 @@ class ItemConfig {
     this.iconSize = 26.0,
   })  : inactiveIcon = inactiveIcon ?? icon,
         activeBackgroundColor =
-            activeColorSecondary ?? activeForegroundColor.withOpacity(0.2),
-        assert(
-          opacity >= 0 && opacity <= 1.0,
-          "Opacity must be between 0 and 1.0",
-        );
+            activeColorSecondary ?? activeForegroundColor.withOpacity(0.2);
 
   /// Icon for the bar item.
   final Widget icon;
@@ -48,18 +42,6 @@ class ItemConfig {
 
   /// Color for the item background if unselected (not used in every prebuilt style). Defaults to `Colors.transparent`
   final Color inactiveBackgroundColor;
-
-  /// Enables and controls the transparency effect of the entire NavBar when this tab is selected.
-  ///
-  /// `Warning: Screen will cover the entire extent of the display`
-  @Deprecated("Use the opacity of NavBarDecoration.color instead")
-  final double opacity;
-
-  /// Filter used when `opacity < 1.0`. Can be used to create 'frosted glass' effect.
-  ///
-  /// By default -> `ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0)`.
-  @Deprecated("Use NavBarDecoration.filter instead")
-  final ImageFilter? filter;
 
   /// `TextStyle` of the title's text. Defaults to `TextStyle(color: CupertinoColors.systemGrey, fontWeight: FontWeight.w400, fontSize: 12.0)`
   final TextStyle textStyle;

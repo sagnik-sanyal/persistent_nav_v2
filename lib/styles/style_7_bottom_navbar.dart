@@ -102,10 +102,6 @@ class _Style7BottomNavBarState extends State<Style7BottomNavBar>
     }
     return DecoratedNavBar(
       decoration: widget.navBarDecoration,
-      filter:
-          widget.navBarConfig.items[widget.navBarConfig.selectedIndex].filter,
-      opacity:
-          widget.navBarConfig.items[widget.navBarConfig.selectedIndex].opacity,
       height: widget.navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -8,7 +8,7 @@ enum PopActionScreensType { once, all }
 /// used styling properties.
 class NavBarDecoration extends BoxDecoration {
   const NavBarDecoration({
-    Color super.color = Colors.white,
+    super.color = Colors.white,
     super.image,
     super.border,
     super.borderRadius,
@@ -20,7 +20,7 @@ class NavBarDecoration extends BoxDecoration {
     this.filter,
   });
 
-  /// `padding` for the persistent navigation bar content.
+  /// `padding` for the NavigationBar content.
   @override
   final EdgeInsets padding;
 
