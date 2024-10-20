@@ -75,7 +75,6 @@ void main() {
                       (context) => pushScreen(
                         context,
                         screen: defaultScreen(id * 10 + (id % 10)),
-                        withNavBar: false,
                       ),
                     ),
                   ),
