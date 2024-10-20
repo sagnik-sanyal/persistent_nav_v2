@@ -28,6 +28,9 @@ class PersistentTabView extends StatefulWidget {
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
+    @Deprecated(
+      "Wrap [PersistentTabView] with [PopScope] instead. Look here for migration: https://docs.flutter.dev/release/breaking-changes/android-predictive-back",
+    )
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -57,6 +60,9 @@ class PersistentTabView extends StatefulWidget {
     this.popAllScreensOnTapAnyTabs = false,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
+    @Deprecated(
+      "Wrap [PersistentTabView] with [PopScope] instead. Look here for migration: https://docs.flutter.dev/release/breaking-changes/android-predictive-back",
+    )
     this.onWillPop,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -71,7 +77,9 @@ class PersistentTabView extends StatefulWidget {
   /// List of persistent bottom navigation bar items to be displayed in the navigation bar.
   final List<PersistentTabConfig> tabs;
 
-  /// Controller for persistent bottom navigation bar. Will be declared if left empty.
+  /// Controller for persistent bottom navigation bar. You can use this to e.g. change the selected tab programmatically. If you don't provide a controller, a new one will be created.
+  ///
+  /// **Important**: If you provide a controller, you are responsible for disposing it. If you don't provide a controller, the controller will be disposed automatically.
   final PersistentTabController? controller;
 
   /// Background color of the Tab View. If your tabs have transparent background
@@ -132,9 +140,8 @@ class PersistentTabView extends StatefulWidget {
   /// Handles android back button actions. Defaults to `true`.
   ///
   /// Action based on scenarios:
-  /// 1. If the you are on the first tab with all screens popped of the given tab, the app will close.
-  /// 2. If you are on another tab with all screens popped of that given tab, you will be switched to first tab.
-  /// 3. If there are screens pushed on the selected tab, a screen will pop on a respective back button press.
+  /// 1. If there are screens pushed on the selected tab, it will pop one screen.
+  /// 2. If there are no screens pushed on the selected tab, it will go to the previous tab or exit the app, depending on what you set for [PersistentTabController.historyLength].
   final bool handleAndroidBackButtonPress;
 
   /// If an already selected tab is pressed/tapped again, all the screens pushed
@@ -142,7 +149,9 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to `true`.
   final bool popAllScreensOnTapOfSelectedTab;
 
-  /// All the screens pushed on that particular tab will pop until the first screen in the stack, whether the tab is already selected or not. Defaults to `false`.
+  /// All the screens pushed on that particular tab will pop until the first
+  /// screen in the stack, whether the tab is already selected or not.
+  /// Defaults to `false`.
   final bool popAllScreensOnTapAnyTabs;
 
   /// If set all pop until to first screen else set once pop once
@@ -155,6 +164,9 @@ class PersistentTabView extends StatefulWidget {
 
   /// If you want to perform a custom action on Android when exiting the app,
   /// you can write your logic here. Returns context of the selected screen.
+  @Deprecated(
+    "Wrap [PersistentTabView] with [PopScope] instead. Look here for migration: https://docs.flutter.dev/release/breaking-changes/android-predictive-back",
+  )
   final Future<bool> Function(BuildContext)? onWillPop;
 
   /// Returns the context of the selected tab.
@@ -225,6 +237,12 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     widget.tabs.length,
     (index) => GlobalKey<CustomTabViewState>(),
   );
+  late bool canPop =
+      widget.handleAndroidBackButtonPress && widget.onWillPop == null;
+  late final _navigatorKeys = widget.tabs
+      .map((config) => config.navigatorConfig.navigatorKey)
+      .fillNullsWith((index) => GlobalKey<NavigatorState>())
+      .toList();
 
   @override
   void initState() {
@@ -242,7 +260,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         _sendScreenContext = true;
       }
       if (mounted) {
-        setState(() {});
+        setState(() {
+          canPop = calcCanPop();
+        });
       }
       widget.onTabChanged?.call(_controller.index);
     });
@@ -266,13 +286,16 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
   Widget _buildScreen(int index) => CustomTabView(
         key: _tabKeys[index],
-        navigatorConfig: widget.tabs[index].navigatorConfig,
+        navigatorConfig: widget.tabs[index].navigatorConfig
+            .copyWith(navigatorKey: _navigatorKeys[index]),
         home: (screenContext) {
           _contextList[index] = screenContext;
           if (_sendScreenContext && index == _controller.index) {
@@ -315,11 +338,14 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                     initialLocation: widget.popAllScreensOnTapOfSelectedTab &&
                         index == widget.navigationShell!.currentIndex,
                   );
-                } else if (widget.popAllScreensOnTapOfSelectedTab &&
-                    _controller.index == index) {
-                  popAllScreens();
                 } else {
+                  final oldIndex = _controller.index;
                   _controller.jumpToTab(index);
+                  if ((widget.popAllScreensOnTapOfSelectedTab &&
+                          oldIndex == index) ||
+                      widget.popAllScreensOnTapAnyTabs) {
+                    popAllScreens();
+                  }
                 }
               }
             },
@@ -335,20 +361,38 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     if (_contextList.length != widget.tabs.length) {
       _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
     }
-    if (widget.handleAndroidBackButtonPress || widget.onWillPop != null) {
+    if ((widget.handleAndroidBackButtonPress || widget.onWillPop != null) &&
+        widget.navigationShell == null) {
       return PopScope(
-        canPop: false,
+        canPop: canPop,
         onPopInvoked: (didPop) async {
           if (didPop) {
             return;
           }
-          final NavigatorState navigator = Navigator.of(context);
-          final bool shouldPop = await _canPopTabView();
+          final navigator = Navigator.of(context);
+          final shouldPop = await _canPopTabView();
+          // This is only used when onWillPop is provided
           if (shouldPop) {
-            navigator.pop();
+            if (navigator.canPop()) {
+              navigator.pop();
+            } else {
+              await SystemNavigator.pop();
+            }
           }
         },
-        child: navigationBarWidget(),
+        child: NotificationListener<NavigationNotification>(
+          onNotification: (notification) {
+            final newCanPop =
+                calcCanPop(subtreeCantHandlePop: !notification.canHandlePop);
+            if (newCanPop != canPop) {
+              setState(() {
+                canPop = newCanPop;
+              });
+            }
+            return false;
+          },
+          child: navigationBarWidget(),
+        ),
       );
     } else {
       return navigationBarWidget();
@@ -359,15 +403,16 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     if (!widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
       return widget.onWillPop!(_contextList[_controller.index]!);
     } else {
-      if (_controller.isOnInitialTab() &&
-          !Navigator.canPop(_contextList.first!)) {
+      final navigator = _navigatorKeys[_controller.index].currentState!;
+      if (_controller.historyIsEmpty() && !navigator.canPop()) {
         if (widget.handleAndroidBackButtonPress && widget.onWillPop != null) {
-          return widget.onWillPop!(_contextList.first!);
+          return widget.onWillPop!(_contextList[_controller.index]!);
         }
-        return true;
+        // CanPop should be true in this case, so we dont return true because the pop already happened
+        return false;
       } else {
-        if (Navigator.canPop(_contextList[_controller.index]!)) {
-          Navigator.pop(_contextList[_controller.index]!);
+        if (navigator.canPop()) {
+          navigator.pop();
         } else {
           _controller.jumpToPreviousTab();
         }
@@ -377,29 +422,27 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   }
 
   void popAllScreens() {
-    if (widget.popAllScreensOnTapOfSelectedTab ||
-        widget.popAllScreensOnTapAnyTabs) {
-      if (widget.tabs[_controller.index]
-                  .onSelectedTabPressWhenNoScreensPushed !=
-              null &&
-          !Navigator.of(_contextList[_controller.index]!).canPop()) {
-        widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed!();
-      }
-
-      if (widget.popActionScreens == PopActionScreensType.once) {
-        if (Navigator.of(_contextList[_controller.index]!).canPop()) {
-          Navigator.of(_contextList[_controller.index]!).pop(context);
-          return;
-        }
+    final navigator = _navigatorKeys[_controller.index].currentState;
+    if (navigator != null) {
+      if (!navigator.canPop()) {
+        widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed
+            ?.call();
       } else {
-        Navigator.popUntil(
-          _contextList[_controller.index]!,
-          ModalRoute.withName(
-            widget.tabs[_controller.index].navigatorConfig.initialRoute ??
-                Navigator.defaultRouteName,
-          ),
-        );
+        if (widget.popActionScreens == PopActionScreensType.once) {
+          navigator.maybePop(context);
+        } else {
+          navigator.popUntil((route) => route.isFirst);
+        }
       }
     }
   }
+
+  bool calcCanPop({bool? subtreeCantHandlePop}) =>
+      widget.handleAndroidBackButtonPress &&
+      widget.onWillPop == null &&
+      _controller.historyIsEmpty() &&
+      _navigatorKeys[_controller.index].currentState !=
+          null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
+      (subtreeCantHandlePop ??
+          !(_navigatorKeys[_controller.index].currentState?.canPop() ?? false));
 }

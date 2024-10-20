@@ -30,6 +30,7 @@ NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.
 - [Styling](#styling)
 - [Using a custom Navigation Bar](#using-a-custom-navigation-bar)
 - [Controlling the Navigation Bar programmatically](#controlling-the-navigation-bar-programmatically)
+- [Custom transition animation when switching pages](#custom-transition-animation-when-switching-pages)
 - [Navigation](#navigation)
   - [Router API](#router-api)
 - [Useful Tips](#useful-tips)
@@ -148,43 +149,45 @@ class CustomNavBar extends StatelessWidget {
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
 
-  CustomNavBar({
-    Key key,
-    @required this.navBarConfig,
+  const CustomNavBar({
+    super.key,
+    required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
-  }) : super(key: key);
+  });
 
   Widget _buildItem(ItemConfig item, bool isSelected) {
+    final title = item.title;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
+      children: [
         Expanded(
           child: IconTheme(
             data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeColorPrimary
-                    : item.inactiveColorPrimary),
+              size: item.iconSize,
+              color: isSelected
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
+            ),
             child: isSelected ? item.icon : item.inactiveIcon,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 15.0),
-          child: Material(
-            type: MaterialType.transparency,
-            child: FittedBox(
-              child: Text(
-                item.title,
-                style: item.textStyle.apply(
-                  color: isSelected
-                      ? item.activeColorPrimary
-                      : item.inactiveColorPrimary,
+        if (title != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0),
+            child: Material(
+              type: MaterialType.transparency,
+              child: FittedBox(
+                child: Text(
+                  title,
+                  style: item.textStyle.apply(
+                    color: isSelected
+                            ? item.activeForegroundColor
+                            : item.inactiveForegroundColor,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -192,27 +195,21 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedNavBar(
-      decoration: this.navBarDecoration,
-      filter: this.navBarConfig.selectedItem.filter,
-      opacity: this.navBarConfig.selectedItem.opacity,
-      height: this.navBarConfig.navBarHeight,
+      decoration: navBarDecoration,
+      height: navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarConfig.items.map((item) {
-          int index = this.navBarConfig.items.indexOf(item);
-          return Expanded(
-            child: InkWell(
-              onTap: () {
-                this.navBarConfig.onItemSelected(index); // This is the most important part. Without this, nothing would happen if you tap on an item.
-              },
-              child: _buildItem(
-                item,
-                this.navBarConfig.selectedIndex == index,
+        children: [
+          for (final (index, item) in navBarConfig.items.indexed)
+            Expanded(
+              child: InkWell(
+                // This is the most important part. Without this, nothing would happen if you tap on an item.
+                onTap: () => navBarConfig.onItemSelected(index),
+                child: _buildItem(item, navBarConfig.selectedIndex == index),
               ),
             ),
-          );
-        }).toList(),
+        ],
       ),
     );
   }
@@ -251,6 +248,24 @@ _controller.jumpToTab(2);
 // Navigate to the previously selected Table
 _controller.jumpToPreviousTab();
 
+```
+
+## Custom transition animation when switching pages
+
+When switching from one tab to another, the default behavior is a slide transition that slides the current page to the left or right and reveals the taget page by sliding it into the screen. You can customize this behavior by building your own animation, e.g. by fading out the current page and fading in the new one. To control the animation, you can pass a function to `PersistentTabView.animatedTabBuilder`. This function is a builder that builds the old page and the new page at the same time. That is why it gets the BuildContext as an argument, the index of the currently built tab, the progress of the animation, the new index, the old index and the actual page content as a child.
+
+This is what the default animation builder looks like:
+
+```dart
+ final double yOffset = newIndex > index
+     ? -animationValue
+     : (newIndex < index
+         ? animationValue
+         : (index < oldIndex ? animationValue - 1 : 1 - animationValue));
+ return FractionalTranslation(
+   translation: Offset(yOffset, 0),
+   child: child,
+ );
 ```
 
 ## Navigation

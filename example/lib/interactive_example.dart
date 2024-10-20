@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
-import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 import "package:example/screens.dart";
 import "package:example/settings.dart";
+import "package:flutter/material.dart";
+import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 class InteractiveExample extends StatefulWidget {
   const InteractiveExample({super.key});
@@ -83,7 +83,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           const ItemAnimation(),
           const NeumorphicProperties(),
         ),
-        floatingActionButton: IconButton(
+        floatingActionButton: FloatingActionButton(
           onPressed: () => showDialog(
             context: context,
             builder: (context) => Dialog(
@@ -95,7 +95,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
               ),
             ),
           ),
-          icon: const Icon(Icons.settings),
+          child: const Icon(Icons.settings),
         ),
         backgroundColor: Colors.green,
         margin: settings.margin,

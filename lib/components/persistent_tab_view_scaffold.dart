@@ -72,15 +72,15 @@ class PersistentTabViewScaffold extends StatefulWidget {
 
 class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
     with TickerProviderStateMixin {
-  late bool _navBarFullyShown;
+  late bool _navBarFullyShown = !widget.hideNavigationBar;
   late final AnimationController _hideNavBarAnimationController =
       AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 500),
   );
-  late final Animation<Offset> slideAnimation = Tween<Offset>(
-    begin: Offset.zero,
-    end: const Offset(0, 1),
+  late final Animation<double> _animation = Tween<double>(
+    begin: 1,
+    end: 0,
   ).animate(
     CurvedAnimation(
       parent: _hideNavBarAnimationController,
@@ -91,9 +91,8 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   @override
   void initState() {
     super.initState();
-    _navBarFullyShown = !widget.hideNavigationBar;
     if (widget.hideNavigationBar) {
-      _hideNavBarAnimationController.value = 1.0;
+      _hideNavBarAnimationController.value = 1;
     }
   }
 
@@ -149,37 +148,56 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
         key: widget.controller.scaffoldKey,
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         backgroundColor: widget.backgroundColor,
-        extendBody: true,
+        extendBody: widget.navBarOverlap.overlap != 0 || !_navBarFullyShown,
         floatingActionButton: widget.floatingActionButton,
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
         drawer: widget.drawer,
-        body: widget.navigationShell ??
-            (widget.gestureNavigationEnabled
-                ? _SwipableTabSwitchingView(
-                    currentTabIndex: widget.controller.index,
-                    tabCount: widget.tabCount,
-                    controller: widget.controller,
-                    tabBuilder: buildTab,
-                    stateManagement: widget.stateManagement,
-                    screenTransitionAnimation: widget.screenTransitionAnimation,
-                  )
-                : _TabSwitchingView(
-                    currentTabIndex: widget.controller.index,
-                    tabCount: widget.tabCount,
-                    tabBuilder: buildTab,
-                    stateManagement: widget.stateManagement,
-                    screenTransitionAnimation: widget.screenTransitionAnimation,
-                    animatedTabBuilder: widget.animatedTabBuilder,
-                  )),
-        bottomNavigationBar: SlideTransition(
-          position: slideAnimation,
+        body: Builder(
+          builder: (bodyContext) => MediaQuery(
+            data: MediaQuery.of(bodyContext).copyWith(
+              padding:
+                  _navBarFullyShown ? null : MediaQuery.of(context).padding,
+              viewPadding: !_navBarFullyShown
+                  ? MediaQuery.of(context).viewPadding
+                  : widget.navBarOverlap.overlap != 0
+                      ? MediaQuery.of(bodyContext).padding
+                      : null,
+            ),
+            child: widget.navigationShell ??
+                (widget.gestureNavigationEnabled
+                    ? _SwipableTabSwitchingView(
+                        currentTabIndex: widget.controller.index,
+                        tabCount: widget.tabCount,
+                        controller: widget.controller,
+                        tabBuilder: buildTab,
+                        stateManagement: widget.stateManagement,
+                        screenTransitionAnimation:
+                            widget.screenTransitionAnimation,
+                      )
+                    : _TabSwitchingView(
+                        currentTabIndex: widget.controller.index,
+                        tabCount: widget.tabCount,
+                        tabBuilder: buildTab,
+                        stateManagement: widget.stateManagement,
+                        screenTransitionAnimation:
+                            widget.screenTransitionAnimation,
+                        animatedTabBuilder: widget.animatedTabBuilder,
+                      )),
+          ),
+        ),
+        bottomNavigationBar: NCSizeTransition(
+          sizeFactor: _animation,
           child: Padding(
             padding: widget.margin,
-            child: MediaQuery.removePadding(
-              context: context,
-              // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
-              removeBottom: !widget.avoidBottomPadding,
+            child: MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                padding: !widget.avoidBottomPadding
+                    // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
+                    ? EdgeInsets.zero
+                    // The padding might have been consumed by the keyboard, so it is maintained here. Using maintainBottomViewPadding would require that in the DecoratedNavBar as well, but only if the bottom padding should not be avoided. So it is easier to just maintain the padding here.
+                    : MediaQuery.of(context).viewPadding,
+              ),
               child: SafeArea(
                 top: false,
                 right: false,
@@ -462,7 +480,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
         fit: StackFit.expand,
         children: List<Widget>.generate(widget.tabCount, (index) {
           final bool active = index == _currentTabIndex ||
-              (!_animation.isCompleted && index == _previousTabIndex);
+              (!_animation.isCompleted &&
+                  index == _previousTabIndex &&
+                  _showAnimation);
           shouldBuildTab[index] =
               active || (shouldBuildTab[index] && widget.stateManagement);
 
@@ -554,4 +574,23 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
           key: key,
           child: _buildScreens(),
         );
+}
+
+class NCSizeTransition extends AnimatedWidget {
+  const NCSizeTransition({
+    required Animation<double> sizeFactor,
+    super.key,
+    this.child,
+  }) : super(listenable: sizeFactor);
+
+  Animation<double> get sizeFactor => listenable as Animation<double>;
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) => Align(
+        alignment: Alignment.topCenter,
+        heightFactor: max(sizeFactor.value, 0),
+        child: child,
+      );
 }

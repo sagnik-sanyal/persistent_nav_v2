@@ -5,12 +5,12 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 class CustomTabView extends StatefulWidget {
   const CustomTabView({
     required this.navigatorConfig,
+    required this.home,
     super.key,
-    this.home,
   });
 
   final NavigatorConfig navigatorConfig;
-  final WidgetBuilder? home;
+  final WidgetBuilder home;
 
   @override
   CustomTabViewState createState() => CustomTabViewState();
@@ -19,7 +19,7 @@ class CustomTabView extends StatefulWidget {
 class CustomTabViewState extends State<CustomTabView> {
   final HeroController _heroController =
       CupertinoApp.createCupertinoHeroController();
-  late List<NavigatorObserver?> _navigatorObservers;
+  late List<NavigatorObserver> _navigatorObservers;
 
   @override
   void initState() {
@@ -47,17 +47,17 @@ class CustomTabViewState extends State<CustomTabView> {
   @override
   Widget build(BuildContext context) => Navigator(
         key: widget.navigatorConfig.navigatorKey,
+        initialRoute: widget.navigatorConfig.initialRoute,
         onGenerateRoute: _onGenerateRoute,
         onUnknownRoute: _onUnknownRoute,
-        observers: _navigatorObservers as List<NavigatorObserver>,
+        observers: _navigatorObservers,
       );
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     final String? name = settings.name;
-    final WidgetBuilder? pageContentBuilder =
-        name == Navigator.defaultRouteName && widget.home != null
-            ? widget.home
-            : widget.navigatorConfig.routes[name];
+    final WidgetBuilder? pageContentBuilder = name == Navigator.defaultRouteName
+        ? widget.home
+        : widget.navigatorConfig.routes[name];
 
     if (pageContentBuilder != null) {
       return PageRouteBuilder(

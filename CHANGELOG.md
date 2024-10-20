@@ -4,9 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [5.3.1] - 2024-10-03
+### Fixed
+- Improve documentation on the historyLength (https://github.com/jb3rndt/PersistentBottomNavBarV2/pull/138)
+- Fix opacity overriding NavBarDecoration color (https://github.com/jb3rndt/PersistentBottomNavBarV2/issues/181)
+
+## [5.3.0] - 2024-07-06
+### Fixed
+- Only dispose PersistentTabController if it is automatically created. If you pass your own, you are responsible to dispose it manually.
+- Handle popAllScreensOnTapAnyTabs correctly
+
+## [5.2.3] - 2024-04-24
+### Fixed
+- popAllScreensOnTapOfSelectedTab and onSelectedTabPressWhenNoScreensPushed did not work properly when an initialRoute was set for that tab
+
+## [5.2.2] - 2024-04-11
+### Fixed
+- NavigatorConfig.initialRoute did not get passed to the respective Navigator
+- Mark ItemConfig.color and filter as deprecated
+
+## [5.2.1] - 2024-04-10
+### Fixed
+- Navbar got clipped and thus didnt show a boxShadow
+
+## [5.2.0] - 2024-04-03
 ### Changed
-- Use `NavBarOverlap.none()` as the default for `navBarOverlap`
+- Mark onWillPop as deprecated
+
+### Fixed
+- Navigator.copyWith didn't properly copy the navigatorKey
+- Rewrite usage of PopScope by providing `canPop: true` when all child navigators are clear and the initial tab is selected to the give pop control to the ancestors or correctly pop/close the app if no parent PopScope exists (thus maintaining natural PopScope behavior)
+- PopScope now just blocks popping until the initial tab is selected and the child navigator cant be popped anymore
+
+## [5.1.0] - 2024-03-28
+### Fixed
+- Fix deprecation of colorScheme.background
+- The Main Scaffold only extends its body if necessary (full overlap or hidden navbar) to prevent unnecessary padding (equal to navbar height)
+- Replace NavBar SlideTransition with SizeTransition to correctly report its size to the Main Scaffold
+- Pass on the source padding to the Main Scaffold Body if the navbar is hidden
+- Pass the source viewPadding if navbar is hidden and the new body padding of the Main Scaffold as a new viewPadding to the tabs to ensure better placement of FABs on individual screens
+- Prevent Navbar jumping when keyboard opens because the keyboard consumes the MediaQuery.padding.bottom
+- Prevent Navbar jumping when keyboard opens because the keyboard consumes the MediaQuery.padding.bottom
+- Fix tabs overlaying each other if no transition animation should be shown
 
 ## [5.0.0] - 2024-03-13
 ### Added
@@ -535,7 +574,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
-[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...HEAD
+[5.3.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.0...5.3.1
+[5.3.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.3...5.3.0
+[5.2.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.2...5.2.3
+[5.2.2]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.1...5.2.2
+[5.2.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.0...5.2.1
+[5.2.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.1.0...5.2.0
+[5.1.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0...5.1.0
 [5.0.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.10...5.0.0
 [5.0.0-beta.10]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.9...5.0.0-beta.10
 [5.0.0-beta.9]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.0.0-beta.8...5.0.0-beta.9

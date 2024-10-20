@@ -1,8 +1,8 @@
+import "package:example/interactive_example.dart";
+import "package:example/screens.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
-import "package:example/interactive_example.dart";
-import "package:example/screens.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

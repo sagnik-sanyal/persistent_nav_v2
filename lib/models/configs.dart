@@ -52,11 +52,13 @@ class ItemConfig {
   /// Enables and controls the transparency effect of the entire NavBar when this tab is selected.
   ///
   /// `Warning: Screen will cover the entire extent of the display`
+  @Deprecated("Use the opacity of NavBarDecoration.color instead")
   final double opacity;
 
   /// Filter used when `opacity < 1.0`. Can be used to create 'frosted glass' effect.
   ///
   /// By default -> `ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0)`.
+  @Deprecated("Use NavBarDecoration.filter instead")
   final ImageFilter? filter;
 
   /// `TextStyle` of the title's text. Defaults to `TextStyle(color: CupertinoColors.systemGrey, fontWeight: FontWeight.w400, fontSize: 12.0)`
@@ -172,7 +174,7 @@ class NavigatorConfig {
     RouteFactory? onUnknownRoute,
     String? initialRoute,
     List<NavigatorObserver>? navigatorObservers,
-    GlobalKey<NavigatorState>? navigatorKeys,
+    GlobalKey<NavigatorState>? navigatorKey,
   }) =>
       NavigatorConfig(
         defaultTitle: defaultTitle ?? this.defaultTitle,
@@ -181,6 +183,6 @@ class NavigatorConfig {
         onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
         initialRoute: initialRoute ?? this.initialRoute,
         navigatorObservers: navigatorObservers ?? this.navigatorObservers,
-        navigatorKey: navigatorKey ?? navigatorKey,
+        navigatorKey: navigatorKey ?? this.navigatorKey,
       );
 }

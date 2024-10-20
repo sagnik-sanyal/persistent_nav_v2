@@ -22,7 +22,7 @@ Widget screenWithSubPages(int id) => id > 99
                   builder: (context) => screenWithSubPages(id * 10 + (id % 10)),
                 ),
               ),
-              child: const Text("SubPage"),
+              child: const Text("Push SubPage"),
             ),
           ),
         ],
@@ -35,13 +35,46 @@ Future<void> tapAndroidBackButton(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-void main() {
-  Widget wrapTabView(WidgetBuilder builder) => MaterialApp(
-        home: Builder(
-          builder: (context) => builder(context),
-        ),
-      );
+Future<void> tapElevatedButton(WidgetTester tester) async {
+  await tester.tap(find.byType(ElevatedButton));
+  await tester.pumpAndSettle();
+}
 
+Future<void> tapItem(WidgetTester tester, int id) async {
+  await tester.tap(find.text("Item$id"));
+  await tester.pumpAndSettle();
+}
+
+void expectScreen(int id, {int screenCount = 3}) {
+  find.byType(Text).hitTestable().evaluate().forEach((element) {
+    final Text text = element.widget as Text;
+    if (text.data?.startsWith("Screen") ?? false) {
+      expect(
+        text.data,
+        equals("Screen$id"),
+      );
+    }
+  });
+}
+
+Widget wrapTabView(WidgetBuilder builder) => MaterialApp(
+      home: Builder(
+        builder: (context) => builder(context),
+      ),
+    );
+
+Widget wrapTabViewWithMainScreen(WidgetBuilder builder) => wrapTabView(
+      (context) => ElevatedButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => builder(context),
+          ),
+        ),
+        child: const Text("Screen0"),
+      ),
+    );
+
+void main() {
   group("PersistentTabView", () {
     testWidgets("builds a DecoratedNavBar", (tester) async {
       await tester.pumpWidget(
@@ -70,24 +103,13 @@ void main() {
         ),
       );
 
-      expect(find.text("Screen1").hitTestable(), findsOneWidget);
-      expect(find.text("Screen2").hitTestable(), findsNothing);
-      expect(find.text("Screen3").hitTestable(), findsNothing);
-      await tester.tap(find.text("Item2"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen2").hitTestable(), findsOneWidget);
-      expect(find.text("Screen1").hitTestable(), findsNothing);
-      expect(find.text("Screen3").hitTestable(), findsNothing);
-      await tester.tap(find.text("Item3"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1").hitTestable(), findsNothing);
-      expect(find.text("Screen2").hitTestable(), findsNothing);
-      expect(find.text("Screen3").hitTestable(), findsOneWidget);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1").hitTestable(), findsOneWidget);
-      expect(find.text("Screen2").hitTestable(), findsNothing);
-      expect(find.text("Screen3").hitTestable(), findsNothing);
+      expectScreen(1);
+      await tapItem(tester, 2);
+      expectScreen(2);
+      await tapItem(tester, 3);
+      expectScreen(3);
+      await tapItem(tester, 1);
+      expectScreen(1);
     });
 
     testWidgets("hides the navbar when hideNavBar is true", (tester) async {
@@ -238,11 +260,9 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text("Item2"));
-      await tester.pumpAndSettle();
+      await tapItem(tester, 2);
       expect(count, 1);
-      await tester.tap(find.text("Item3"));
-      await tester.pumpAndSettle();
+      await tapItem(tester, 3);
       expect(count, 2);
     });
 
@@ -283,17 +303,13 @@ void main() {
           ),
         );
 
-        expect(find.text("Screen1").hitTestable(), findsOneWidget);
-        expect(find.text("Screen2").hitTestable(), findsNothing);
-        await tester.tap(find.text("Item2"));
-        await tester.pumpAndSettle();
-        expect(find.text("Screen1").hitTestable(), findsNothing);
-        expect(find.text("Screen2").hitTestable(), findsOneWidget);
+        expectScreen(1);
+        await tapItem(tester, 2);
+        expectScreen(2);
 
         await tapAndroidBackButton(tester);
 
-        expect(find.text("Screen1").hitTestable(), findsOneWidget);
-        expect(find.text("Screen2").hitTestable(), findsNothing);
+        expectScreen(1);
       });
 
       testWidgets("pops one screen on back button press", (tester) async {
@@ -309,8 +325,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(ElevatedButton));
-        await tester.pumpAndSettle();
+        await tapElevatedButton(tester);
         expect(find.text("Screen1"), findsNothing);
         expect(find.text("Screen11"), findsOneWidget);
 
@@ -319,10 +334,190 @@ void main() {
         expect(find.text("Screen1"), findsOneWidget);
         expect(find.text("Screen11"), findsNothing);
       });
+
+      testWidgets("pops main screen when historyLength is 0", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(historyLength: 0),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectScreen(1);
+
+        await tapItem(tester, 2);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(0);
+      });
+
+      testWidgets("pops main screen when historyLength is 1", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(historyLength: 1),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectScreen(1);
+
+        await tapItem(tester, 2);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(0);
+      });
+
+      testWidgets(
+          "pops main screen when historyLength is 1 and switched to initial tab",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(historyLength: 1),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectScreen(1);
+
+        await tapItem(tester, 2);
+        expectScreen(2);
+
+        await tapItem(tester, 1);
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(0);
+      });
+
+      testWidgets(
+          "pops main screen when historyLength is 1 and initial tab has subpage",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(historyLength: 1),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, screenWithSubPages(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectScreen(1);
+
+        await tapElevatedButton(tester);
+        expectScreen(11);
+
+        await tapItem(tester, 2);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(11);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(0);
+      });
+
+      testWidgets("pops main screen when historyLength is 2", (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(historyLength: 2),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectScreen(1);
+
+        await tapItem(tester, 2);
+        expectScreen(2);
+
+        await tapItem(tester, 3);
+        expectScreen(3);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(2);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(0);
+      });
+
+      testWidgets(
+          "pops main screen when historyLength is 2 and clearing history",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(
+                historyLength: 2,
+                clearHistoryOnInitialIndex: true,
+              ),
+              tabs: [1, 2, 3]
+                  .map((id) => tabConfig(id, defaultScreen(id)))
+                  .toList(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectScreen(1);
+
+        await tapItem(tester, 2);
+        expectScreen(2);
+
+        await tapItem(tester, 1);
+        expectScreen(1);
+
+        await tapAndroidBackButton(tester);
+        expectScreen(0);
+      });
     });
 
     group("should not handle Android back button press and thus", () {
-      testWidgets("does not switch to first tab on back button press",
+      testWidgets("does not switch the tab on back button press",
           (tester) async {
         await tester.pumpWidget(
           wrapTabView(
@@ -337,17 +532,13 @@ void main() {
           ),
         );
 
-        expect(find.text("Screen1").hitTestable(), findsOneWidget);
-        expect(find.text("Screen2").hitTestable(), findsNothing);
-        await tester.tap(find.text("Item2"));
-        await tester.pumpAndSettle();
-        expect(find.text("Screen1").hitTestable(), findsNothing);
-        expect(find.text("Screen2").hitTestable(), findsOneWidget);
+        expectScreen(1);
+        await tapItem(tester, 2);
+        expectScreen(2);
 
         await tapAndroidBackButton(tester);
 
-        expect(find.text("Screen1").hitTestable(), findsNothing);
-        expect(find.text("Screen2").hitTestable(), findsOneWidget);
+        expectScreen(2);
       });
 
       testWidgets("pops no screen on back button press", (tester) async {
@@ -364,15 +555,12 @@ void main() {
           ),
         );
 
-        await tester.tap(find.byType(ElevatedButton));
-        await tester.pumpAndSettle();
-        expect(find.text("Screen1"), findsNothing);
-        expect(find.text("Screen11"), findsOneWidget);
+        await tapElevatedButton(tester);
+        expectScreen(11);
 
         await tapAndroidBackButton(tester);
 
-        expect(find.text("Screen1"), findsNothing);
-        expect(find.text("Screen11"), findsOneWidget);
+        expectScreen(11);
       });
     });
 
@@ -413,6 +601,7 @@ void main() {
         equals(originalIconSize - 4 * 2),
       );
     });
+
     testWidgets("navBarPadding does not make navbar bigger", (tester) async {
       await tester.pumpWidget(
         wrapTabView(
@@ -565,8 +754,7 @@ void main() {
         isFalse,
       );
       final BuildContext? oldContext = screenContext;
-      await tester.tap(find.text("Item2"));
-      await tester.pumpAndSettle();
+      await tapItem(tester, 2);
       expect(screenContext, isNot(equals(oldContext)));
       expect(
         screenContext?.findAncestorWidgetOfExactType<Offstage>()?.offstage,
@@ -574,28 +762,9 @@ void main() {
       );
     });
 
-    testWidgets("pops screens when tapping same tab if specified to do so",
+    testWidgets(
+        "doesnt pop all screens when tapping same tab when `popAllScreensOnTapOfSelectedTab: false`",
         (tester) async {
-      await tester.pumpWidget(
-        wrapTabView(
-          (context) => PersistentTabView(
-            tabs: [1, 2, 3]
-                .map((id) => tabConfig(id, screenWithSubPages(id)))
-                .toList(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-          ),
-        ),
-      );
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsOneWidget);
-      expect(find.text("Screen11"), findsNothing);
-
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -608,14 +777,10 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
+      await tapElevatedButton(tester);
+      expectScreen(11);
+      await tapItem(tester, 1);
+      expectScreen(11);
     });
 
     testWidgets("pops all screens when tapping same tab", (tester) async {
@@ -630,20 +795,55 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsNothing);
-      expect(find.text("Screen111"), findsOneWidget);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsOneWidget);
-      expect(find.text("Screen11"), findsNothing);
-      expect(find.text("Screen111"), findsNothing);
+      await tapElevatedButton(tester);
+      expectScreen(11);
+      await tapElevatedButton(tester);
+      expectScreen(111);
+      await tapItem(tester, 1);
+      expectScreen(1);
+    });
+
+    testWidgets(
+        "doesnt pop all screens when tapping any tab when `popAllScreensOnTapAnyTabs: false`",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map((id) => tabConfig(id, screenWithSubPages(id)))
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      await tapElevatedButton(tester);
+      expectScreen(11);
+      await tapItem(tester, 2);
+      await tapItem(tester, 1);
+      expectScreen(11);
+    });
+
+    testWidgets(
+        "pops all screens when tapping any tab when `popAllScreensOnTapAnyTabs: true`",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map((id) => tabConfig(id, screenWithSubPages(id)))
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            popAllScreensOnTapAnyTabs: true,
+          ),
+        ),
+      );
+
+      await tapElevatedButton(tester);
+      expectScreen(11);
+      await tapItem(tester, 2);
+      await tapItem(tester, 1);
+      expectScreen(1);
     });
 
     testWidgets("persists screens while switching if stateManagement turned on",
@@ -659,18 +859,12 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1").hitTestable(), findsNothing);
-      expect(find.text("Screen11").hitTestable(), findsOneWidget);
-      await tester.tap(find.text("Item2"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen2").hitTestable(), findsOneWidget);
-      expect(find.text("Screen11").hitTestable(), findsNothing);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1").hitTestable(), findsNothing);
-      expect(find.text("Screen11").hitTestable(), findsOneWidget);
+      await tapElevatedButton(tester);
+      expectScreen(11);
+      await tapItem(tester, 2);
+      expectScreen(2);
+      await tapItem(tester, 1);
+      expectScreen(11);
     });
 
     testWidgets("trashes screens while switching if stateManagement turned off",
@@ -687,18 +881,12 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen1"), findsNothing);
-      expect(find.text("Screen11"), findsOneWidget);
-      await tester.tap(find.text("Item2"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen2"), findsOneWidget);
-      expect(find.text("Screen11"), findsNothing);
-      await tester.tap(find.text("Item1"));
-      await tester.pumpAndSettle();
-      expect(find.text("Screen11"), findsNothing);
-      expect(find.text("Screen1"), findsOneWidget);
+      await tapElevatedButton(tester);
+      expectScreen(11);
+      await tapItem(tester, 2);
+      expectScreen(2);
+      await tapItem(tester, 1);
+      expectScreen(1);
     });
 
     testWidgets("shows FloatingActionButton if specified", (tester) async {
@@ -738,7 +926,7 @@ void main() {
       Offset topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
       await tester.tapAt(topCenter.translate(0, -10));
       await tester.pumpAndSettle();
-      expect(find.text("Screen2"), findsOneWidget);
+      expectScreen(2);
 
       await tester.pumpWidget(
         wrapTabView(
@@ -755,7 +943,7 @@ void main() {
       topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
       await tester.tapAt(topCenter.translate(0, -10));
       await tester.pumpAndSettle();
-      expect(find.text("Screen2"), findsOneWidget);
+      expectScreen(2);
     });
   });
 
