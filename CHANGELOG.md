@@ -1,19 +1,21 @@
-<!-- markdownlint-disable --># Changelog
-All notable changes to this project will be documented in this file.
+# ChangelogAll notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## \[Unreleased\]
+## [Unreleased]
 ### Changed
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
 - Removed ItemConfig.opacity. Use the opacity of NavBarDecoration.color instead
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
-- Removed default value of NavBarDecoration.filter to allow no filter at all
+- Removed default value of NavBarDecoration.filter to allow omitting any filter
 
-## [Unreleased]
+### Fixed
+- Adjusting the number of tabs at runtime threw an error
+
 ### Removed
 - Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
+- Removed `PersistentTabController.onIndexChanged`. Use `listen` instead.
 
 ## [5.3.1] - 2024-10-03
 ### Fixed
