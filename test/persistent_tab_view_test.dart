@@ -8,6 +8,18 @@ PersistentTabConfig tabConfig(int id, Widget screen) => PersistentTabConfig(
     );
 
 Widget defaultScreen(int id) => Text("Screen$id");
+Widget scrollableScreen(int id) => ListView(
+      children: [
+        Text("Screen$id"),
+        ...List.generate(
+          40,
+          (id) => Container(
+            padding: const EdgeInsets.all(16),
+            child: Text("Item $id"),
+          ),
+        ),
+      ],
+    );
 
 Widget screenWithSubPages(int id) => id > 99
     ? defaultScreen(id)
@@ -657,6 +669,55 @@ void main() {
         expectScreen(1);
         expect(find.byType(Icon), findsNWidgets(3));
       });
+    });
+
+    testWidgets(
+        "hides nav bar after the specified amount of pixels have been scrolled",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [1, 2, 3]
+                .map((id) => tabConfig(id, scrollableScreen(id)))
+                .toList(),
+            navBarBuilder: (config) => Style1BottomNavBar(
+              navBarConfig: config,
+            ),
+            hideOnScrollVelocity: 200,
+          ),
+        ),
+      );
+
+      final initialHeight =
+          tester.getSize(find.byType(DecoratedNavBar).first).height;
+
+      final gesture = await tester.startGesture(const Offset(0, 200));
+
+      await gesture.moveBy(const Offset(0, -100));
+      await tester.pumpAndSettle();
+      expect(
+        find.byType(DecoratedNavBar).hitTestable(at: Alignment.topCenter),
+        findsOneWidget,
+      );
+      expect(
+        (tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600)
+            .toStringAsPrecision(2),
+        equals(
+          (Curves.ease.transform(0.5) * initialHeight).toStringAsPrecision(2),
+        ),
+      );
+
+      await gesture.moveBy(const Offset(0, -100));
+      await tester.pumpAndSettle();
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
+
+      await gesture.moveBy(const Offset(0, 200));
+      await tester.pumpAndSettle();
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(DecoratedNavBar).first).height,
+        equals(initialHeight),
+      );
     });
 
     testWidgets("navBarPadding adds padding inside navBar", (tester) async {

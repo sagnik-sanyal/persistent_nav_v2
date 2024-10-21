@@ -30,6 +30,7 @@ class PersistentTabView extends StatefulWidget {
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
     this.hideNavigationBar = false,
+    this.hideOnScrollVelocity = 0,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
     this.drawer,
     this.drawerEdgeDragWidth,
@@ -55,6 +56,7 @@ class PersistentTabView extends StatefulWidget {
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
     this.stateManagement = true,
+    this.hideOnScrollVelocity = 0,
     this.handleAndroidBackButtonPress = true,
     this.hideNavigationBar = false,
     this.drawer,
@@ -154,6 +156,13 @@ class PersistentTabView extends StatefulWidget {
 
   /// Screen transition animation properties when switching tabs.
   final ScreenTransitionAnimation screenTransitionAnimation;
+
+  /// Use this to hide the navigation bar when the user scrolls down and show
+  /// it when the user scrolls up. This feature will be enabled if you provide
+  /// a value greater than 0. Defaults to `0`. Recommended value is `200`. This
+  /// means that the user has to scroll 200 pixels in the opposite direction to
+  /// hide/show the navigation bar.
+  final int hideOnScrollVelocity;
 
   /// Hides the navigation bar with a transition animation. Defaults to `false`.
   final bool hideNavigationBar;
@@ -263,6 +272,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   Widget navigationBarWidget() => PersistentTabViewScaffold(
         controller: _controller,
         hideNavigationBar: widget.hideNavigationBar,
+        hideOnScrollVelocity: widget.hideOnScrollVelocity,
         tabCount: widget.tabs.length,
         stateManagement: widget.stateManagement,
         backgroundColor: widget.backgroundColor,

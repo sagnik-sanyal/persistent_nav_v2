@@ -1,9 +1,11 @@
 # ChangelogAll notable changes to this project will be documented in this file.
-
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Hide the NavBar on scroll: Set `hideOnScrollVelocity` to x (x != 0) to make the NavBar disappear after x pixels have been scrolled (and reappear respectively)
+
 ### Changed
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
 - Removed ItemConfig.opacity. Use the opacity of NavBarDecoration.color instead

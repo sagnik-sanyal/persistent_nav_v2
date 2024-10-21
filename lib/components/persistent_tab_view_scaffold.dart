@@ -15,6 +15,7 @@ class PersistentTabViewScaffold extends StatefulWidget {
     this.gestureNavigationEnabled = false,
     this.screenTransitionAnimation = const ScreenTransitionAnimation(),
     this.hideNavigationBar = false,
+    this.hideOnScrollVelocity = 0,
     this.navBarOverlap = const NavBarOverlap.full(),
     this.floatingActionButton,
     this.floatingActionButtonLocation,
@@ -45,6 +46,8 @@ class PersistentTabViewScaffold extends StatefulWidget {
   final EdgeInsets margin;
 
   final bool hideNavigationBar;
+
+  final int hideOnScrollVelocity;
 
   final bool stateManagement;
 
@@ -136,67 +139,83 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        key: widget.controller.scaffoldKey,
-        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        backgroundColor: widget.backgroundColor,
-        extendBody: widget.navBarOverlap.overlap != 0 || !_navBarFullyShown,
-        floatingActionButton: widget.floatingActionButton,
-        floatingActionButtonLocation: widget.floatingActionButtonLocation,
-        drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
-        drawer: widget.drawer,
-        body: Builder(
-          builder: (bodyContext) => MediaQuery(
-            data: MediaQuery.of(bodyContext).copyWith(
-              padding:
-                  _navBarFullyShown ? null : MediaQuery.of(context).padding,
-              viewPadding: !_navBarFullyShown
-                  ? MediaQuery.of(context).viewPadding
-                  : widget.navBarOverlap.overlap != 0
-                      ? MediaQuery.of(bodyContext).padding
-                      : null,
-              viewInsets: EdgeInsets.zero,
-            ),
-            child: widget.navigationShell ??
-                (widget.gestureNavigationEnabled
-                    ? _SwipableTabSwitchingView(
-                        currentTabIndex: widget.controller.index,
-                        tabCount: widget.tabCount,
-                        controller: widget.controller,
-                        tabBuilder: buildTab,
-                        stateManagement: widget.stateManagement,
-                        screenTransitionAnimation:
-                            widget.screenTransitionAnimation,
-                      )
-                    : _TabSwitchingView(
-                        currentTabIndex: widget.controller.index,
-                        tabCount: widget.tabCount,
-                        tabBuilder: buildTab,
-                        stateManagement: widget.stateManagement,
-                        screenTransitionAnimation:
-                            widget.screenTransitionAnimation,
-                        animatedTabBuilder: widget.animatedTabBuilder,
-                      )),
-          ),
-        ),
-        bottomNavigationBar: NCSizeTransition(
-          sizeFactor: _animation,
-          child: Padding(
-            padding: widget.margin,
-            child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                padding: !widget.avoidBottomPadding
-                    // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
-                    ? EdgeInsets.zero
-                    // The padding might have been consumed by the keyboard, so it is maintained here. Using maintainBottomViewPadding would require that in the DecoratedNavBar as well, but only if the bottom padding should not be avoided. So it is easier to just maintain the padding here.
-                    : MediaQuery.of(context).viewPadding,
+  Widget build(BuildContext context) => HideOnScroll(
+        hideOnScrollVelocity: widget.hideOnScrollVelocity,
+        onScroll: (offsetPercentage) {
+          final currentValue = _hideNavBarAnimationController.value;
+          if (currentValue < 1 && offsetPercentage > 0) {
+            // Hide NavBar
+            _hideNavBarAnimationController.value =
+                min(currentValue + offsetPercentage, 1);
+          } else if (currentValue > 0 && offsetPercentage < 0) {
+            // Reveal NavBar
+            _hideNavBarAnimationController.value =
+                max(currentValue + offsetPercentage, 0);
+          }
+        },
+        child: Scaffold(
+          key: widget.controller.scaffoldKey,
+          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+          backgroundColor: widget.backgroundColor,
+          extendBody: widget.navBarOverlap.overlap != 0 || !_navBarFullyShown,
+          floatingActionButton: widget.floatingActionButton,
+          floatingActionButtonLocation: widget.floatingActionButtonLocation,
+          drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+          drawer: widget.drawer,
+          body: Builder(
+            builder: (bodyContext) => MediaQuery(
+              data: MediaQuery.of(bodyContext).copyWith(
+                padding:
+                    _navBarFullyShown ? null : MediaQuery.of(context).padding,
+                viewPadding: !_navBarFullyShown
+                    ? MediaQuery.of(context).viewPadding
+                    : widget.navBarOverlap.overlap != 0
+                        ? MediaQuery.of(bodyContext).padding
+                        : null,
+                viewInsets: EdgeInsets.zero,
               ),
-              child: SafeArea(
-                top: false,
-                right: false,
-                left: false,
-                bottom: widget.avoidBottomPadding && widget.margin.bottom != 0,
-                child: widget.tabBar,
+              child: widget.navigationShell ??
+                  (widget.gestureNavigationEnabled
+                      ? _SwipableTabSwitchingView(
+                          currentTabIndex: widget.controller.index,
+                          tabCount: widget.tabCount,
+                          controller: widget.controller,
+                          tabBuilder: buildTab,
+                          stateManagement: widget.stateManagement,
+                          screenTransitionAnimation:
+                              widget.screenTransitionAnimation,
+                        )
+                      : _TabSwitchingView(
+                          currentTabIndex: widget.controller.index,
+                          tabCount: widget.tabCount,
+                          tabBuilder: buildTab,
+                          stateManagement: widget.stateManagement,
+                          screenTransitionAnimation:
+                              widget.screenTransitionAnimation,
+                          animatedTabBuilder: widget.animatedTabBuilder,
+                        )),
+            ),
+          ),
+          bottomNavigationBar: NCSizeTransition(
+            sizeFactor: _animation,
+            child: Padding(
+              padding: widget.margin,
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  padding: !widget.avoidBottomPadding
+                      // safespace should be ignored, so the bottom inset is removed before it could be applied by any safearea child (e.g. in DecoratedNavBar).
+                      ? EdgeInsets.zero
+                      // The padding might have been consumed by the keyboard, so it is maintained here. Using maintainBottomViewPadding would require that in the DecoratedNavBar as well, but only if the bottom padding should not be avoided. So it is easier to just maintain the padding here.
+                      : MediaQuery.of(context).viewPadding,
+                ),
+                child: SafeArea(
+                  top: false,
+                  right: false,
+                  left: false,
+                  bottom:
+                      widget.avoidBottomPadding && widget.margin.bottom != 0,
+                  child: widget.tabBar,
+                ),
               ),
             ),
           ),
@@ -219,6 +238,42 @@ class PersistentTab extends StatelessWidget {
         padding: EdgeInsets.only(bottom: bottomMargin),
         child: child,
       );
+}
+
+class HideOnScroll extends StatefulWidget {
+  const HideOnScroll({
+    required this.onScroll,
+    required this.child,
+    super.key,
+    this.hideOnScrollVelocity = 0,
+  });
+
+  final int hideOnScrollVelocity;
+  final Widget child;
+  final Function(double) onScroll;
+
+  @override
+  State<HideOnScroll> createState() => _HideOnScrollState();
+}
+
+class _HideOnScrollState extends State<HideOnScroll> {
+  double scrollOffset = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.hideOnScrollVelocity == 0) {
+      return widget.child;
+    }
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollInfo) {
+        final diff = scrollInfo.metrics.pixels - scrollOffset;
+        scrollOffset = scrollInfo.metrics.pixels;
+        widget.onScroll(diff / widget.hideOnScrollVelocity);
+        return true;
+      },
+      child: widget.child,
+    );
+  }
 }
 
 class _SwipableTabSwitchingView extends StatefulWidget {
