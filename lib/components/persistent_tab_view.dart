@@ -24,7 +24,7 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
     this.popAllScreensOnTapOfSelectedTab = true,
-    this.popAllScreensOnTapAnyTabs = false,
+    this.keepNavigatorHistory = true,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
     this.stateManagement = true,
@@ -52,7 +52,7 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
     this.popAllScreensOnTapOfSelectedTab = true,
-    this.popAllScreensOnTapAnyTabs = false,
+    this.keepNavigatorHistory = true,
     this.popActionScreens = PopActionScreensType.all,
     this.avoidBottomPadding = true,
     this.stateManagement = true,
@@ -141,18 +141,19 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to `true`.
   final bool popAllScreensOnTapOfSelectedTab;
 
-  /// All the screens pushed on that particular tab will pop until the first
-  /// screen in the stack, whether the tab is already selected or not.
-  /// Defaults to `false`.
-  final bool popAllScreensOnTapAnyTabs;
-
   /// If set all pop until to first screen else set once pop once
   final PopActionScreensType? popActionScreens;
 
   final bool resizeToAvoidBottomInset;
 
-  /// Preserves the state of each tab's screen. `true` by default.
+  /// Preserves the state of each tab's screen, including pushed screens inside that tab. `true` by default.
+  /// If you only want to preserve the state of each tab but not the screens pushed inside that tab, set `keepNavigatorHistory` to `false`.
   final bool stateManagement;
+
+  /// If set to `false`, the history of each tab's navigator will be cleared when switching tabs. Defaults to `true`.
+  ///
+  /// NOTE: This will only have an effect if `stateManagement` is set to `true`.
+  final bool keepNavigatorHistory;
 
   /// Screen transition animation properties when switching tabs.
   final ScreenTransitionAnimation screenTransitionAnimation;
@@ -309,7 +310,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                   _controller.jumpToTab(index);
                   if ((widget.popAllScreensOnTapOfSelectedTab &&
                           oldIndex == index) ||
-                      widget.popAllScreensOnTapAnyTabs) {
+                      !widget.keepNavigatorHistory) {
                     popAllScreens();
                   }
                 }
