@@ -72,9 +72,10 @@ Note: These do not include all style variations
 - Each style is fully customizable ([see below](#styling))
 - Supports custom navigation bars
 - Persistent Tabs -> Navigation Stack is not discarded when switching to another tab
-- Supports transparency and blur effects
+- Optionally hide the navigation bar once the user scrolls down
 - Handles hardware/software Android back button.
 - Supports [go_router](https://pub.dev/packages/go_router) to make use of flutters Router API
+- Supports transparency and blur effects
 
 ## Getting Started
 
