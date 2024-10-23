@@ -59,7 +59,7 @@ class PersistentTabConfig {
     required this.screen,
     required this.item,
     NavigatorConfig? navigatorConfig,
-    this.onSelectedTabPressWhenNoScreensPushed,
+    this.scrollController,
   })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
         onPressed = null;
 
@@ -67,7 +67,7 @@ class PersistentTabConfig {
     required this.item,
     required void Function(BuildContext) this.onPressed,
     NavigatorConfig? navigatorConfig,
-    this.onSelectedTabPressWhenNoScreensPushed,
+    this.scrollController,
   })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
         screen = Container();
 
@@ -77,21 +77,43 @@ class PersistentTabConfig {
 
   final NavigatorConfig navigatorConfig;
 
-  /// If you want custom behavior on a press of a NavBar item like display a modal screen, you can declare your logic here.
+  /// Use this if you want an item in your navigation bar to perform an action instead of showing a tab. Example: display a modal screen.
   ///
   /// NOTE: This will override the default tab switiching behavior for this particular item.
   final void Function(BuildContext)? onPressed;
 
-  /// Use it when you want to run some code when user presses the NavBar when on the initial screen of that respective tab. The inspiration was taken from the native iOS navigation bar behavior where when performing similar operation, you taken to the top of the list.
+  /// This is required for each tab that should scroll to the top when the tab is pressed again. Pass the scroll controller of the content of the tab.
+  final ScrollController? scrollController;
+}
+
+class SelectedTabPressConfig {
+  const SelectedTabPressConfig({
+    this.onPressed,
+    this.popAction = PopActionType.all,
+    this.scrollToTop = true,
+  });
+
+  /// Use this callback to get notified when the selected tab is pressed again. The provided parameter indicates whether there were any screens pushed on the navigator of that tab **before** the user pressed the selected tab.
   ///
-  /// NOTE: This feature is experimental at the moment and might not work as intended for some.
-  final Function()? onSelectedTabPressWhenNoScreensPushed;
+  // ignore: avoid_positional_boolean_parameters
+  final void Function(bool)? onPressed;
+
+  /// Defines how many screens should be popped of the navigator of the selected tab, when the selected tab is pressed again.
+  /// If set to `PopActionType.all`, all screens will be popped on a single press.
+  /// If set to `PopActionType.single`, only one screen will be popped on each press.
+  /// If set to `PopActionType.none`, no screens will be popped on a press.
+  /// Defaults to `PopActionScreensType.all`.
+  final PopActionType popAction;
+
+  /// Defines whether the content of the selected tab should be scrolled to the top when the selected tab is pressed again. This requires the content to be a scrollable widget and the scroll controller has to be passed to `PersistentTabConfig.scrollController` of the tab this should apply to.
+  /// Defaults to `true`.
+  final bool scrollToTop;
 }
 
 class PersistentRouterTabConfig extends PersistentTabConfig {
   PersistentRouterTabConfig({
     required super.item,
-    super.onSelectedTabPressWhenNoScreensPushed,
+    super.scrollController,
   }) : super(screen: Container());
 }
 

@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Hide the NavBar on scroll: Set `hideOnScrollVelocity` to x (x != 0) to make the NavBar disappear after x pixels have been scrolled (and reappear respectively)
+- `SelectedTabPressConfig`, which is responsible for any configuration when the selected tab is pressed again.
+  - `SelectedTabPressConfig.popAction` allows to specify how many screens of the current tab should be popped if the tab is pressed again
+  - `SelectedTabPressConfig.scrollToTop` enables automatically scrolling the tab content to top if the current tab is pressed again. This requires a ScrollController on each `PersistentTabConfig.scrollController` for each tab this should be activated for.
+  - `SelectedTabPressConfig.onPressed` is a callback that gets executed whenever the current tab is pressed again. I also provides an argument whether there are any pages pushed to the tab.
 
 ### Changed
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
@@ -12,13 +16,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
 - Removed default value of NavBarDecoration.filter to allow omitting any filter
 - Replaced popAllScreensOnTapAnyTabs with keepNavigatorHistory, which has an inverted meaning. To migrate, invert the boolean value for that parameter if you use it.
+- Combined `popAllScreensOnTapOfSelectedTab` and `popActionScreens` into the `SelectedTabPressConfig.popAction`.
+  - Set `popAction` to `PopActionType.all` to pop all screens of the current tab if it is pressed again
+  - Set `popAction` to `PopActionType.single` to pop a single screen of the current tab if it is pressed again
+  - Set `popAction` to `PopActionType.none` to pop no screen of the current tab if it is pressed again
+- Replaced `onSelectedTabPressWhenNoScreensPushed` with `SelectedTabPressConfig.onPressed`. You need to check the passed argument whether there are any pages pushed to that tab.
 
 ### Fixed
 - Adjusting the number of tabs at runtime threw an error
 
 ### Removed
 - Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
-- Removed `PersistentTabController.onIndexChanged`. Use `listen` instead.
+- Removed `PersistentTabController.onIndexChanged`. Use `PersistentTabController.listen` instead.
 
 ## [5.3.1] - 2024-10-03
 ### Fixed
