@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `SelectedTabPressConfig.popAction` allows to specify how many screens of the current tab should be popped if the tab is pressed again
   - `SelectedTabPressConfig.scrollToTop` enables automatically scrolling the tab content to top if the current tab is pressed again. This requires a ScrollController on each `PersistentTabConfig.scrollController` for each tab this should be activated for.
   - `SelectedTabPressConfig.onPressed` is a callback that gets executed whenever the current tab is pressed again. I also provides an argument whether there are any pages pushed to the tab.
+- Navigator function to pop all screens of the current tab
 
 ### Changed
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
