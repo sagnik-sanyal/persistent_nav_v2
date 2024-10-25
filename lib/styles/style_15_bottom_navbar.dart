@@ -70,7 +70,6 @@ class Style15BottomNavBar extends StatelessWidget {
     final midIndex = (navBarConfig.items.length / 2).floor();
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      height: navBarConfig.navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: navBarConfig.items.map((item) {

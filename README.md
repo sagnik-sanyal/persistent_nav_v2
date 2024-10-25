@@ -268,7 +268,7 @@ class CustomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      height: navBarConfig.navBarHeight,
+      height: kBottomNavigationBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,

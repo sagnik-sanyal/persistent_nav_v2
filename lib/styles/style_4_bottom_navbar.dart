@@ -5,11 +5,13 @@ class Style4BottomNavBar extends StatelessWidget {
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
+    this.height = kBottomNavigationBarHeight,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -49,7 +51,7 @@ class Style4BottomNavBar extends StatelessWidget {
         navBarConfig.items.length;
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      height: navBarConfig.navBarHeight,
+      height: height,
       child: Column(
         children: <Widget>[
           Row(

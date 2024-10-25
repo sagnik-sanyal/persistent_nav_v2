@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Set `popAction` to `PopActionType.single` to pop a single screen of the current tab if it is pressed again
   - Set `popAction` to `PopActionType.none` to pop no screen of the current tab if it is pressed again
 - Replaced `onSelectedTabPressWhenNoScreensPushed` with `SelectedTabPressConfig.onPressed`. You need to check the passed argument whether there are any pages pushed to that tab.
+- Removed `navBarHeight` parameter. Use the `height` parameter of each style instead if needed.
 
 ### Fixed
 - Adjusting the number of tabs at runtime threw an error

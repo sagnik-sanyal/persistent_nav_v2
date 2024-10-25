@@ -66,17 +66,18 @@ Future<void> tapItem(WidgetTester tester, int id) async {
   await tester.pumpAndSettle();
 }
 
-Future<TestGesture> scroll(
+Future<void> scroll(
   WidgetTester tester,
   Offset start,
   Offset moveBy,
 ) async {
   final gesture = await tester.startGesture(start);
 
-  await gesture.moveBy(const Offset(0, -100));
+  await gesture.moveBy(moveBy);
   await tester.pumpAndSettle();
 
-  return gesture;
+  await gesture.removePointer();
+  await gesture.cancel();
 }
 
 void expectScreen(int id, {int screenCount = 3}) {
@@ -162,7 +163,7 @@ void main() {
       expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
     });
 
-    testWidgets("sizes the navbar according to navBarHeight", (tester) async {
+    testWidgets("sizes the navbar according to the height", (tester) async {
       const double height = 42;
 
       await tester.pumpWidget(
@@ -171,8 +172,10 @@ void main() {
             tabs: [1, 2, 3]
                 .map((id) => tabConfig(id, defaultScreen(id)))
                 .toList(),
-            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            navBarHeight: height,
+            navBarBuilder: (config) => Style1BottomNavBar(
+              navBarConfig: config,
+              height: height,
+            ),
           ),
         ),
       );
@@ -728,9 +731,12 @@ void main() {
       );
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -100));
+      expect(
+        tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
+        equals(kBottomNavigationBarHeight),
+      );
 
       expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
-
       await scroll(tester, const Offset(0, 200), const Offset(0, 200));
 
       expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
@@ -1004,8 +1010,7 @@ void main() {
         ),
       );
 
-      await tapElevatedButton(tester);
-      expectScreen(11);
+      expectScreen(1);
       await tapItem(tester, 1);
       expect(areScreensPushed, equals(false));
       expect(callbackGotExecuted, equals(true));

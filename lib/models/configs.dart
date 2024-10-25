@@ -125,12 +125,10 @@ class NavBarConfig {
     required this.selectedIndex,
     required this.items,
     required this.onItemSelected,
-    this.navBarHeight = kBottomNavigationBarHeight,
   });
   final int selectedIndex;
   final List<ItemConfig> items;
   final void Function(int) onItemSelected;
-  final double navBarHeight;
 
   ItemConfig get selectedItem => items[selectedIndex];
 
@@ -138,13 +136,11 @@ class NavBarConfig {
     int? selectedIndex,
     List<ItemConfig>? items,
     bool Function(int)? onItemSelected,
-    double? navBarHeight,
   }) =>
       NavBarConfig(
         selectedIndex: selectedIndex ?? this.selectedIndex,
         items: items ?? this.items,
         onItemSelected: onItemSelected ?? this.onItemSelected,
-        navBarHeight: navBarHeight ?? this.navBarHeight,
       );
 }
 

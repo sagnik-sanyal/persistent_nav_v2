@@ -15,7 +15,6 @@ class PersistentTabView extends StatefulWidget {
     required this.navBarBuilder,
     super.key,
     this.controller,
-    this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.none(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
@@ -42,7 +41,6 @@ class PersistentTabView extends StatefulWidget {
     required this.navBarBuilder,
     required StatefulNavigationShell this.navigationShell,
     super.key,
-    this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.none(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
@@ -92,12 +90,6 @@ class PersistentTabView extends StatefulWidget {
   ///
   /// Defaults to [FloatingActionButtonLocation.endFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocation;
-
-  /// Specifies the navBarHeight
-  ///
-  /// Defaults to `kBottomNavigationBarHeight` which is `56.0`.
-  // TODO: Get rid of this
-  final double navBarHeight;
 
   /// Works similar to [Scaffold.extendBody].
   ///
@@ -303,7 +295,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           NavBarConfig(
             selectedIndex: _controller.index,
             items: widget.tabs.map((e) => e.item).toList(),
-            navBarHeight: widget.navBarHeight,
             onItemSelected: onItemSelected,
           ),
         ),
