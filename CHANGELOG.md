@@ -13,11 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Animated Icons: Have nice animations of the navigation bar icons simply by using the provided `AnimatedIconWrapper` (see README for more)
 - PersistentTabController now gives you access to the previousIndex. Before the first tab switch, this will be null though
 
-### Changed
+### **Breaking Changes**
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
 - Removed ItemConfig.opacity. Use the opacity of NavBarDecoration.color instead
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
-- Removed default value of NavBarDecoration.filter to allow omitting any filter
+- Removed default value of NavBarDecoration.filter to allow omitting the filter
 - Replaced popAllScreensOnTapAnyTabs with keepNavigatorHistory, which has an inverted meaning. To migrate, invert the boolean value for that parameter if you use it.
 - Combined `popAllScreensOnTapOfSelectedTab` and `popActionScreens` into the `SelectedTabPressConfig.popAction`.
   - Set `popAction` to `PopActionType.all` to pop all screens of the current tab if it is pressed again
