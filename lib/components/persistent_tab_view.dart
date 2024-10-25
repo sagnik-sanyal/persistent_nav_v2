@@ -241,6 +241,17 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         });
       }
       widget.onTabChanged?.call(_controller.index);
+
+      tryGetAnimatedIconWrapperState(_controller.index)?.forward();
+      if (_controller.previousIndex != null) {
+        tryGetAnimatedIconWrapperState(_controller.previousIndex!)?.reverse();
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        tryGetAnimatedIconWrapperState(_controller.index)?.forward();
+      }
     });
   }
 
@@ -334,6 +345,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       return;
     }
 
+    final oldIndex = _controller.index;
+
     if (widget.navigationShell != null) {
       final isSameTab = index == widget.navigationShell!.currentIndex;
       if (isSameTab) {
@@ -351,7 +364,6 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       return;
     }
 
-    final oldIndex = _controller.index;
     _controller.jumpToTab(index);
     if (!widget.keepNavigatorHistory) {
       popScreensAccodingToAction(PopActionType.all);
@@ -415,4 +427,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       _currentNavigatorState() !=
           null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ?? !(_currentNavigatorState()?.canPop() ?? false));
+
+  AnimatedIconWrapperState? tryGetAnimatedIconWrapperState(int index) {
+    if (widget.tabs[index].item.icon is AnimatedIconWrapper) {
+      final key = widget.tabs[index].item.icon.key!
+          as GlobalKey<AnimatedIconWrapperState>;
+      return key.currentState;
+    }
+    return null;
+  }
 }
