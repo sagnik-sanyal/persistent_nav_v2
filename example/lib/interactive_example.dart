@@ -104,7 +104,7 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         resizeToAvoidBottomInset: settings.resizeToAvoidBottomInset,
         stateManagement: settings.stateManagement,
         hideNavigationBar: settings.hideNavBar,
-        popAllScreensOnTapOfSelectedTab:
-            settings.popAllScreensOnTapOfSelectedTab,
+        hideOnScrollVelocity: settings.hideOnScrollVelocity,
+        selectedTabPressConfig: settings.selectedTabPressConfig,
       );
 }
