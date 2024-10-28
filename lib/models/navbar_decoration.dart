@@ -1,6 +1,6 @@
 part of "../persistent_bottom_nav_bar_v2.dart";
 
-enum PopActionScreensType { once, all }
+enum PopActionType { single, all, none }
 
 /// Decoration configuration for the persistent navigation bar.
 /// It is suggested to be used in conjunction with [DecoratedNavBar]

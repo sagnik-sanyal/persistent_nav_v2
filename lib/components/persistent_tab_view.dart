@@ -15,7 +15,6 @@ class PersistentTabView extends StatefulWidget {
     required this.navBarBuilder,
     super.key,
     this.controller,
-    this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.none(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
@@ -23,9 +22,8 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
-    this.popAllScreensOnTapOfSelectedTab = true,
-    this.popAllScreensOnTapAnyTabs = false,
-    this.popActionScreens = PopActionScreensType.all,
+    this.keepNavigatorHistory = true,
+    this.selectedTabPressConfig = const SelectedTabPressConfig(),
     this.avoidBottomPadding = true,
     this.stateManagement = true,
     this.handleAndroidBackButtonPress = true,
@@ -43,7 +41,6 @@ class PersistentTabView extends StatefulWidget {
     required this.navBarBuilder,
     required StatefulNavigationShell this.navigationShell,
     super.key,
-    this.navBarHeight = kBottomNavigationBarHeight,
     this.navBarOverlap = const NavBarOverlap.none(),
     this.margin = EdgeInsets.zero,
     this.backgroundColor = Colors.white,
@@ -51,9 +48,8 @@ class PersistentTabView extends StatefulWidget {
     this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset = true,
-    this.popAllScreensOnTapOfSelectedTab = true,
-    this.popAllScreensOnTapAnyTabs = false,
-    this.popActionScreens = PopActionScreensType.all,
+    this.keepNavigatorHistory = true,
+    this.selectedTabPressConfig = const SelectedTabPressConfig(),
     this.avoidBottomPadding = true,
     this.stateManagement = true,
     this.hideOnScrollVelocity = 0,
@@ -95,11 +91,6 @@ class PersistentTabView extends StatefulWidget {
   /// Defaults to [FloatingActionButtonLocation.endFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
-  /// Specifies the navBarHeight
-  ///
-  /// Defaults to `kBottomNavigationBarHeight` which is `56.0`.
-  final double navBarHeight;
-
   /// Works similar to [Scaffold.extendBody].
   ///
   /// If set to [NavBarOverlap.full], the tabs will extend to the bottom of
@@ -136,23 +127,23 @@ class PersistentTabView extends StatefulWidget {
   /// 2. If there are no screens pushed on the selected tab, it will go to the previous tab or exit the app, depending on what you set for [PersistentTabController.historyLength].
   final bool handleAndroidBackButtonPress;
 
-  /// If an already selected tab is pressed/tapped again, all the screens pushed
-  /// on that particular tab will pop until the first screen in the stack.
-  /// Defaults to `true`.
-  final bool popAllScreensOnTapOfSelectedTab;
-
-  /// All the screens pushed on that particular tab will pop until the first
-  /// screen in the stack, whether the tab is already selected or not.
-  /// Defaults to `false`.
-  final bool popAllScreensOnTapAnyTabs;
-
-  /// If set all pop until to first screen else set once pop once
-  final PopActionScreensType? popActionScreens;
+  /// This defines the behavior when the selected tab is pressed again.
+  /// Possible configs are:
+  /// 1. `onPressed` - A callback that gets called when the selected tab is pressed again.
+  /// 2. `popAction` - Defines how many screens should be popped of the navigator of the selected tab, when the selected tab is pressed again.
+  /// 3. `scrollToTop` - If set to `true`, the selected tab will scroll to the top when the selected tab is pressed again. (Requires a [ScrollController] to be set in the [PersistentTabConfig] of the tab this should apply to.)
+  final SelectedTabPressConfig selectedTabPressConfig;
 
   final bool resizeToAvoidBottomInset;
 
-  /// Preserves the state of each tab's screen. `true` by default.
+  /// Preserves the state of each tab's screen, including pushed screens inside that tab. `true` by default.
+  /// If you only want to preserve the state of each tab but not the screens pushed inside that tab, set `keepNavigatorHistory` to `false`.
   final bool stateManagement;
+
+  /// If set to `false`, the history of each tab's navigator will be cleared when switching tabs. Defaults to `true`.
+  ///
+  /// NOTE: This will only have an effect if `stateManagement` is set to `true`.
+  final bool keepNavigatorHistory;
 
   /// Screen transition animation properties when switching tabs.
   final ScreenTransitionAnimation screenTransitionAnimation;
@@ -242,6 +233,17 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         });
       }
       widget.onTabChanged?.call(_controller.index);
+
+      tryGetAnimatedIconWrapperState(_controller.index)?.forward();
+      if (_controller.previousIndex != null) {
+        tryGetAnimatedIconWrapperState(_controller.previousIndex!)?.reverse();
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        tryGetAnimatedIconWrapperState(_controller.index)?.forward();
+      }
     });
   }
 
@@ -293,31 +295,11 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           NavBarConfig(
             selectedIndex: _controller.index,
             items: widget.tabs.map((e) => e.item).toList(),
-            navBarHeight: widget.navBarHeight,
-            onItemSelected: (index) {
-              if (widget.tabs[index].onPressed != null) {
-                widget.tabs[index].onPressed!(context);
-              } else {
-                if (widget.navigationShell != null) {
-                  widget.navigationShell!.goBranch(
-                    index,
-                    initialLocation: widget.popAllScreensOnTapOfSelectedTab &&
-                        index == widget.navigationShell!.currentIndex,
-                  );
-                } else {
-                  final oldIndex = _controller.index;
-                  _controller.jumpToTab(index);
-                  if ((widget.popAllScreensOnTapOfSelectedTab &&
-                          oldIndex == index) ||
-                      widget.popAllScreensOnTapAnyTabs) {
-                    popAllScreens();
-                  }
-                }
-              }
-            },
+            onItemSelected: onItemSelected,
           ),
         ),
       );
+
   @override
   Widget build(BuildContext context) {
     if (widget.navigationShell == null && widget.handleAndroidBackButtonPress) {
@@ -348,6 +330,60 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     }
   }
 
+  void onItemSelected(index) {
+    if (widget.tabs[index].onPressed != null) {
+      widget.tabs[index].onPressed!.call(context);
+      return;
+    }
+
+    final oldIndex = _controller.index;
+
+    if (widget.navigationShell != null) {
+      final isSameTab = index == widget.navigationShell!.currentIndex;
+      if (isSameTab) {
+        widget.selectedTabPressConfig.onPressed?.call(false);
+        if (widget.selectedTabPressConfig.scrollToTop) {
+          tryScrollToTop(index);
+        }
+      }
+      widget.navigationShell!.goBranch(
+        index,
+        initialLocation:
+            widget.selectedTabPressConfig.popAction == PopActionType.all &&
+                isSameTab,
+      );
+      return;
+    }
+
+    _controller.jumpToTab(index);
+    if (!widget.keepNavigatorHistory) {
+      popScreensAccodingToAction(PopActionType.all);
+    }
+    if (oldIndex == index) {
+      final canPopScreens = _currentNavigatorState()?.canPop() ?? false;
+      widget.selectedTabPressConfig.onPressed?.call(canPopScreens);
+      if (canPopScreens) {
+        popScreensAccodingToAction(
+          widget.selectedTabPressConfig.popAction,
+        );
+      } else {
+        if (widget.selectedTabPressConfig.scrollToTop) {
+          tryScrollToTop(index);
+        }
+      }
+    }
+  }
+
+  void tryScrollToTop(int index) {
+    if (widget.tabs[index].scrollController != null) {
+      widget.tabs[index].scrollController!.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   void _handlePop() {
     final navigator = _currentNavigatorState()!;
     if (navigator.canPop()) {
@@ -360,18 +396,18 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   NavigatorState? _currentNavigatorState() =>
       widget.tabs[_controller.index].navigatorConfig.navigatorKey.currentState;
 
-  void popAllScreens() {
+  void popScreensAccodingToAction(PopActionType action) {
     final navigator = _currentNavigatorState();
     if (navigator != null) {
-      if (!navigator.canPop()) {
-        widget.tabs[_controller.index].onSelectedTabPressWhenNoScreensPushed
-            ?.call();
-      } else {
-        if (widget.popActionScreens == PopActionScreensType.once) {
-          navigator.maybePop(context);
-        } else {
+      switch (action) {
+        case PopActionType.single:
+          navigator.maybePop();
+          break;
+        case PopActionType.all:
           navigator.popUntil((route) => route.isFirst);
-        }
+          break;
+        case PopActionType.none:
+          break;
       }
     }
   }
@@ -382,4 +418,13 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       _currentNavigatorState() !=
           null && // Required if historyLength == 0 because historyIsEmpty() is already true when switching to uninitialized tabs instead of only when going back.
       (subtreeCantHandlePop ?? !(_currentNavigatorState()?.canPop() ?? false));
+
+  AnimatedIconWrapperState? tryGetAnimatedIconWrapperState(int index) {
+    if (widget.tabs[index].item.icon is AnimatedIconWrapper) {
+      final key = widget.tabs[index].item.icon.key!
+          as GlobalKey<AnimatedIconWrapperState>;
+      return key.currentState;
+    }
+    return null;
+  }
 }

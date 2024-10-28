@@ -6,11 +6,13 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     super.key,
     this.navBarDecoration = const NavBarDecoration(),
     this.neumorphicProperties = const NeumorphicProperties(),
+    this.height = kBottomNavigationBarHeight,
   });
 
   final NavBarConfig navBarConfig;
   final NeumorphicProperties neumorphicProperties;
   final NavBarDecoration navBarDecoration;
+  final double height;
 
   Widget _getNavItem(
     ItemConfig item,
@@ -72,7 +74,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        height: navBarConfig.navBarHeight,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: navBarConfig.items.map((item) {

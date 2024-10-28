@@ -5,12 +5,12 @@ class DecoratedNavBar extends StatelessWidget {
     required this.child,
     super.key,
     this.decoration = const NavBarDecoration(),
-    this.height = kBottomNavigationBarHeight,
+    this.height,
   });
 
   final NavBarDecoration decoration;
   final Widget child;
-  final double height;
+  final double? height;
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -34,7 +34,8 @@ class DecoratedNavBar extends StatelessWidget {
               left: false,
               child: Container(
                 padding: decoration.padding,
-                height: height - decoration.borderHeight(),
+                height:
+                    height != null ? height! - decoration.borderHeight() : null,
                 child: child,
               ),
             ),

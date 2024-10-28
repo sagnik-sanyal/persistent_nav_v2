@@ -50,3 +50,7 @@ Future<T?> pushReplacementWithoutNavBar<T extends Object?, TO extends Object?>(
   TO? result,
 }) =>
     Navigator.of(context, rootNavigator: true).pushReplacement<T, TO>(route);
+
+void popAllScreensOfCurrentTab(BuildContext context) {
+  Navigator.popUntil(context, (route) => route.isFirst);
+}
