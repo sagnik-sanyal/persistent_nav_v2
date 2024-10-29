@@ -260,6 +260,48 @@ void main() {
       expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
     });
 
+    testWidgets("changes hideNavBar status at runtime", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            hideNavigationBar: false,
+          ),
+        ),
+      );
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            hideNavigationBar: true,
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            hideNavigationBar: false,
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
+    });
+
     testWidgets("sizes the navbar according to the height", (tester) async {
       const double height = 42;
 
@@ -1312,6 +1354,27 @@ void main() {
       expect(find.byType(FloatingActionButton).hitTestable(), findsOneWidget);
     });
 
+    testWidgets("changes screens on gestures", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            gestureNavigationEnabled: true,
+          ),
+        ),
+      );
+
+      await tester.fling(
+        find.byType(PersistentTabView),
+        const Offset(-200, 0),
+        800,
+      );
+      await tester.pumpAndSettle();
+
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
     testWidgets(
         "Style 13 and Style 14 center button are tappable above the navBar",
         (tester) async {
@@ -1842,7 +1905,7 @@ void main() {
     testWidgets(
         "does not scroll the tab content to top when the selected tab is tapped again when it is disabled",
         (tester) async {
-     final controllers = [
+      final controllers = [
         ScrollController(),
         ScrollController(),
         ScrollController(),
