@@ -242,7 +242,9 @@ class _PersistentTabViewState extends State<PersistentTabView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        tryGetAnimatedIconWrapperState(_controller.index)?.forward();
+        tryGetAnimatedIconWrapperState(_controller.index)
+            ?.controller
+            .animateTo(1, duration: Duration.zero);
       }
     });
   }
