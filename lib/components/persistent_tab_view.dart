@@ -348,6 +348,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
           tryScrollToTop(index);
         }
       }
+
       widget.navigationShell!.goBranch(
         index,
         initialLocation:

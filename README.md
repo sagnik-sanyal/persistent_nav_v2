@@ -455,7 +455,7 @@ StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          path: "home",
+          path: "/home",
           builder: (context, state) => const MainScreen(
             useRouter: true,
           ),
@@ -475,7 +475,7 @@ StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          path: "messages",
+          path: "/messages",
           builder: (context, state) => const MainScreen(
             useRouter: true,
           ),
@@ -487,7 +487,7 @@ StatefulShellRoute.indexedStack(
     StatefulShellBranch(
       routes: <RouteBase>[
         GoRoute(
-          path: "settings",
+          path: "/settings",
           builder: (context, state) => const MainScreen(
             useRouter: true,
           ),
