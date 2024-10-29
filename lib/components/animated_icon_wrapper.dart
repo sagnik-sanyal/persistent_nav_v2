@@ -52,6 +52,8 @@ class AnimatedIconWrapperState extends State<AnimatedIconWrapper>
     super.dispose();
   }
 
+  AnimationController get controller => _controller;
+
   @override
   Widget build(BuildContext context) => AnimatedIcon(
         icon: widget.icon,

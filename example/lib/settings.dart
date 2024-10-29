@@ -17,7 +17,7 @@ class Settings {
   bool popAllScreensOnTapOfSelectedTab = true;
   int hideOnScrollVelocity = 200;
   bool avoidBottomPadding = true;
-  SelectedTabPressConfig selectedTabPressConfig = SelectedTabPressConfig();
+  SelectedTabPressConfig selectedTabPressConfig = const SelectedTabPressConfig();
   Color navBarColor = Colors.white;
   NavBarBuilder get navBarBuilder => navBarStyles[navBarStyle]!;
   String navBarStyle = "Style 1";

@@ -453,6 +453,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
           setState(() {
             key = UniqueKey();
           });
+        } else {
+          setState(() {});
         }
       }
     });
