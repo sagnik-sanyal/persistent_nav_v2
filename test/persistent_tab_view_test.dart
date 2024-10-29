@@ -2,6 +2,7 @@
 
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:persistent_bottom_nav_bar_v2/components/animated_icon_wrapper.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 PersistentTabConfig tabConfig(
@@ -65,7 +66,7 @@ Widget scrollableScreen(
 
 List<PersistentTabConfig> tabs([int count = 3]) => List.generate(
       count,
-      (index) => tabConfig(index, defaultScreen(index)),
+      (id) => tabConfig(id, defaultScreen(id)),
     );
 
 Future<void> tapAndroidBackButton(WidgetTester tester) async {
@@ -100,13 +101,13 @@ Future<void> scroll(
 }
 
 void expectTabAndLevel({required int tab, required int level}) {
-  expect(find.text("Tab $tab").hitTestable(), findsOneWidget);
-  expect(find.text("Level $level").hitTestable(), findsOneWidget);
+  expect(find.text("Tab $tab"), findsOneWidget);
+  expect(find.text("Level $level"), findsOneWidget);
 }
 
 void expectNotTabAndLevel({required int tab, required int level}) {
-  expect(find.text("Tab $tab").hitTestable(), findsNothing);
-  expect(find.text("Level $level").hitTestable(), findsNothing);
+  expect(find.text("Tab $tab"), findsNothing);
+  expect(find.text("Level $level"), findsNothing);
 }
 
 void expectMainScreen() {
@@ -1242,6 +1243,372 @@ void main() {
       await tester.tapAt(topCenter.translate(0, -10));
       await tester.pumpAndSettle();
       expectTabAndLevel(tab: 1, level: 0);
+    });
+
+    testWidgets("automatically animates animated icons", (tester) async {
+      final keys = [
+        GlobalKey<AnimatedIconWrapperState>(),
+        GlobalKey<AnimatedIconWrapperState>(),
+        GlobalKey<AnimatedIconWrapperState>(),
+      ];
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: List.generate(
+              3,
+              (id) => PersistentTabConfig(
+                screen: defaultScreen(id),
+                item: ItemConfig(
+                  title: "Item$id",
+                  icon: AnimatedIconWrapper(
+                    icon: AnimatedIcons.add_event,
+                    key: keys[id],
+                  ),
+                ),
+              ),
+            ),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(keys[0].currentState!.controller.value, equals(1));
+      expect(keys[1].currentState!.controller.value, equals(0));
+      await tapItem(tester, 1);
+
+      expect(keys[0].currentState!.controller.value, equals(0));
+      expect(keys[1].currentState!.controller.value, equals(1));
+    });
+
+    group("uses navigator config", () {
+      testWidgets("to populate routes of each tab navigator", (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/details");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                  navigatorConfig: NavigatorConfig(
+                    routes: {
+                      "/details": (context) => defaultScreen(id, level: 1),
+                    },
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+        await tapItem(tester, 1);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 1, level: 1);
+        await tapItem(tester, 2);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 2, level: 1);
+      });
+
+      testWidgets("to run onGenerateRoute of each tab navigator",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/details");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                  navigatorConfig: NavigatorConfig(
+                    onGenerateRoute: (settings) => MaterialPageRoute(
+                      builder: (context) => defaultScreen(id, level: 1),
+                    ),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+        await tapItem(tester, 1);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 1, level: 1);
+        await tapItem(tester, 2);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 2, level: 1);
+      });
+
+      testWidgets("to run onUnknownRoute of each tab navigator",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/unknown-route");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                  navigatorConfig: NavigatorConfig(
+                    onUnknownRoute: (settings) => MaterialPageRoute(
+                      builder: (context) => defaultScreen(id, level: -1),
+                    ),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: -1);
+        await tapItem(tester, 1);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 1, level: -1);
+        await tapItem(tester, 2);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 2, level: -1);
+      });
+
+      testWidgets("to report missing onUnknownRoute as error", (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/unknown-route");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        final exception = tester.takeException();
+        expect(exception, isFlutterError);
+      });
+
+      testWidgets("to report onUnknownRoute returning null as error",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabView(
+            (context) => PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/unknown-route");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                  navigatorConfig: NavigatorConfig(
+                    onUnknownRoute: (settings) => null,
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        final exception = tester.takeException();
+        expect(exception, isFlutterError);
+      });
+    });
+
+    group("uses root navigator", () {
+      testWidgets("to populate routes of each tab navigator", (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            routes: {
+              "/details": (context) => defaultScreen(0, level: 1),
+            },
+            home: PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/details");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+        await tapItem(tester, 1);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+        await tapItem(tester, 2);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+      });
+
+      testWidgets("to run onGenerateRoute of each tab navigator",
+          (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            onGenerateRoute: (settings) => MaterialPageRoute(
+              builder: (context) => defaultScreen(0, level: 1),
+            ),
+            home: PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/details");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+        await tapItem(tester, 1);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+        await tapItem(tester, 2);
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 1);
+      });
+
+      testWidgets("to report missing onUnknownRoute as error", (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/unknown-route");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        final exception = tester.takeException();
+        expect(exception, isFlutterError);
+      });
+
+      testWidgets("to report onUnknownRoute returning null as error",
+          (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            onGenerateRoute: (settings) => null,
+            home: PersistentTabView(
+              tabs: List.generate(
+                3,
+                (id) => PersistentTabConfig(
+                  screen: defaultScreen(
+                    id,
+                    onTap: (context) {
+                      Navigator.of(context).pushNamed("/unknown-route");
+                    },
+                  ),
+                  item: ItemConfig(
+                    title: "Item$id",
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        final exception = tester.takeException();
+        expect(exception, isFlutterError);
+      });
     });
   });
 
