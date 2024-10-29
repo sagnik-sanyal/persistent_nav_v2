@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_redundant_argument_values
 
+import "dart:ui";
+
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:go_router/go_router.dart";
 import "package:persistent_bottom_nav_bar_v2/components/animated_icon_wrapper.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
@@ -69,6 +72,22 @@ List<PersistentTabConfig> tabs([int count = 3]) => List.generate(
       (id) => tabConfig(id, defaultScreen(id)),
     );
 
+List<PersistentRouterTabConfig> routerTabs([
+  int count = 3,
+  List<ScrollController>? scrollControllers,
+]) =>
+    List.generate(
+      count,
+      (id) => PersistentRouterTabConfig(
+        scrollController:
+            scrollControllers != null ? scrollControllers[id] : null,
+        item: ItemConfig(
+          icon: const Icon(Icons.add),
+          title: "Item$id",
+        ),
+      ),
+    );
+
 Future<void> tapAndroidBackButton(WidgetTester tester) async {
   final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp));
   // ignore: avoid_dynamic_calls
@@ -131,6 +150,34 @@ Widget wrapTabViewWithMainScreen(WidgetBuilder builder) => wrapTabView(
       ),
     );
 
+GoRouter wrapWithGoRouter(
+  Widget Function(BuildContext, GoRouterState, StatefulNavigationShell)?
+      builder, {
+  List<ScrollController>? scrollControllers,
+}) =>
+    GoRouter(
+      initialLocation: "/tab-0",
+      routes: [
+        StatefulShellRoute.indexedStack(
+          builder: builder,
+          branches: List.generate(
+            3,
+            (id) => StatefulShellBranch(
+              initialLocation: "/tab-$id",
+              routes: <RouteBase>[
+                GoRoute(
+                  path: "/tab-$id",
+                  builder: (context, state) => scrollControllers != null
+                      ? scrollableScreen(id, controller: scrollControllers[id])
+                      : defaultScreen(id),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+
 void main() {
   group("PersistentTabView", () {
     testWidgets("builds a DecoratedNavBar", (tester) async {
@@ -163,6 +210,40 @@ void main() {
       expectTabAndLevel(tab: 2, level: 0);
       await tapItem(tester, 0);
       expectTabAndLevel(tab: 0, level: 0);
+    });
+
+    testWidgets("runs onPressed instead of switching the tab", (tester) async {
+      int count = 0;
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: [
+              PersistentTabConfig(
+                screen: defaultScreen(0),
+                item: ItemConfig(
+                  title: "Item0",
+                  icon: const Icon(Icons.add),
+                ),
+              ),
+              PersistentTabConfig.noScreen(
+                onPressed: (context) {
+                  count++;
+                },
+                item: ItemConfig(
+                  title: "Item1",
+                  icon: const Icon(Icons.add),
+                ),
+              ),
+            ],
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      expectTabAndLevel(tab: 0, level: 0);
+      await tapItem(tester, 1);
+      expectTabAndLevel(tab: 0, level: 0);
+      expect(count, 1);
     });
 
     testWidgets("hides the navbar when hideNavBar is true", (tester) async {
@@ -290,6 +371,26 @@ void main() {
             ?.color,
         const Color(0xFFFFC107),
       );
+    });
+
+    testWidgets("navbar applies filter if color is (partially) transparent",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(
+              navBarConfig: config,
+              navBarDecoration: NavBarDecoration(
+                color: const Color.fromARGB(45, 255, 193, 7),
+                filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(BackdropFilter), findsOneWidget);
     });
 
     testWidgets("executes onItemSelected when tapping items", (tester) async {
@@ -1609,6 +1710,206 @@ void main() {
         final exception = tester.takeException();
         expect(exception, isFlutterError);
       });
+    });
+  });
+
+  group("PersistentTabView.router", () {
+    testWidgets("can switch tabs", (tester) async {
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: wrapWithGoRouter(
+            (context, state, shell) => PersistentTabView.router(
+              tabs: routerTabs(),
+              navigationShell: shell,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        ),
+      );
+
+      expectTabAndLevel(tab: 0, level: 0);
+      await tapItem(tester, 1);
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
+    testWidgets("switches tabs when triggered by go_router", (tester) async {
+      final router = wrapWithGoRouter(
+        (context, state, shell) => PersistentTabView.router(
+          tabs: routerTabs(),
+          navigationShell: shell,
+          navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+        ),
+      );
+
+      await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+
+      expectTabAndLevel(tab: 0, level: 0);
+      router.go("/tab-1");
+      await tester.pumpAndSettle();
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
+    testWidgets(
+        "doesnt pop any screen when tapping same tab when `selectedTabPressConfig.popAction == PopActionType.none`",
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: wrapWithGoRouter(
+            (context, state, shell) => PersistentTabView.router(
+              tabs: routerTabs(),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                popAction: PopActionType.none,
+              ),
+              navigationShell: shell,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        ),
+      );
+
+      await tapElevatedButton(tester);
+      expectTabAndLevel(tab: 0, level: 1);
+      await tapItem(tester, 0);
+      expectTabAndLevel(tab: 0, level: 1);
+    });
+
+    testWidgets(
+        "runs callback when selected tab is tapped again and there are no screens pushed",
+        (tester) async {
+      bool callbackGotExecuted = false;
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: wrapWithGoRouter(
+            (context, state, shell) => PersistentTabView.router(
+              tabs: routerTabs(),
+              selectedTabPressConfig: SelectedTabPressConfig(
+                onPressed: (hasPages) {
+                  callbackGotExecuted = true;
+                },
+              ),
+              navigationShell: shell,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        ),
+      );
+
+      expectTabAndLevel(tab: 0, level: 0);
+      await tapItem(tester, 0);
+      expect(callbackGotExecuted, equals(true));
+    });
+
+    testWidgets(
+        "scrolls the tab content to top when the selected tab is tapped again and it is enabled",
+        (tester) async {
+      final controllers = [
+        ScrollController(),
+        ScrollController(),
+        ScrollController(),
+      ];
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: wrapWithGoRouter(
+            (context, state, shell) => PersistentTabView.router(
+              tabs: routerTabs(3, controllers),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                scrollToTop: true,
+              ),
+              navigationShell: shell,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+            scrollControllers: controllers,
+          ),
+        ),
+      );
+
+      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+
+      expectNotTabAndLevel(tab: 0, level: 0);
+
+      await tapItem(tester, 0);
+
+      expectTabAndLevel(tab: 0, level: 0);
+      expect(controllers[0].offset, equals(0));
+    });
+
+    testWidgets(
+        "does not scroll the tab content to top when the selected tab is tapped again when it is disabled",
+        (tester) async {
+     final controllers = [
+        ScrollController(),
+        ScrollController(),
+        ScrollController(),
+      ];
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: wrapWithGoRouter(
+            (context, state, shell) => PersistentTabView.router(
+              tabs: routerTabs(3, controllers),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                scrollToTop: false,
+              ),
+              navigationShell: shell,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+            scrollControllers: controllers,
+          ),
+        ),
+      );
+
+      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+
+      expectNotTabAndLevel(tab: 0, level: 0);
+
+      await tapItem(tester, 0);
+
+      expectNotTabAndLevel(tab: 0, level: 0);
+      expect(controllers[0].offset, isNot(0));
+    });
+
+    testWidgets(
+        "scrollToTop is enabled but switching to a new tab does not scroll immediately",
+        (tester) async {
+      final controllers = [
+        ScrollController(),
+        ScrollController(),
+        ScrollController(),
+      ];
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: wrapWithGoRouter(
+            (context, state, shell) => PersistentTabView.router(
+              tabs: routerTabs(3, controllers),
+              selectedTabPressConfig: const SelectedTabPressConfig(
+                scrollToTop: true,
+              ),
+              navigationShell: shell,
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+            scrollControllers: controllers,
+          ),
+        ),
+      );
+
+      await scroll(tester, const Offset(0, 200), const Offset(0, -400));
+
+      expectNotTabAndLevel(tab: 0, level: 0);
+
+      await tapItem(tester, 1);
+      await tapItem(tester, 0);
+
+      expectNotTabAndLevel(tab: 0, level: 0);
+      expect(controllers[0].offset, isNot(0));
     });
   });
 
