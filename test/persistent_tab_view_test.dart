@@ -1375,6 +1375,71 @@ void main() {
       expectTabAndLevel(tab: 1, level: 0);
     });
 
+    testWidgets("changes screens programmatically when gestures are enabled",
+        (tester) async {
+      final controller = PersistentTabController();
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            controller: controller,
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            gestureNavigationEnabled: true,
+          ),
+        ),
+      );
+
+      controller.jumpToTab(1);
+      await tester.pumpAndSettle();
+
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
+    testWidgets(
+        "trashes screens while switching if stateManagement turned off with gestures enabled",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            stateManagement: false,
+            gestureNavigationEnabled: true,
+          ),
+        ),
+      );
+
+      await tapElevatedButton(tester);
+      expectTabAndLevel(tab: 0, level: 1);
+      await tapItem(tester, 1);
+      expectTabAndLevel(tab: 1, level: 0);
+      await tapItem(tester, 0);
+      expectTabAndLevel(tab: 0, level: 0);
+    });
+
+    testWidgets(
+        "persists screens while switching if stateManagement turned on with gestures enabled",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            stateManagement: true,
+            gestureNavigationEnabled: true,
+          ),
+        ),
+      );
+
+      await tapElevatedButton(tester);
+      expectTabAndLevel(tab: 0, level: 1);
+      await tapItem(tester, 1);
+      expectTabAndLevel(tab: 1, level: 0);
+      await tapItem(tester, 0);
+      expectTabAndLevel(tab: 0, level: 1);
+    });
+
     testWidgets(
         "Style 13 and Style 14 center button are tappable above the navBar",
         (tester) async {

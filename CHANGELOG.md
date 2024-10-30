@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Animated Icons: Have nice animations of the navigation bar icons simply by using the provided `AnimatedIconWrapper` (see README for more)
 - PersistentTabController now gives you access to the previousIndex. Before the first tab switch, this will be null though
 
-### **Breaking Changes**
+### Breaking Changes
 - Use `NavBarOverlap.none()` as the default for `navBarOverlap`
 - Removed ItemConfig.opacity. Use the opacity of NavBarDecoration.color instead
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Adjusting the number of tabs at runtime threw an error
+- The state of each tab was not disposed if stateManagement was true and gestures were enabled
 
 ### Removed
 - Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`

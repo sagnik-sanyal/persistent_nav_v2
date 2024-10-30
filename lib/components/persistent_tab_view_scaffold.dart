@@ -315,15 +315,11 @@ class _SwipableTabSwitchingViewState extends State<_SwipableTabSwitchingView> {
     if (widget.currentTabIndex != oldWidget.currentTabIndex &&
         !pageUpdateCausedBySwipe) {
       isSwiping = false;
-      if (widget.screenTransitionAnimation.duration == Duration.zero) {
-        _pageController.jumpToPage(widget.currentTabIndex);
-      } else {
-        _pageController.animateToPage(
-          widget.currentTabIndex,
-          duration: widget.screenTransitionAnimation.duration,
-          curve: widget.screenTransitionAnimation.curve,
-        );
-      }
+      _pageController.animateToPage(
+        widget.currentTabIndex,
+        duration: widget.screenTransitionAnimation.duration,
+        curve: widget.screenTransitionAnimation.curve,
+      );
     }
     pageUpdateCausedBySwipe = false;
   }
@@ -350,6 +346,7 @@ class _SwipableTabSwitchingViewState extends State<_SwipableTabSwitchingView> {
           children: List.generate(
             widget.tabCount,
             (index) => FocusScope(
+              key: widget.stateManagement ? null : UniqueKey(),
               node: FocusScopeNode(),
               child: widget.stateManagement
                   ? KeepAlivePage(
