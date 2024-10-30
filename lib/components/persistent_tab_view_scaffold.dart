@@ -576,7 +576,7 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
         List<TabMetaData>.generate(lengthDiff, (index) => TabMetaData()),
       );
     } else if (lengthDiff < 0) {
-      tabMetaData.skip(oldWidget.tabCount).forEach((tabMetaData) {
+      tabMetaData.skip(widget.tabCount).forEach((tabMetaData) {
         tabMetaData.focusNode.dispose();
       });
       tabMetaData.removeRange(widget.tabCount, tabMetaData.length);
