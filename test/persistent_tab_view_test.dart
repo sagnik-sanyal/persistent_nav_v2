@@ -1337,6 +1337,87 @@ void main() {
       expectTabAndLevel(tab: 0, level: 0);
     });
 
+    testWidgets(
+        "changes animation direction when switching tabs if TextDirection is RTL",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => Directionality(
+            textDirection: TextDirection.rtl,
+            child: PersistentTabView(
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        ),
+      );
+
+      expectTabAndLevel(tab: 0, level: 0);
+      await tester.tap(find.text("Item1"));
+      await tester.pump(Durations.short1);
+      await tester.pump(Durations.short1);
+      // 400 is the horizontal center of the screen, so tab 0 should leave towards the right and tab 1 should enter from the left
+      expect(tester.getCenter(find.text("Tab 0")).dx, greaterThan(400));
+      expect(tester.getCenter(find.text("Tab 1")).dx, lessThan(400));
+      await tester.pumpAndSettle();
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
+    testWidgets("custom animated builder", (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            animatedTabBuilder:
+                (context, index, animation, oldTabIndex, newTabIndex, child) {
+              final double yOffset = newTabIndex > index
+                  ? -animation
+                  : (newTabIndex < index
+                      ? animation
+                      : (index < oldTabIndex ? animation - 1 : 1 - animation));
+              return FractionalTranslation(
+                translation: Offset(yOffset, 0),
+                child: child,
+              );
+            },
+          ),
+        ),
+      );
+
+      expectTabAndLevel(tab: 0, level: 0);
+      await tester.tap(find.text("Item1"));
+      await tester.pump(Durations.short1);
+      await tester.pump(Durations.short1);
+      // 400 is the horizontal center of the screen, so tab 0 should leave towards the left and tab 1 should enter from the right
+      expect(tester.getCenter(find.text("Tab 0")).dx, lessThan(400));
+      expect(tester.getCenter(find.text("Tab 1")).dx, greaterThan(400));
+      await tester.pumpAndSettle();
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
+    testWidgets(
+        "no animation when ScreenTransitionAnimation.duration == Duration.zero",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            screenTransitionAnimation: const ScreenTransitionAnimation(
+              duration: Duration.zero,
+            ),
+          ),
+        ),
+      );
+
+      expectTabAndLevel(tab: 0, level: 0);
+      await tester.tap(find.text("Item1"));
+      await tester.pump();
+      expectTabAndLevel(tab: 1, level: 0);
+    });
+
     testWidgets("shows FloatingActionButton if specified", (tester) async {
       await tester.pumpWidget(
         wrapTabView(
