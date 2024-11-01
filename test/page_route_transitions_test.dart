@@ -15,6 +15,50 @@ Widget mainScreen(void Function() onPressed) => MaterialApp(
 
 void main() {
   group("PageTransitionAnimation", () {
+    testWidgets("material", (tester) async {
+      await tester.pumpWidget(
+        mainScreen(() {
+          Navigator.of(tester.element(find.text("Push Route"))).push(
+            getPageRoute(
+              PageTransitionAnimation.platform,
+              screen: const Column(
+                children: [
+                  Text("Material"),
+                ],
+              ),
+            ),
+          );
+        }),
+      );
+
+      await tester.tap(find.text("Push Route"));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Material"), findsOneWidget);
+    });
+
+    testWidgets("cupertino", (tester) async {
+      await tester.pumpWidget(
+        mainScreen(() {
+          Navigator.of(tester.element(find.text("Push Route"))).push(
+            getPageRoute(
+              PageTransitionAnimation.cupertino,
+              screen: const Column(
+                children: [
+                  Text("Cupertino"),
+                ],
+              ),
+            ),
+          );
+        }),
+      );
+
+      await tester.tap(find.text("Push Route"));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Cupertino"), findsOneWidget);
+    });
+
     testWidgets("slideUp", (tester) async {
       await tester.pumpWidget(
         mainScreen(() {
