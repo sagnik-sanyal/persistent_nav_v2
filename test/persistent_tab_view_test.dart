@@ -1397,17 +1397,14 @@ void main() {
       expectTabAndLevel(tab: 1, level: 0);
     });
 
-    testWidgets(
-        "no animation when ScreenTransitionAnimation.duration == Duration.zero",
+    testWidgets("no animation when ScreenTransitionAnimation.none()",
         (tester) async {
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
             tabs: tabs(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
-            screenTransitionAnimation: const ScreenTransitionAnimation(
-              duration: Duration.zero,
-            ),
+            screenTransitionAnimation: const ScreenTransitionAnimation.none(),
           ),
         ),
       );

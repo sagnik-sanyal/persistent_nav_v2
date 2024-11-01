@@ -135,7 +135,7 @@ class NavBarConfig {
   NavBarConfig copyWith({
     int? selectedIndex,
     List<ItemConfig>? items,
-    bool Function(int)? onItemSelected,
+    void Function(int)? onItemSelected,
   }) =>
       NavBarConfig(
         selectedIndex: selectedIndex ?? this.selectedIndex,
