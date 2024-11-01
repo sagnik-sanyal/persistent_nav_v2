@@ -4,7 +4,7 @@ import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 void main() {
   group("ScreenTransitionAnimation", () {
-    test("== and hashCode", () {
+    testWidgets("== and hashCode", (tester) async {
       const animation = ScreenTransitionAnimation();
       expect(animation, equals(animation));
       expect(animation, equals(const ScreenTransitionAnimation()));
@@ -16,7 +16,7 @@ void main() {
   });
 
   group("NavBarConfig", () {
-    test("copyWith", () {
+    testWidgets("copyWith", (tester) async {
       bool didRun = false;
 
       final config = NavBarConfig(
@@ -39,7 +39,7 @@ void main() {
   });
 
   group("NavigatorConfig", () {
-    test("copyWith", () {
+    testWidgets("copyWith", (tester) async {
       final config = NavigatorConfig(
         defaultTitle: "Default Title",
         routes: {"route": (context) => const SizedBox()},
@@ -73,7 +73,7 @@ void main() {
   });
 
   group("NavBarDecoration", () {
-    test("exposedHeight is calculated correctly", () {
+    testWidgets("exposedHeight is calculated correctly", (tester) async {
       final decoration = NavBarDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 2),
