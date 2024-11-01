@@ -16,7 +16,10 @@ PersistentTabConfig tabConfig(
     PersistentTabConfig(
       screen: screen,
       scrollController: scrollController,
-      item: ItemConfig(title: "Item$id", icon: const Icon(Icons.add)),
+      item: ItemConfig(
+        title: "Item$id",
+        icon: Icon(key: Key("Item$id"), Icons.add),
+      ),
     );
 
 Widget defaultScreen(
@@ -82,7 +85,7 @@ List<PersistentRouterTabConfig> routerTabs([
         scrollController:
             scrollControllers != null ? scrollControllers[id] : null,
         item: ItemConfig(
-          icon: const Icon(Icons.add),
+          icon: Icon(key: Key("Item$id"), Icons.add),
           title: "Item$id",
         ),
       ),
@@ -101,7 +104,7 @@ Future<void> tapElevatedButton(WidgetTester tester) async {
 }
 
 Future<void> tapItem(WidgetTester tester, int id) async {
-  await tester.tap(find.text("Item$id"));
+  await tester.tap(find.byKey(Key("Item$id")));
   await tester.pumpAndSettle();
 }
 
@@ -222,7 +225,7 @@ void main() {
                 screen: defaultScreen(0),
                 item: ItemConfig(
                   title: "Item0",
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(key: Key("Item0"), Icons.add),
                 ),
               ),
               PersistentTabConfig.noScreen(
@@ -231,7 +234,7 @@ void main() {
                 },
                 item: ItemConfig(
                   title: "Item1",
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(key: Key("Item1"), Icons.add),
                 ),
               ),
             ],
@@ -1583,7 +1586,8 @@ void main() {
 
       expect(keys[0].currentState!.controller.value, equals(1));
       expect(keys[1].currentState!.controller.value, equals(0));
-      await tapItem(tester, 1);
+      await tester.tap(find.text("Item1"));
+      await tester.pumpAndSettle();
 
       expect(keys[0].currentState!.controller.value, equals(0));
       expect(keys[1].currentState!.controller.value, equals(1));
@@ -1605,7 +1609,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                   navigatorConfig: NavigatorConfig(
                     routes: {
@@ -1646,7 +1650,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                   navigatorConfig: NavigatorConfig(
                     onGenerateRoute: (settings) => MaterialPageRoute(
@@ -1687,7 +1691,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                   navigatorConfig: NavigatorConfig(
                     onUnknownRoute: (settings) => MaterialPageRoute(
@@ -1727,7 +1731,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                 ),
               ),
@@ -1758,7 +1762,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                   navigatorConfig: NavigatorConfig(
                     onUnknownRoute: (settings) => null,
@@ -1796,7 +1800,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                 ),
               ),
@@ -1835,7 +1839,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                 ),
               ),
@@ -1870,7 +1874,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                 ),
               ),
@@ -1902,7 +1906,7 @@ void main() {
                   ),
                   item: ItemConfig(
                     title: "Item$id",
-                    icon: const Icon(Icons.add),
+                    icon: Icon(key: Key("Item$id"), Icons.add),
                   ),
                 ),
               ),
