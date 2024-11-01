@@ -15,12 +15,39 @@ Widget mainScreen(void Function() onPressed) => MaterialApp(
 
 void main() {
   group("PageTransitionAnimation", () {
+    testWidgets("slideUp", (tester) async {
+      await tester.pumpWidget(
+        mainScreen(() {
+          Navigator.of(tester.element(find.text("Push Route"))).push(
+            getPageRoute(
+              PageTransitionAnimation.slideUp,
+              screen: const Column(
+                children: [
+                  Text("SlideUp"),
+                ],
+              ),
+            ),
+          );
+        }),
+      );
+
+      await tester.tap(find.text("Push Route"));
+      await tester.pump(Durations.short1);
+      await tester.pump(Durations.short1);
+      expect(tester.getCenter(find.byType(Column)).dy, greaterThan(400));
+
+      await tester.pumpAndSettle();
+
+      expect(find.text("SlideUp"), findsOneWidget);
+    });
+
     testWidgets("slideRight", (tester) async {
       await tester.pumpWidget(
         mainScreen(() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
-            SlideRightPageRoute(
-              page: const Column(
+            getPageRoute(
+              PageTransitionAnimation.slideRight,
+              screen: const Column(
                 children: [
                   Text("SlideRight"),
                 ],
@@ -33,7 +60,6 @@ void main() {
       await tester.tap(find.text("Push Route"));
       await tester.pump(Durations.short1);
       await tester.pump(Durations.short1);
-      // 400 is the horizontal center of the screen, so tab 0 should leave towards the right and tab 1 should enter from the left
       expect(tester.getCenter(find.byType(Column)).dx, lessThan(0));
 
       await tester.pumpAndSettle();
@@ -45,8 +71,9 @@ void main() {
       await tester.pumpWidget(
         mainScreen(() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
-            ScalePageRoute(
-              page: const Column(
+            getPageRoute(
+              PageTransitionAnimation.scale,
+              screen: const Column(
                 children: [
                   Text("Scale"),
                 ],
@@ -72,8 +99,9 @@ void main() {
       await tester.pumpWidget(
         mainScreen(() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
-            RotationPageRoute(
-              page: const Column(
+            getPageRoute(
+              PageTransitionAnimation.rotate,
+              screen: const Column(
                 children: [
                   Text("Rotate"),
                 ],
@@ -93,8 +121,9 @@ void main() {
       await tester.pumpWidget(
         mainScreen(() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
-            SizePageRoute(
-              page: const Column(
+            getPageRoute(
+              PageTransitionAnimation.sizeUp,
+              screen: const Column(
                 children: [
                   Text("SizeUp"),
                 ],
@@ -120,8 +149,9 @@ void main() {
       await tester.pumpWidget(
         mainScreen(() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
-            FadePageRoute(
-              page: const Column(
+            getPageRoute(
+              PageTransitionAnimation.fade,
+              screen: const Column(
                 children: [
                   Text("Fade"),
                 ],
@@ -141,8 +171,9 @@ void main() {
       await tester.pumpWidget(
         mainScreen(() {
           Navigator.of(tester.element(find.text("Push Route"))).push(
-            ScaleRotatePageRoute(
-              page: const Column(
+            getPageRoute(
+              PageTransitionAnimation.scaleRotate,
+              screen: const Column(
                 children: [
                   Text("ScaleRotate"),
                 ],
