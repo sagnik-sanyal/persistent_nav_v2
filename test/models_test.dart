@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_redundant_argument_values
+
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
 void main() {
   group("ScreenTransitionAnimation", () {
-    testWidgets("== and hashCode", (tester) async {
+    test("== and hashCode", () {
       const animation = ScreenTransitionAnimation();
       expect(animation, equals(animation));
       expect(animation, equals(const ScreenTransitionAnimation()));
@@ -16,7 +18,7 @@ void main() {
   });
 
   group("NavBarConfig", () {
-    testWidgets("copyWith", (tester) async {
+    test("copyWith", () {
       bool didRun = false;
 
       final config = NavBarConfig(
@@ -37,7 +39,7 @@ void main() {
       expect(didRun, isTrue);
     });
 
-    testWidgets("copyWith without new values", (tester) async {
+    test("copyWith without new values", () {
       bool didRun = false;
 
       final config = NavBarConfig(
@@ -56,7 +58,7 @@ void main() {
   });
 
   group("NavigatorConfig", () {
-    testWidgets("copyWith", (tester) async {
+    test("copyWith", () {
       final config = NavigatorConfig(
         defaultTitle: "Default Title",
         routes: {"route": (context) => const SizedBox()},
@@ -88,7 +90,7 @@ void main() {
       expect(newConfig.initialRoute, equals("/new"));
     });
 
-    testWidgets("copyWith without new values", (tester) async {
+    test("copyWith without new values", () {
       final config = NavigatorConfig(
         defaultTitle: "Default Title",
         routes: {"route": (context) => const SizedBox()},
@@ -110,12 +112,47 @@ void main() {
   });
 
   group("NavBarDecoration", () {
-    testWidgets("exposedHeight is calculated correctly", (tester) async {
+    test("exposedHeight is calculated correctly", () {
       final decoration = NavBarDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 2),
       );
       expect(decoration.exposedHeight(), equals(14));
+    });
+  });
+
+  group("NeumorphicDecoration", () {
+    test("copyWith", () {
+      final decoration = NeumorphicDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 2),
+        shape: BoxShape.rectangle,
+      );
+      final newDecoration = decoration.copyWith(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(width: 4),
+        shape: BoxShape.circle,
+      );
+      expect(newDecoration.color, equals(Colors.blue));
+      expect(newDecoration.borderRadius, equals(BorderRadius.circular(20)));
+      expect(newDecoration.border, equals(Border.all(width: 4)));
+      expect(newDecoration.shape, equals(BoxShape.circle));
+    });
+
+    test("copyWith without new values", () {
+      final decoration = NeumorphicDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 2),
+        shape: BoxShape.rectangle,
+      );
+      final newDecoration = decoration.copyWith();
+      expect(newDecoration.color, equals(Colors.red));
+      expect(newDecoration.borderRadius, equals(BorderRadius.circular(10)));
+      expect(newDecoration.border, equals(Border.all(width: 2)));
+      expect(newDecoration.shape, equals(BoxShape.rectangle));
     });
   });
 }

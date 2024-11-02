@@ -34,6 +34,16 @@ void main() {
     );
     await testStyle(
       tester,
+      (config) => NeumorphicBottomNavBar(
+        navBarConfig: config,
+        neumorphicProperties: const NeumorphicProperties(
+          decoration: NeumorphicDecoration(color: Colors.red),
+          showSubtitleText: true,
+        ),
+      ),
+    );
+    await testStyle(
+      tester,
       (config) => Style1BottomNavBar(navBarConfig: config),
     );
     await testStyle(
