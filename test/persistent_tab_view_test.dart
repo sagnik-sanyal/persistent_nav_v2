@@ -687,6 +687,57 @@ void main() {
         await tapAndroidBackButton(tester);
         expectMainScreen();
       });
+
+      testWidgets(
+          "pops main screen when historyLength is 2 and clears repeating tabs in history",
+          (tester) async {
+        await tester.pumpWidget(
+          wrapTabViewWithMainScreen(
+            (context) => PersistentTabView(
+              controller: PersistentTabController(historyLength: 2),
+              tabs: tabs(),
+              navBarBuilder: (config) =>
+                  Style1BottomNavBar(navBarConfig: config),
+            ),
+          ),
+        );
+
+        await tapElevatedButton(tester);
+        expectTabAndLevel(tab: 0, level: 0);
+
+        await tapItem(tester, 1);
+        expectTabAndLevel(tab: 1, level: 0);
+
+        await tapItem(tester, 0);
+        expectTabAndLevel(tab: 0, level: 0);
+
+        await tapItem(tester, 1);
+        expectTabAndLevel(tab: 1, level: 0);
+
+        await tapAndroidBackButton(tester);
+        await tapAndroidBackButton(tester);
+        expectMainScreen();
+      });
+    });
+
+    testWidgets("controller can open drawer", (tester) async {
+      final controller = PersistentTabController();
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            controller: controller,
+            tabs: tabs(),
+            drawer: const Drawer(child: Text("Drawer")),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+          ),
+        ),
+      );
+
+      controller.openDrawer();
+      await tester.pumpAndSettle();
+
+      expect(find.text("Drawer"), findsOneWidget);
     });
 
     group("should not handle Android back button press and thus", () {
