@@ -36,6 +36,23 @@ void main() {
       newConfig.onItemSelected(0);
       expect(didRun, isTrue);
     });
+
+    testWidgets("copyWith without new values", (tester) async {
+      bool didRun = false;
+
+      final config = NavBarConfig(
+        selectedIndex: 0,
+        items: List.empty(),
+        onItemSelected: (index) {
+          didRun = true;
+        },
+      );
+      final newConfig = config.copyWith();
+      expect(newConfig.selectedIndex, equals(0));
+      expect(newConfig.items, isEmpty);
+      newConfig.onItemSelected(0);
+      expect(didRun, isTrue);
+    });
   });
 
   group("NavigatorConfig", () {
@@ -69,6 +86,26 @@ void main() {
       expect(newConfig.defaultTitle, equals("New Title"));
       expect(newConfig.routes.keys.first, equals("newRoute"));
       expect(newConfig.initialRoute, equals("/new"));
+    });
+
+    testWidgets("copyWith without new values", (tester) async {
+      final config = NavigatorConfig(
+        defaultTitle: "Default Title",
+        routes: {"route": (context) => const SizedBox()},
+        onGenerateRoute: (settings) => MaterialPageRoute(
+          builder: (context) => const SizedBox(),
+        ),
+        onUnknownRoute: (settings) => MaterialPageRoute(
+          builder: (context) => const SizedBox(),
+        ),
+        initialRoute: "/",
+        navigatorObservers: [NavigatorObserver()],
+        navigatorKey: GlobalKey<NavigatorState>(),
+      );
+      final newConfig = config.copyWith();
+      expect(newConfig.defaultTitle, equals("Default Title"));
+      expect(newConfig.routes.keys.first, equals("route"));
+      expect(newConfig.initialRoute, equals("/"));
     });
   });
 
