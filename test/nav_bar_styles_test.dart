@@ -36,6 +36,7 @@ void main() {
       tester,
       (config) => NeumorphicBottomNavBar(
         navBarConfig: config,
+        height: 80,
         neumorphicProperties: const NeumorphicProperties(
           decoration: NeumorphicDecoration(color: Colors.red),
           showSubtitleText: true,
