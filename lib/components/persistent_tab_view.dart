@@ -252,6 +252,21 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   @override
   void didUpdateWidget(covariant PersistentTabView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.tabs.length != oldWidget.tabs.length) {
+      // TODO: update the tab keys
+      if (_controller.index >= widget.tabs.length) {
+        _controller.jumpToTab(
+          _controller.index - (oldWidget.tabs.length - widget.tabs.length),
+        );
+      } else if (oldWidget.tabs[_controller.index] !=
+          widget.tabs[_controller.index]) {
+        // try to find the index of the selected tab in the new list. If unsuccessful, stay on the current tab.
+        final newIndex = widget.tabs.indexWhere(
+          (tab) => tab.item == oldWidget.tabs[_controller.index].item,
+        );
+        _controller.jumpToTab(newIndex);
+      }
+    }
     if (widget.navigationShell != null &&
         widget.navigationShell != oldWidget.navigationShell &&
         widget.navigationShell!.currentIndex != _controller.index) {

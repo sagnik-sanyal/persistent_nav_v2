@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
 - Removed `PersistentTabController.onIndexChanged`. Use `PersistentTabController.listen` instead.
 
+## [5.4.0] - 2025-05-04
+## Fixed
+- Allow changing the tabs at runtime
+
 ## [5.3.1] - 2024-10-03
 ### Fixed
 - Improve documentation on the historyLength (https://github.com/jb3rndt/PersistentBottomNavBarV2/pull/138)
@@ -604,7 +608,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
-[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.1...HEAD
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.4.0...HEAD
+[5.4.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.1...5.4.0
 [5.3.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.0...5.3.1
 [5.3.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.3...5.3.0
 [5.2.3]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.2...5.2.3
