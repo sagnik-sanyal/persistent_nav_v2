@@ -219,16 +219,22 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   late List<BuildContext?> _contextList;
   late PersistentTabController _controller;
   bool _sendScreenContext = false;
-  late final List<GlobalKey<CustomTabViewState>> _tabKeys = List.generate(
-    widget.tabs.length,
-    (index) => GlobalKey<CustomTabViewState>(),
-  );
+  late List<GlobalKey<CustomTabViewState>> _tabKeys;
   late bool canPop =
       widget.handleAndroidBackButtonPress && widget.onWillPop == null;
-  late final _navigatorKeys = widget.tabs
-      .map((config) => config.navigatorConfig.navigatorKey)
-      .fillNullsWith((index) => GlobalKey<NavigatorState>())
-      .toList();
+  late List<GlobalKey<NavigatorState>> _navigatorKeys;
+
+  void createStateLists() {
+    _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
+    _tabKeys = List.generate(
+      widget.tabs.length,
+      (index) => GlobalKey<CustomTabViewState>(),
+    );
+    _navigatorKeys = widget.tabs
+        .map((config) => config.navigatorConfig.navigatorKey)
+        .fillNullsWith((index) => GlobalKey<NavigatorState>())
+        .toList();
+  }
 
   @override
   void initState() {
@@ -240,7 +246,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
         );
     _controller.onIndexChanged = widget.onTabChanged;
 
-    _contextList = List<BuildContext?>.filled(widget.tabs.length, null);
+    createStateLists();
 
     _controller.addListener(() {
       if (widget.selectedTabContext != null) {
@@ -263,6 +269,21 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   @override
   void didUpdateWidget(covariant PersistentTabView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.tabs.length != oldWidget.tabs.length) {
+      createStateLists();
+      if (_controller.index >= widget.tabs.length) {
+        _controller.jumpToTab(
+          _controller.index - (oldWidget.tabs.length - widget.tabs.length),
+        );
+      } else if (oldWidget.tabs[_controller.index] !=
+          widget.tabs[_controller.index]) {
+        // try to find the index of the selected tab in the new list. If unsuccessful, stay on the current tab.
+        final newIndex = widget.tabs.indexWhere(
+          (tab) => tab.item == oldWidget.tabs[_controller.index].item,
+        );
+        _controller.jumpToTab(newIndex);
+      }
+    }
     if (widget.navigationShell != null &&
         widget.navigationShell != oldWidget.navigationShell &&
         widget.navigationShell!.currentIndex != _controller.index) {

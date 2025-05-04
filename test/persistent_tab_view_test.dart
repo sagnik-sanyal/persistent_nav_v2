@@ -112,6 +112,193 @@ void main() {
       expectScreen(1);
     });
 
+    group("allows changing the number of tabs", () {
+      group("when adding tabs", () {
+        testWidgets("after the current tab is accessible", (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectScreen(1);
+
+          tabs.add(tabConfig(4, defaultScreen(4)));
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectScreen(1);
+
+          await tapItem(tester, 4);
+          expectScreen(4);
+        });
+
+        testWidgets(
+            "in front of the current tab is accessible and stays on the previous tab",
+            (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectScreen(1);
+
+          tabs.insert(0, tabConfig(0, defaultScreen(0)));
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tester.pumpAndSettle();
+
+          expectScreen(1);
+          await tapItem(tester, 0);
+          expectScreen(0);
+        });
+      });
+
+      group("when removing tabs", () {
+        testWidgets("they are not accessible", (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectScreen(1);
+
+          tabs.removeAt(2);
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectScreen(1);
+
+          expect(find.text("Item3"), findsNothing);
+        });
+
+        testWidgets(
+            "stays on the same tab when removing a tab in front of the current one",
+            (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tapItem(tester, 2);
+          expectScreen(2);
+
+          tabs.removeAt(0);
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tester.pumpAndSettle();
+
+          expectScreen(2);
+        });
+
+        testWidgets(
+            "jumps to the last tab when removing a tab in front of the current one and old index would be out of range",
+            (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tapItem(tester, 3);
+          expectScreen(3);
+
+          tabs.removeAt(0);
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tester.pumpAndSettle();
+
+          expectScreen(3);
+        });
+      });
+    });
+
     testWidgets("hides the navbar when hideNavBar is true", (tester) async {
       await tester.pumpWidget(
         wrapTabView(

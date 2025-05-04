@@ -13,6 +13,7 @@ class InteractiveExample extends StatefulWidget {
 class _InteractiveExampleState extends State<InteractiveExample> {
   final PersistentTabController _controller = PersistentTabController();
   Settings settings = Settings();
+  bool _hideTab = false;
 
   List<PersistentTabConfig> _tabs() => [
         PersistentTabConfig(
@@ -41,13 +42,9 @@ class _InteractiveExampleState extends State<InteractiveExample> {
             inactiveForegroundColor: Colors.grey,
           ),
           onPressed: (context) {
-            pushWithNavBar(
-              context,
-              DialogRoute(
-                context: context,
-                builder: (context) => const ExampleDialog(),
-              ),
-            );
+            setState(() {
+              _hideTab = !_hideTab;
+            });
           },
         ),
         PersistentTabConfig(
@@ -59,15 +56,16 @@ class _InteractiveExampleState extends State<InteractiveExample> {
             inactiveForegroundColor: Colors.grey,
           ),
         ),
-        PersistentTabConfig(
-          screen: const MainScreen(),
-          item: ItemConfig(
-            icon: const Icon(Icons.settings),
-            title: "Settings",
-            activeForegroundColor: Colors.indigo,
-            inactiveForegroundColor: Colors.grey,
+        if (!_hideTab)
+          PersistentTabConfig(
+            screen: const MainScreen(),
+            item: ItemConfig(
+              icon: const Icon(Icons.settings),
+              title: "Settings",
+              activeForegroundColor: Colors.indigo,
+              inactiveForegroundColor: Colors.grey,
+            ),
           ),
-        ),
       ];
 
   @override
