@@ -289,10 +289,14 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     super.dispose();
   }
 
+  Widget _buildScreen(int index) {
+    final screen = widget.tabs[index].screen;
+    return CustomTabView(
       key: _tabKeys[tabIDs[index]],
-        navigatorConfig: widget.tabs[index].navigatorConfig,
-        home: (screenContext) => widget.tabs[index].screen,
-      );
+      navigatorConfig: widget.tabs[index].navigatorConfig,
+      home: (context) => screen,
+    );
+  }
 
   Widget navigationBarWidget() => PersistentTabViewScaffold(
         controller: _controller,
