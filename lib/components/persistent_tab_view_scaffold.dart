@@ -464,11 +464,6 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
     }
   }
 
-  void _focusActiveTab() {
-    FocusScope.of(context)
-        .setFirstFocus(tabMetaData[_currentTabIndex].focusNode);
-  }
-
   void _startAnimation() {
     if (_previousTabIndex == _currentTabIndex ||
         _previousTabIndex == -1 ||
@@ -558,12 +553,6 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       );
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _focusActiveTab();
-  }
-
-  @override
   void didUpdateWidget(_TabSwitchingView oldWidget) {
     super.didUpdateWidget(oldWidget);
     final int lengthDiff = widget.tabCount - oldWidget.tabCount;
@@ -586,11 +575,13 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
     if (widget.currentTabIndex != oldWidget.currentTabIndex) {
       _currentTabIndex = widget.currentTabIndex;
       _previousTabIndex = oldWidget.currentTabIndex;
+      if (_previousTabIndex < widget.tabCount) {
+        tabMetaData[_previousTabIndex].focusNode.unfocus();
+      }
       if (_showAnimation) {
         _startAnimation();
       }
     }
-    _focusActiveTab();
   }
 
   @override
