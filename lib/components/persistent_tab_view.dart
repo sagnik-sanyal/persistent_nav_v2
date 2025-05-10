@@ -252,21 +252,25 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   @override
   void didUpdateWidget(covariant PersistentTabView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.tabs.length != oldWidget.tabs.length) {
-      // TODO: update the tab keys
-      if (_controller.index >= widget.tabs.length) {
-        _controller.jumpToTab(
-          _controller.index - (oldWidget.tabs.length - widget.tabs.length),
-        );
-      } else if (oldWidget.tabs[_controller.index] !=
-          widget.tabs[_controller.index]) {
-        // try to find the index of the selected tab in the new list. If unsuccessful, stay on the current tab.
-        final newIndex = widget.tabs.indexWhere(
-          (tab) => tab.item == oldWidget.tabs[_controller.index].item,
-        );
-        _controller.jumpToTab(newIndex);
-      }
+
+    _tabKeys.alignLength(
+      widget.tabs.length,
+      (index) => GlobalKey<CustomTabViewState>(),
+    );
+
+    // If the tabs changed in a manner where the current index is not valid anymore, jump to the initial index.
+    if (_controller.index >= widget.tabs.length ||
+        widget.tabs[_controller.index].onPressed != null) {
+      final newIndex = widget.tabs[_controller.initialIndex].onPressed == null
+          ? _controller.initialIndex
+          : widget.tabs.indexWhere((tab) => tab.onPressed == null);
+      _controller.jumpToTab(newIndex);
+      _controller.tabHistory.removeWhere(
+        (index) =>
+            index >= widget.tabs.length || widget.tabs[index].onPressed != null,
+      );
     }
+
     if (widget.navigationShell != null &&
         widget.navigationShell != oldWidget.navigationShell &&
         widget.navigationShell!.currentIndex != _controller.index) {
@@ -441,7 +445,8 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       (subtreeCantHandlePop ?? !(_currentNavigatorState()?.canPop() ?? false));
 
   AnimatedIconWrapperState? tryGetAnimatedIconWrapperState(int index) {
-    if (widget.tabs[index].item.icon is AnimatedIconWrapper) {
+    if (index < widget.tabs.length &&
+        widget.tabs[index].item.icon is AnimatedIconWrapper) {
       final key = widget.tabs[index].item.icon.key!
           as GlobalKey<AnimatedIconWrapperState>;
       return key.currentState;

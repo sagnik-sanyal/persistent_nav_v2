@@ -287,7 +287,7 @@ void main() {
         });
 
         testWidgets(
-            "in front of the current tab is accessible and stays on the previous tab",
+            "in front of the current tab is accessible and has the same index",
             (tester) async {
           final tabs =
               [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
@@ -317,10 +317,6 @@ void main() {
             ),
           );
 
-          await tester.pumpAndSettle();
-
-          expectTabAndLevel(tab: 1, level: 0);
-          await tapItem(tester, 0);
           expectTabAndLevel(tab: 0, level: 0);
         });
       });
@@ -361,10 +357,91 @@ void main() {
         });
 
         testWidgets(
-            "stays on the same tab when removing a tab in front of the current one",
+            "stays on the same index (-> tab changes) when removing a tab in front of the current one",
             (tester) async {
           final tabs =
               [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tapItem(tester, 2);
+          expectTabAndLevel(tab: 2, level: 0);
+
+          tabs.removeAt(0);
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tester.pumpAndSettle();
+
+          expectTabAndLevel(tab: 3, level: 0);
+        });
+
+        testWidgets(
+            "jumps to the initial index when removing a tab in front of the current one and old index would be out of range",
+            (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs
+                    .toList(), // create a copy to avoid modifying this reference
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tapItem(tester, 3);
+          expectTabAndLevel(tab: 3, level: 0);
+
+          tabs.removeAt(0);
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: tabs.toList(),
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          await tester.pumpAndSettle();
+
+          expectTabAndLevel(tab: 2, level: 0);
+        });
+
+        testWidgets(
+            "jumps to the initial index when removing a tab and the new tab at that index has an onPressed callback",
+            (tester) async {
+          final tabs =
+              [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+          tabs[2] = PersistentTabConfig.noScreen(
+            item: ItemConfig(
+              title: "Item3",
+              icon: const Icon(key: Key("Item3"), Icons.add),
+            ),
+            onPressed: (c) {},
+          );
 
           await tester.pumpWidget(
             wrapTabView(
@@ -398,10 +475,17 @@ void main() {
         });
 
         testWidgets(
-            "jumps to the last tab when removing a tab in front of the current one and old index would be out of range",
+            "jumps to the first possible tab if the initial index has an onPressed callback after removing a tab and the new tab at that index also has an onPressed callback",
             (tester) async {
           final tabs =
               [1, 2, 3].map((id) => tabConfig(id, defaultScreen(id))).toList();
+          tabs[1] = PersistentTabConfig.noScreen(
+            item: ItemConfig(
+              title: "Item2",
+              icon: const Icon(key: Key("Item2"), Icons.add),
+            ),
+            onPressed: (c) {},
+          );
 
           await tester.pumpWidget(
             wrapTabView(
@@ -414,8 +498,7 @@ void main() {
             ),
           );
 
-          await tapItem(tester, 3);
-          expectTabAndLevel(tab: 3, level: 0);
+          expectTabAndLevel(tab: 1, level: 0);
 
           tabs.removeAt(0);
 

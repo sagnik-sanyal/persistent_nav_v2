@@ -187,6 +187,7 @@ class _PersistentTabViewScaffoldState extends State<PersistentTabViewScaffold>
                         )
                       : _TabSwitchingView(
                           currentTabIndex: widget.controller.index,
+                          previousTabIndex: widget.controller.previousIndex,
                           tabCount: widget.tabCount,
                           tabBuilder: buildTab,
                           stateManagement: widget.stateManagement,
@@ -403,6 +404,7 @@ typedef AnimatedTabBuilder = Widget Function(
 class _TabSwitchingView extends StatefulWidget {
   const _TabSwitchingView({
     required this.currentTabIndex,
+    required this.previousTabIndex,
     required this.tabCount,
     required this.stateManagement,
     required this.tabBuilder,
@@ -411,6 +413,7 @@ class _TabSwitchingView extends StatefulWidget {
   }) : assert(tabCount > 0, "tabCount must be greater 0");
 
   final int currentTabIndex;
+  final int? previousTabIndex;
   final int tabCount;
   final IndexedWidgetBuilder tabBuilder;
   final bool stateManagement;
@@ -427,10 +430,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       List<TabMetaData>.generate(widget.tabCount, (index) => TabMetaData());
   late AnimationController _animationController;
   late Animation<double> _animation;
-  late int _currentTabIndex = widget.currentTabIndex;
-  late int _previousTabIndex = -1;
-  late final bool _showAnimation =
-      widget.screenTransitionAnimation.duration != Duration.zero;
+  bool get _showAnimation =>
+      widget.screenTransitionAnimation.duration != Duration.zero &&
+      widget.currentTabIndex != widget.previousTabIndex;
   late Key? key = widget.stateManagement ? null : UniqueKey();
 
   @override
@@ -465,9 +467,6 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _startAnimation() {
-    if (_previousTabIndex == _currentTabIndex || _previousTabIndex == -1) {
-      return;
-    }
     _animationController.reset();
     _animation = Tween<double>(
       begin: 0,
@@ -504,9 +503,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   Widget _buildScreens() => Stack(
         fit: StackFit.expand,
         children: List<Widget>.generate(widget.tabCount, (index) {
-          final bool active = index == _currentTabIndex ||
+          final bool active = index == widget.currentTabIndex ||
               (!_animation.isCompleted &&
-                  index == _previousTabIndex &&
+                  index == widget.previousTabIndex &&
                   _showAnimation);
           tabMetaData[index].shouldBuild = active ||
               (tabMetaData[index].shouldBuild && widget.stateManagement);
@@ -527,16 +526,16 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
                                     context,
                                     index,
                                     _animation.value,
-                                    _currentTabIndex,
-                                    _previousTabIndex,
+                                    widget.currentTabIndex,
+                                    widget.previousTabIndex ?? -1,
                                     child!,
                                   ) ??
                                   _buildAnimatedTab(
                                     context,
                                     index,
                                     _animation.value,
-                                    _currentTabIndex,
-                                    _previousTabIndex,
+                                    widget.currentTabIndex,
+                                    widget.previousTabIndex ?? -1,
                                     child!,
                                   ),
                               child: widget.tabBuilder(context, index),
@@ -560,23 +559,19 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       _animationController.dispose();
       _initAnimationController();
     }
-    if (lengthDiff > 0) {
-      tabMetaData.addAll(
-        List<TabMetaData>.generate(lengthDiff, (index) => TabMetaData()),
-      );
-    } else if (lengthDiff < 0) {
-      tabMetaData.skip(widget.tabCount).forEach((tabMetaData) {
+    tabMetaData.alignLength(
+      widget.tabCount,
+      (index) => TabMetaData(),
+      onRemove: (tabMetaData) {
         tabMetaData.focusNode.dispose();
-      });
-      tabMetaData.removeRange(widget.tabCount, tabMetaData.length);
-    }
+      },
+    );
     if (widget.currentTabIndex != oldWidget.currentTabIndex) {
-      _currentTabIndex = widget.currentTabIndex;
-      _previousTabIndex = oldWidget.currentTabIndex;
-      if (_previousTabIndex < widget.tabCount) {
-        tabMetaData[_previousTabIndex].focusNode.unfocus();
+      if (widget.previousTabIndex != null &&
+          widget.previousTabIndex! < widget.tabCount) {
+        tabMetaData[widget.previousTabIndex!].focusNode.unfocus();
       }
-      if (_showAnimation) {
+      if (_showAnimation && lengthDiff == 0) {
         _startAnimation();
       }
     }
