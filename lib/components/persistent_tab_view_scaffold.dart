@@ -429,9 +429,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   late Animation<double> _animation;
   late int _currentTabIndex = widget.currentTabIndex;
   late int _previousTabIndex = -1;
-  late final bool _showAnimation =
-      widget.screenTransitionAnimation.duration != Duration.zero;
   late Key? key = widget.stateManagement ? null : UniqueKey();
+  bool get _showAnimation =>
+      widget.screenTransitionAnimation.duration != Duration.zero && _previousTabIndex != -1 && _previousTabIndex <= widget.tabCount;
 
   @override
   void initState() {
@@ -470,7 +470,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _startAnimation() {
-    if (_previousTabIndex == _currentTabIndex || _previousTabIndex == -1) {
+    if (_previousTabIndex == _currentTabIndex ||
+        _previousTabIndex == -1 ||
+        _previousTabIndex >= widget.tabCount) {
       return;
     }
     _animationController.reset();

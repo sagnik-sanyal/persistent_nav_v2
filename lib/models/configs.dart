@@ -61,7 +61,8 @@ class PersistentTabConfig {
     NavigatorConfig? navigatorConfig,
     this.scrollController,
   })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
-        onPressed = null;
+        onPressed = null,
+        id = UniqueKey().toString();
 
   PersistentTabConfig.noScreen({
     required this.item,
@@ -69,7 +70,12 @@ class PersistentTabConfig {
     NavigatorConfig? navigatorConfig,
     this.scrollController,
   })  : navigatorConfig = navigatorConfig ?? NavigatorConfig(),
-        screen = Container();
+        screen = Container(),
+        id = UniqueKey().toString();
+
+  /// Unique identifier for the tab. This is used to identify the tab in the
+  /// [PersistentTabView] widget.
+  final String id;
 
   final Widget screen;
 

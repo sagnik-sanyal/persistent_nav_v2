@@ -10,3 +10,18 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 /// We use this so that APIs that have become non-nullable can still be used
 /// with `!` and `?` to support older versions of the API as well.
 T? _ambiguate<T>(T? value) => value;
+
+extension MapUtils<K, V> on Map<K, V> {
+  /// Given a list of keys, remove all keys that are not in the list and
+  /// add all keys that are in the list but not in the map using the provided
+  /// generator function.
+  void alignKeys(Iterable<K> keys, V Function(K) generator) {
+    final Set<K> keySet = keys.toSet();
+    removeWhere((key, _) => !keySet.contains(key));
+    for (final K key in keySet) {
+      if (!containsKey(key)) {
+        this[key] = generator(key);
+      }
+    }
+  }
+}

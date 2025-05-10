@@ -211,15 +211,17 @@ class PersistentTabView extends StatefulWidget {
 
 class _PersistentTabViewState extends State<PersistentTabView> {
   late PersistentTabController _controller;
-  late final List<GlobalKey<CustomTabViewState>> _tabKeys = List.generate(
-    widget.tabs.length,
-    (index) => GlobalKey<CustomTabViewState>(),
-  );
+  late final Map<String, GlobalKey<CustomTabViewState>> _tabKeys = {
+    for (var tab in widget.tabs) tab.id: GlobalKey<CustomTabViewState>(),
+  };
+  late final List<String> tabIDs = widget.tabs.map((e) => e.id).toList();
   late bool canPop = widget.handleAndroidBackButtonPress;
 
   @override
   void initState() {
     super.initState();
+
+    validateTabConfigs(widget.tabs);
 
     _controller = widget.controller ??
         PersistentTabController(
@@ -252,20 +254,25 @@ class _PersistentTabViewState extends State<PersistentTabView> {
   @override
   void didUpdateWidget(covariant PersistentTabView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.tabs.length != oldWidget.tabs.length) {
-      // TODO: update the tab keys
-      if (_controller.index >= widget.tabs.length) {
-        _controller.jumpToTab(
-          _controller.index - (oldWidget.tabs.length - widget.tabs.length),
-        );
-      } else if (oldWidget.tabs[_controller.index] !=
-          widget.tabs[_controller.index]) {
-        // try to find the index of the selected tab in the new list. If unsuccessful, stay on the current tab.
-        final newIndex = widget.tabs.indexWhere(
-          (tab) => tab.item == oldWidget.tabs[_controller.index].item,
-        );
-        _controller.jumpToTab(newIndex);
+
+    validateTabConfigs(widget.tabs);
+
+    final newIDs = widget.tabs.map((e) => e.id).toList();
+    final commonIDs = tabIDs.toSet().intersection(newIDs.toSet());
+
+    if (commonIDs.length != tabIDs.length ||
+        commonIDs.length != newIDs.length) {
+      _tabKeys.alignKeys(newIDs, (id) => GlobalKey<CustomTabViewState>());
+
+      var index = newIDs.indexOf(tabIDs[_controller.index]);
+      if (index == -1) {
+        index = _controller.initialIndex;
       }
+      _controller.jumpToTab(index);
+
+      tabIDs
+        ..clear()
+        ..addAll(newIDs);
     }
     if (widget.navigationShell != null &&
         widget.navigationShell != oldWidget.navigationShell &&
@@ -282,8 +289,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     super.dispose();
   }
 
-  Widget _buildScreen(int index) => CustomTabView(
-        key: _tabKeys[index],
+      key: _tabKeys[tabIDs[index]],
         navigatorConfig: widget.tabs[index].navigatorConfig,
         home: (screenContext) => widget.tabs[index].screen,
       );
@@ -438,11 +444,19 @@ class _PersistentTabViewState extends State<PersistentTabView> {
       (subtreeCantHandlePop ?? !(_currentNavigatorState()?.canPop() ?? false));
 
   AnimatedIconWrapperState? tryGetAnimatedIconWrapperState(int index) {
-    if (widget.tabs[index].item.icon is AnimatedIconWrapper) {
+    if (index < widget.tabs.length &&
+        widget.tabs[index].item.icon is AnimatedIconWrapper) {
       final key = widget.tabs[index].item.icon.key!
           as GlobalKey<AnimatedIconWrapperState>;
       return key.currentState;
     }
     return null;
+  }
+
+  void validateTabConfigs(List<PersistentTabConfig> tabs) {
+    assert(
+      tabs.map((t) => t.id).toSet().length == tabs.length,
+      "Tab IDs must be unique. Please make sure that all tabs have a unique ID. If left empty, a unique ID will be assigned automatically.",
+    );
   }
 }
