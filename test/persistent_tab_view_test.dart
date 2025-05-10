@@ -266,7 +266,7 @@ void main() {
             ),
           );
 
-          expectScreen(1);
+          expectTabAndLevel(tab: 1, level: 0);
 
           tabs.add(tabConfig(4, defaultScreen(4)));
 
@@ -280,10 +280,10 @@ void main() {
             ),
           );
 
-          expectScreen(1);
+          expectTabAndLevel(tab: 1, level: 0);
 
           await tapItem(tester, 4);
-          expectScreen(4);
+          expectTabAndLevel(tab: 4, level: 0);
         });
 
         testWidgets(
@@ -303,7 +303,7 @@ void main() {
             ),
           );
 
-          expectScreen(1);
+          expectTabAndLevel(tab: 1, level: 0);
 
           tabs.insert(0, tabConfig(0, defaultScreen(0)));
 
@@ -319,9 +319,9 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectScreen(1);
+          expectTabAndLevel(tab: 1, level: 0);
           await tapItem(tester, 0);
-          expectScreen(0);
+          expectTabAndLevel(tab: 0, level: 0);
         });
       });
 
@@ -341,7 +341,7 @@ void main() {
             ),
           );
 
-          expectScreen(1);
+          expectTabAndLevel(tab: 1, level: 0);
 
           tabs.removeAt(2);
 
@@ -355,7 +355,7 @@ void main() {
             ),
           );
 
-          expectScreen(1);
+          expectTabAndLevel(tab: 1, level: 0);
 
           expect(find.text("Item3"), findsNothing);
         });
@@ -378,7 +378,7 @@ void main() {
           );
 
           await tapItem(tester, 2);
-          expectScreen(2);
+          expectTabAndLevel(tab: 2, level: 0);
 
           tabs.removeAt(0);
 
@@ -394,7 +394,7 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectScreen(2);
+          expectTabAndLevel(tab: 2, level: 0);
         });
 
         testWidgets(
@@ -415,7 +415,7 @@ void main() {
           );
 
           await tapItem(tester, 3);
-          expectScreen(3);
+          expectTabAndLevel(tab: 3, level: 0);
 
           tabs.removeAt(0);
 
@@ -431,7 +431,7 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectScreen(3);
+          expectTabAndLevel(tab: 3, level: 0);
         });
       });
     });
