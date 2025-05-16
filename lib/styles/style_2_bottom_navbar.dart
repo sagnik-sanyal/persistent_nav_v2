@@ -6,14 +6,14 @@ class Style2BottomNavBar extends StatelessWidget {
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
     this.itemPadding = const EdgeInsets.all(5),
-    this.height = kBottomNavigationBarHeight,
+    this.height,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
   final EdgeInsets itemPadding;
-  final double height;
+  final double? height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;

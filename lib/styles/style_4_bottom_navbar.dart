@@ -5,30 +5,29 @@ class Style4BottomNavBar extends StatelessWidget {
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
-    this.height = kBottomNavigationBarHeight,
+    this.height,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
-  final double height;
+  final double? height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeForegroundColor
+                  : item.inactiveForegroundColor,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             FittedBox(
@@ -53,6 +52,7 @@ class Style4BottomNavBar extends StatelessWidget {
       decoration: navBarDecoration,
       height: height,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -75,26 +75,25 @@ class Style4BottomNavBar extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: navBarConfig.items.map((item) {
-                final int index = navBarConfig.items.indexOf(item);
-                return Flexible(
-                  child: InkWell(
-                    onTap: () {
-                      navBarConfig.onItemSelected(index);
-                    },
-                    child: Center(
-                      child: _buildItem(
-                        item,
-                        navBarConfig.selectedIndex == index,
-                      ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: navBarConfig.items.map((item) {
+              final int index = navBarConfig.items.indexOf(item);
+              return Flexible(
+                child: InkWell(
+                  onTap: () {
+                    navBarConfig.onItemSelected(index);
+                  },
+                  child: Center(
+                    child: _buildItem(
+                      item,
+                      navBarConfig.selectedIndex == index,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),

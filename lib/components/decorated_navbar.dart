@@ -15,7 +15,7 @@ class DecoratedNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          if ((decoration.color?.opacity ?? 1) < 1 && decoration.filter != null)
+          if ((decoration.color?.a ?? 1) < 1 && decoration.filter != null)
             Positioned.fill(
               child: ClipRect(
                 child: BackdropFilter(

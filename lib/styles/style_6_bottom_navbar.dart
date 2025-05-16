@@ -5,13 +5,13 @@ class Style6BottomNavBar extends StatefulWidget {
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
     this.itemAnimationProperties = const ItemAnimation(),
-    this.height = kBottomNavigationBarHeight,
+    this.height,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
-  final double height;
+  final double? height;
 
   /// This controls the animation properties of the items of the NavBar.
   final ItemAnimation itemAnimationProperties;
@@ -60,17 +60,16 @@ class _Style6BottomNavBarState extends State<Style6BottomNavBar>
           scale: _animationList[itemIndex].value,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Flexible(
-                child: IconTheme(
-                  data: IconThemeData(
-                    size: item.iconSize,
-                    color: isSelected
-                        ? item.activeForegroundColor
-                        : item.inactiveForegroundColor,
-                  ),
-                  child: isSelected ? item.icon : item.inactiveIcon,
+              IconTheme(
+                data: IconThemeData(
+                  size: item.iconSize,
+                  color: isSelected
+                      ? item.activeForegroundColor
+                      : item.inactiveForegroundColor,
                 ),
+                child: isSelected ? item.icon : item.inactiveIcon,
               ),
               if (item.title != null)
                 FittedBox(

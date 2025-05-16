@@ -5,26 +5,25 @@ class Style1BottomNavBar extends StatelessWidget {
     required this.navBarConfig,
     super.key,
     this.navBarDecoration = const NavBarDecoration(),
-    this.height = kBottomNavigationBarHeight,
+    this.height,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
-  final double height;
+  final double? height;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeForegroundColor
+                  : item.inactiveForegroundColor,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             Padding(
