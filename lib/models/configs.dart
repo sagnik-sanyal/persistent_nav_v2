@@ -20,7 +20,7 @@ class ItemConfig {
     this.iconSize = 26.0,
   })  : inactiveIcon = inactiveIcon ?? icon,
         activeBackgroundColor =
-            activeColorSecondary ?? activeForegroundColor.withOpacity(0.2);
+            activeColorSecondary ?? activeForegroundColor.withValues(alpha: 0.2);
 
   /// Icon for the bar item.
   final Widget icon;

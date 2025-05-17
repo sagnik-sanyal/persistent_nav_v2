@@ -20,8 +20,11 @@ extension ListUtils<T> on List<T> {
   ///
   /// [length] is the desired length of the list.
   /// [generator] is a function that generates elements for the list.
-  void alignLength(int length, T Function(int) generator,
-      {void Function(T)? onRemove}) {
+  void alignLength(
+    int length,
+    T Function(int) generator, {
+    void Function(T)? onRemove,
+  }) {
     if (length > this.length) {
       for (int i = this.length; i < length; i++) {
         add(generator(i));

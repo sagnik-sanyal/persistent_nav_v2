@@ -50,7 +50,7 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     ItemConfig item,
     bool isSelected,
   ) =>
-      neumorphicProperties.decoration?.color?.opacity == 1.0
+      neumorphicProperties.decoration?.color?.a == 1.0
           ? NeumorphicContainer(
               decoration: neumorphicProperties.decoration,
               bevel: neumorphicProperties.bevel,
