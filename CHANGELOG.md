@@ -10,29 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `SelectedTabPressConfig.scrollToTop` enables automatically scrolling the tab content to top if the current tab is pressed again. This requires a ScrollController on each `PersistentTabConfig.scrollController` for each tab this should be activated for.
   - `SelectedTabPressConfig.onPressed` is a callback that gets executed whenever the current tab is pressed again. I also provides an argument whether there are any pages pushed to the tab.
 - Navigator function that pop all screens of the current tab: `popAllScreensOfCurrentTab`
-- Animated Icons: Have nice animations of the navigation bar icons simply by using the provided `AnimatedIconWrapper` (see README for more)
-- PersistentTabController now gives you access to the previousIndex. Before the first tab switch, this will be null though
+- Animated Icons: Animate the navigation bar icons by using the provided `AnimatedIconWrapper` (see README for more)
+- PersistentTabController now gives you access to the previousIndex
 
 ### Breaking Changes
-- Use `NavBarOverlap.none()` as the default for `navBarOverlap`
-- Removed ItemConfig.opacity. Use the opacity of NavBarDecoration.color instead
+- Change the default of `navBarOverlap` to `NavBarOverlap.none()` (previously was `NavBarOverlap.full()`)
+- Removed ItemConfig.opacity. Instead, set the opacity on the NavBarDecoration.color directly
 - Removed ItemConfig.filter. Use NavBarDecoration.filter instead
-- Removed default value of NavBarDecoration.filter to allow omitting the filter
-- Replaced popAllScreensOnTapAnyTabs with keepNavigatorHistory, which has an inverted meaning. To migrate, invert the boolean value for that parameter if you use it.
+- Removed default value of NavBarDecoration.filter
+- Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
+- Removed `PersistentTabController.onIndexChanged`. Use `PersistentTabController.listen` instead.
+- Replaced `popAllScreensOnTapAnyTabs` with `keepNavigatorHistory`. The meaning (and default value) of this parameter is thus inverted. To migrate, flip the boolean value for that parameter if you use it.
 - Combined `popAllScreensOnTapOfSelectedTab` and `popActionScreens` into the `SelectedTabPressConfig.popAction`.
-  - Set `popAction` to `PopActionType.all` to pop all screens of the current tab if it is pressed again
-  - Set `popAction` to `PopActionType.single` to pop a single screen of the current tab if it is pressed again
-  - Set `popAction` to `PopActionType.none` to pop no screen of the current tab if it is pressed again
-- Replaced `onSelectedTabPressWhenNoScreensPushed` with `SelectedTabPressConfig.onPressed`. You need to check the passed argument whether there are any pages pushed to that tab.
-- Removed `navBarHeight` parameter. Use the `height` parameter of each style instead if needed.
+  - Set `SelectedTabPressConfig.popAction` to `PopActionType.all` to pop all screens of the selected tab if it is pressed again
+  - Set `SelectedTabPressConfig.popAction` to `PopActionType.single` to pop a single screen of the selected tab if it is pressed again
+  - Set `SelectedTabPressConfig.popAction` to `PopActionType.none` to do nothing if it the selected tab pressed again
+- Replaced `onSelectedTabPressWhenNoScreensPushed` with `SelectedTabPressConfig.onPressed`. The `onPressed` parameter informs you whether any pages are currently pushed to that tab.
+- Removed `navBarHeight` parameter. Use the `height` parameter of each style instead if needed. `height` is not mandatory, so by default no specific height is set. Use `kBottomNavigationBarHeight` if you want the default previous behavior.
 
 ### Fixed
 - Adjusting the number of tabs at runtime threw an error
 - The state of each tab was not disposed if stateManagement was true and gestures were enabled
-
-### Removed
-- Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
-- Removed `PersistentTabController.onIndexChanged`. Use `PersistentTabController.listen` instead.
 
 ## [5.4.0] - 2025-05-04
 ## Fixed

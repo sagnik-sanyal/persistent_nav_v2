@@ -13,7 +13,7 @@ NOTE: This package is a continuation of [persistent_bottom_nav_bar](https://pub.
 
 ## 🎉 Version 6.0.0 Released! 🎉
 
-I'm excited to announce the release of **Version 6.0.0** of the Persistent Bottom Navigation Bar! This version comes packed with new features, improvements, and bug fixes to enhance your experience. 🚀
+**Version 6.0.0** includes new features like Animated Icons, further improvements, and bug fixes. 🚀
 
 ### New Features
 
@@ -32,14 +32,27 @@ See the [Changelog](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/mas
 <img src="https://raw.githubusercontent.com/jb3rndt/PersistentBottomNavBarV2/master/gifs/preview.gif" alt="Preview" style="height:400px;"/>
 </p>
 
+## Features
+
+- New pages can be pushed with or without showing the navigation bar.
+- 17 prebuilt navigation bar styles ready to use.
+- Each style is fully customizable ([see styling section](#styling))
+- Fully customizable navigation bars
+- Navigation Stack is not discarded when switching to another tab (can be turned off)
+- Option to hide the navigation bar once the user scrolls down
+- ([Animated icons](#animatedicons))
+- Handles hardware/software Android back button.
+- Supports [go_router](https://pub.dev/packages/go_router) to make use of flutters Router API
+- Supports transparency and blur effects
+
 <details>
   <summary><span style="font-size: 25px">Table of Contents</span></summary>
 
 - [🎉 Version 6.0.0 Released! 🎉](#-version-600-released-)
   - [New Features](#new-features)
   - [Breaking Changes](#breaking-changes)
-- [Styles](#styles)
 - [Features](#features)
+- [Styles](#styles)
 - [Getting Started](#getting-started)
   - [1. Install the package](#1-install-the-package)
   - [2. Import the package](#2-import-the-package)
@@ -84,19 +97,6 @@ See the [Changelog](https://github.com/jb3rndt/PersistentBottomNavBarV2/blob/mas
 | ![style16](gifs/style16.gif) | ![neumorphic](gifs/neumorphic.gif) |
 
 Note: These do not include all style variations
-
-## Features
-
-- New pages can be pushed with or without showing the navigation bar.
-- 17 prebuilt navigation bar styles ready to use.
-- Each style is fully customizable ([see styling section](#styling))
-- Supports custom navigation bars
-- Navigation Stack is not discarded when switching to another tab (can be turned off)
-- Option to hide the navigation bar once the user scrolls down
-- Supports animated icons
-- Handles hardware/software Android back button.
-- Supports [go_router](https://pub.dev/packages/go_router) to make use of flutters Router API
-- Supports transparency and blur effects
 
 ## Getting Started
 
