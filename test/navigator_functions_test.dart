@@ -226,7 +226,7 @@ void main() {
 
     expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
 
-    expectTabAndLevel(tab: 0, level: 0);
+    expectTab(0);
 
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
@@ -234,11 +234,11 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
-    expectTabAndLevel(tab: 0, level: 2);
+    expectTab(0, level: 2);
     expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
 
     await tapAndroidBackButton(tester);
-    expectTabAndLevel(tab: 0, level: 0);
+    expectTab(0);
   });
 
   testWidgets("pushReplacementWithoutNavBar pushes replacement without navBar",
@@ -275,7 +275,7 @@ void main() {
 
     expect(find.byType(DecoratedNavBar).hitTestable(), findsOneWidget);
 
-    expectTabAndLevel(tab: 0, level: 0);
+    expectTab(0);
 
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
@@ -283,11 +283,11 @@ void main() {
     await tester.tap(find.byType(ElevatedButton));
     await tester.pumpAndSettle();
 
-    expectTabAndLevel(tab: 0, level: 2);
+    expectTab(0, level: 2);
     expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
 
     await tapAndroidBackButton(tester);
-    expectTabAndLevel(tab: 0, level: 0);
+    expectTab(0);
   });
 
   testWidgets("popAllScreensOfCurrentTab pops all screens of current tab",
@@ -324,14 +324,14 @@ void main() {
       ),
     );
 
-    expectTabAndLevel(tab: 0, level: 0);
+    expectTab(0);
 
     await tapElevatedButton(tester);
     await tapElevatedButton(tester);
 
-    expectTabAndLevel(tab: 0, level: 2);
+    expectTab(0, level: 2);
 
     await tapElevatedButton(tester);
-    expectTabAndLevel(tab: 0, level: 0);
+    expectTab(0);
   });
 }

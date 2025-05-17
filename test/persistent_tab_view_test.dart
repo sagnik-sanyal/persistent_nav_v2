@@ -122,13 +122,16 @@ Future<void> scroll(
   await gesture.cancel();
 }
 
-void expectTabAndLevel({required int tab, required int level}) {
+void expectTab(int tab, {int level = 0}) {
   expect(find.text("Tab $tab"), findsOneWidget);
   expect(find.text("Level $level"), findsOneWidget);
 }
 
-void expectNotTabAndLevel({required int tab, required int level}) {
+void expectNotTab(int tab) {
   expect(find.text("Tab $tab"), findsNothing);
+}
+
+void expectNotLevel(int level) {
   expect(find.text("Level $level"), findsNothing);
 }
 
@@ -206,13 +209,13 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
       await tapItem(tester, 2);
-      expectTabAndLevel(tab: 2, level: 0);
+      expectTab(2);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
     });
 
     testWidgets("runs onPressed instead of switching the tab", (tester) async {
@@ -243,9 +246,9 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       expect(count, 1);
     });
 
@@ -266,7 +269,7 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 1, level: 0);
+          expectTab(1);
 
           tabs.add(tabConfig(4, defaultScreen(4)));
 
@@ -280,10 +283,10 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 1, level: 0);
+          expectTab(1);
 
           await tapItem(tester, 4);
-          expectTabAndLevel(tab: 4, level: 0);
+          expectTab(4);
         });
 
         testWidgets(
@@ -303,7 +306,7 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 1, level: 0);
+          expectTab(1);
 
           tabs.insert(0, tabConfig(0, defaultScreen(0)));
 
@@ -317,7 +320,7 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 0, level: 0);
+          expectTab(0);
         });
       });
 
@@ -337,7 +340,7 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 1, level: 0);
+          expectTab(1);
 
           tabs.removeAt(2);
 
@@ -351,7 +354,7 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 1, level: 0);
+          expectTab(1);
 
           expect(find.text("Item3"), findsNothing);
         });
@@ -374,7 +377,7 @@ void main() {
           );
 
           await tapItem(tester, 2);
-          expectTabAndLevel(tab: 2, level: 0);
+          expectTab(2);
 
           tabs.removeAt(0);
 
@@ -390,7 +393,7 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectTabAndLevel(tab: 3, level: 0);
+          expectTab(3);
         });
 
         testWidgets(
@@ -411,7 +414,7 @@ void main() {
           );
 
           await tapItem(tester, 3);
-          expectTabAndLevel(tab: 3, level: 0);
+          expectTab(3);
 
           tabs.removeAt(0);
 
@@ -427,7 +430,7 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectTabAndLevel(tab: 2, level: 0);
+          expectTab(2);
         });
 
         testWidgets(
@@ -455,7 +458,7 @@ void main() {
           );
 
           await tapItem(tester, 2);
-          expectTabAndLevel(tab: 2, level: 0);
+          expectTab(2);
 
           tabs.removeAt(0);
 
@@ -471,7 +474,7 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectTabAndLevel(tab: 2, level: 0);
+          expectTab(2);
         });
 
         testWidgets(
@@ -498,7 +501,7 @@ void main() {
             ),
           );
 
-          expectTabAndLevel(tab: 1, level: 0);
+          expectTab(1);
 
           tabs.removeAt(0);
 
@@ -514,7 +517,7 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          expectTabAndLevel(tab: 3, level: 0);
+          expectTab(3);
         });
       });
     });
@@ -794,11 +797,11 @@ void main() {
           ),
         );
 
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
       });
 
       testWidgets("pops one screen on back button press", (tester) async {
@@ -813,10 +816,10 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
 
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
       });
 
       testWidgets("pops main screen when historyLength is 0", (tester) async {
@@ -832,10 +835,10 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapAndroidBackButton(tester);
         expectMainScreen();
@@ -854,13 +857,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapAndroidBackButton(tester);
         expectMainScreen();
@@ -881,13 +884,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapItem(tester, 0);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapAndroidBackButton(tester);
         expectMainScreen();
@@ -908,19 +911,19 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
 
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapAndroidBackButton(tester);
         expectMainScreen();
@@ -939,19 +942,19 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapItem(tester, 2);
-        expectTabAndLevel(tab: 2, level: 0);
+        expectTab(2);
 
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapAndroidBackButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapAndroidBackButton(tester);
         expectMainScreen();
@@ -975,13 +978,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapItem(tester, 0);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapAndroidBackButton(tester);
         expectMainScreen();
@@ -1002,16 +1005,16 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapItem(tester, 0);
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
 
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapAndroidBackButton(tester);
         await tapAndroidBackButton(tester);
@@ -1053,13 +1056,13 @@ void main() {
           ),
         );
 
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
         await tapItem(tester, 1);
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
 
         await tapAndroidBackButton(tester);
 
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
       });
 
       testWidgets("pops no screen on back button press", (tester) async {
@@ -1075,11 +1078,11 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
 
         await tapAndroidBackButton(tester);
 
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
       });
     });
 
@@ -1097,7 +1100,7 @@ void main() {
           ),
         );
 
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
         expect(find.byType(Icon), findsNWidgets(3));
 
         localTabs.removeAt(0);
@@ -1112,7 +1115,7 @@ void main() {
         );
         await tester.pump();
 
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
         expect(find.byType(Icon), findsNWidgets(2));
       });
 
@@ -1129,7 +1132,7 @@ void main() {
           ),
         );
 
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
         expect(find.byType(Icon), findsNWidgets(3));
 
         localTabs.removeAt(0);
@@ -1144,7 +1147,7 @@ void main() {
         );
         await tester.pump();
 
-        expectTabAndLevel(tab: 1, level: 0);
+        expectTab(1);
         expect(find.byType(Icon), findsNWidgets(2));
 
         localTabs.insert(0, tabConfig(0, defaultScreen(0)));
@@ -1160,7 +1163,7 @@ void main() {
         );
         await tester.pump();
 
-        expectTabAndLevel(tab: 0, level: 0);
+        expectTab(0);
         expect(find.byType(Icon), findsNWidgets(3));
       });
     });
@@ -1392,9 +1395,9 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
     });
 
     testWidgets(
@@ -1413,11 +1416,11 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 2);
+      expectTab(0, level: 2);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
     });
 
     testWidgets(
@@ -1436,11 +1439,11 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 2);
+      expectTab(0, level: 2);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
     });
 
     testWidgets(
@@ -1464,7 +1467,7 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tapItem(tester, 0);
       expect(areScreensPushed, equals(false));
       expect(callbackGotExecuted, equals(true));
@@ -1492,7 +1495,7 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 0);
       expect(areScreensPushed, equals(true));
       expect(callbackGotExecuted, equals(true));
@@ -1531,11 +1534,11 @@ void main() {
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
 
       await tapItem(tester, 0);
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       expect(controllers[0].offset, equals(0));
     });
 
@@ -1572,11 +1575,11 @@ void main() {
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
 
       await tapItem(tester, 0);
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
       expect(controllers[0].offset, isNot(0));
     });
 
@@ -1613,12 +1616,12 @@ void main() {
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
 
       await tapItem(tester, 1);
       await tapItem(tester, 0);
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
       expect(controllers[0].offset, isNot(0));
     });
 
@@ -1636,10 +1639,10 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
     });
 
     testWidgets(
@@ -1656,10 +1659,10 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
     });
 
     testWidgets("persists screens while switching if stateManagement turned on",
@@ -1674,11 +1677,11 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
     });
 
     testWidgets("trashes screens while switching if stateManagement turned off",
@@ -1694,11 +1697,11 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
     });
 
     testWidgets(
@@ -1717,7 +1720,7 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tester.tap(find.text("Item1"));
       await tester.pump(Durations.short1);
       await tester.pump(Durations.short1);
@@ -1725,7 +1728,7 @@ void main() {
       expect(tester.getCenter(find.text("Tab 0")).dx, greaterThan(400));
       expect(tester.getCenter(find.text("Tab 1")).dx, lessThan(400));
       await tester.pumpAndSettle();
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets("custom animated builder", (tester) async {
@@ -1750,7 +1753,7 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tester.tap(find.text("Item1"));
       await tester.pump(Durations.short1);
       await tester.pump(Durations.short1);
@@ -1758,7 +1761,7 @@ void main() {
       expect(tester.getCenter(find.text("Tab 0")).dx, lessThan(400));
       expect(tester.getCenter(find.text("Tab 1")).dx, greaterThan(400));
       await tester.pumpAndSettle();
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets("no animation when ScreenTransitionAnimation.none()",
@@ -1773,10 +1776,10 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tester.tap(find.text("Item1"));
       await tester.pump();
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets("shows FloatingActionButton if specified", (tester) async {
@@ -1814,7 +1817,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets("changes screens programmatically when gestures are enabled",
@@ -1835,7 +1838,7 @@ void main() {
       controller.jumpToTab(1);
       await tester.pumpAndSettle();
 
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets(
@@ -1853,11 +1856,11 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
     });
 
     testWidgets(
@@ -1875,11 +1878,11 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
     });
 
     testWidgets(
@@ -1898,7 +1901,7 @@ void main() {
       Offset topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
       await tester.tapAt(topCenter.translate(0, -10));
       await tester.pumpAndSettle();
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
 
       await tester.pumpWidget(
         wrapTabView(
@@ -1913,7 +1916,7 @@ void main() {
       topCenter = tester.getRect(find.byType(DecoratedNavBar)).topCenter;
       await tester.tapAt(topCenter.translate(0, -10));
       await tester.pumpAndSettle();
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets("automatically animates animated icons", (tester) async {
@@ -1986,13 +1989,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
         await tapItem(tester, 1);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 1, level: 1);
+        expectTab(1, level: 1);
         await tapItem(tester, 2);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 2, level: 1);
+        expectTab(2, level: 1);
       });
 
       testWidgets("to run onGenerateRoute of each tab navigator",
@@ -2027,13 +2030,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
         await tapItem(tester, 1);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 1, level: 1);
+        expectTab(1, level: 1);
         await tapItem(tester, 2);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 2, level: 1);
+        expectTab(2, level: 1);
       });
 
       testWidgets("to run onUnknownRoute of each tab navigator",
@@ -2068,13 +2071,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: -1);
+        expectTab(0, level: -1);
         await tapItem(tester, 1);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 1, level: -1);
+        expectTab(1, level: -1);
         await tapItem(tester, 2);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 2, level: -1);
+        expectTab(2, level: -1);
       });
 
       testWidgets("to report missing onUnknownRoute as error", (tester) async {
@@ -2172,13 +2175,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
         await tapItem(tester, 1);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
         await tapItem(tester, 2);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
       });
 
       testWidgets("to run onGenerateRoute of each tab navigator",
@@ -2211,13 +2214,13 @@ void main() {
         );
 
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
         await tapItem(tester, 1);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
         await tapItem(tester, 2);
         await tapElevatedButton(tester);
-        expectTabAndLevel(tab: 0, level: 1);
+        expectTab(0, level: 1);
       });
 
       testWidgets("to report missing onUnknownRoute as error", (tester) async {
@@ -2299,9 +2302,9 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tapItem(tester, 1);
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets("switches tabs when triggered by go_router", (tester) async {
@@ -2315,10 +2318,10 @@ void main() {
 
       await tester.pumpWidget(MaterialApp.router(routerConfig: router));
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       router.go("/tab-1");
       await tester.pumpAndSettle();
-      expectTabAndLevel(tab: 1, level: 0);
+      expectTab(1);
     });
 
     testWidgets(
@@ -2341,9 +2344,9 @@ void main() {
       );
 
       await tapElevatedButton(tester);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
       await tapItem(tester, 0);
-      expectTabAndLevel(tab: 0, level: 1);
+      expectTab(0, level: 1);
     });
 
     testWidgets(
@@ -2369,7 +2372,7 @@ void main() {
         ),
       );
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       await tapItem(tester, 0);
       expect(callbackGotExecuted, equals(true));
     });
@@ -2402,11 +2405,11 @@ void main() {
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
 
       await tapItem(tester, 0);
 
-      expectTabAndLevel(tab: 0, level: 0);
+      expectTab(0);
       expect(controllers[0].offset, equals(0));
     });
 
@@ -2438,11 +2441,11 @@ void main() {
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
 
       await tapItem(tester, 0);
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
       expect(controllers[0].offset, isNot(0));
     });
 
@@ -2474,12 +2477,12 @@ void main() {
 
       await scroll(tester, const Offset(0, 200), const Offset(0, -400));
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
 
       await tapItem(tester, 1);
       await tapItem(tester, 0);
 
-      expectNotTabAndLevel(tab: 0, level: 0);
+      expectNotTab(0);
       expect(controllers[0].offset, isNot(0));
     });
   });
