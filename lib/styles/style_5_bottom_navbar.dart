@@ -3,27 +3,31 @@ part of "../persistent_bottom_nav_bar_v2.dart";
 class Style5BottomNavBar extends StatelessWidget {
   const Style5BottomNavBar({
     required this.navBarConfig,
-    this.navBarDecoration = const NavBarDecoration(),
+    this.navBarDecoration = const NavBarDecoration(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+    ),
+    this.height,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double? height;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeForegroundColor
+                  : item.inactiveForegroundColor,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
+          const SizedBox(height: 2),
           Container(
             height: 5,
             width: 5,
@@ -39,9 +43,7 @@ class Style5BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        filter: navBarConfig.selectedItem.filter,
-        opacity: navBarConfig.selectedItem.opacity,
-        height: navBarConfig.navBarHeight,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: navBarConfig.items.map((item) {

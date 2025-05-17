@@ -4,25 +4,26 @@ class Style3BottomNavBar extends StatelessWidget {
   const Style3BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
+    this.height,
     super.key,
   });
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double? height;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Flexible(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeForegroundColor
+                  : item.inactiveForegroundColor,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             FittedBox(
@@ -41,9 +42,7 @@ class Style3BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DecoratedNavBar(
         decoration: navBarDecoration,
-        filter: navBarConfig.selectedItem.filter,
-        opacity: navBarConfig.selectedItem.opacity,
-        height: navBarConfig.navBarHeight,
+        height: height,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: navBarConfig.items.map((item) {

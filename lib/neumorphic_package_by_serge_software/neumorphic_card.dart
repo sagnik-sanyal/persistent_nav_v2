@@ -124,9 +124,9 @@ class NeumorphicContainer extends StatelessWidget {
 
   Color _getAdjustColor(Color baseColor, double amount) {
     Map<String, int> colors = {
-      "r": baseColor.red,
-      "g": baseColor.green,
-      "b": baseColor.blue,
+      "r": (baseColor.r * 255).floor(),
+      "g": (baseColor.g * 255).floor(),
+      "b": (baseColor.b * 255).floor(),
     };
 
     colors = colors.map((key, value) {

@@ -1,10 +1,44 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Hide the NavBar on scroll: Set `hideOnScrollVelocity` to x (x != 0) to make the NavBar disappear after x pixels have been scrolled (and reappear respectively)
+- `SelectedTabPressConfig`, which is responsible for any configuration when the selected tab is pressed again.
+  - `SelectedTabPressConfig.popAction` allows to specify how many screens of the current tab should be popped if the tab is pressed again
+  - `SelectedTabPressConfig.scrollToTop` enables automatically scrolling the tab content to top if the current tab is pressed again. This requires a ScrollController on each `PersistentTabConfig.scrollController` for each tab this should be activated for.
+  - `SelectedTabPressConfig.onPressed` is a callback that gets executed whenever the current tab is pressed again. I also provides an argument whether there are any pages pushed to the tab.
+- Navigator function that pop all screens of the current tab: `popAllScreensOfCurrentTab`
+- Animated Icons: Animate the navigation bar icons by using the provided `AnimatedIconWrapper` (see README for more)
+- PersistentTabController now gives you access to the previousIndex
+
+### Breaking Changes
+- Change the default of `navBarOverlap` to `NavBarOverlap.none()` (previously was `NavBarOverlap.full()`)
+- Removed ItemConfig.opacity. Instead, set the opacity on the NavBarDecoration.color directly
+- Removed ItemConfig.filter. Use NavBarDecoration.filter instead
+- Removed default value of NavBarDecoration.filter
+- Removed `selectedTabContext`. Use the list of your tabs instead to get the current tab context like so: `tabs[controller.index].navigatorConfig.navigatorKey.currentContext`
+- Removed `PersistentTabController.onIndexChanged`. Use `PersistentTabController.listen` instead.
+- Replaced `popAllScreensOnTapAnyTabs` with `keepNavigatorHistory`. The meaning (and default value) of this parameter is thus inverted. To migrate, flip the boolean value for that parameter if you use it.
+- Combined `popAllScreensOnTapOfSelectedTab` and `popActionScreens` into the `SelectedTabPressConfig.popAction`.
+  - Set `SelectedTabPressConfig.popAction` to `PopActionType.all` to pop all screens of the selected tab if it is pressed again
+  - Set `SelectedTabPressConfig.popAction` to `PopActionType.single` to pop a single screen of the selected tab if it is pressed again
+  - Set `SelectedTabPressConfig.popAction` to `PopActionType.none` to do nothing if it the selected tab pressed again
+- Replaced `onSelectedTabPressWhenNoScreensPushed` with `SelectedTabPressConfig.onPressed`. The `onPressed` parameter informs you whether any pages are currently pushed to that tab.
+- Removed `navBarHeight` parameter. Use the `height` parameter of each style instead if needed. `height` is not mandatory, so by default no specific height is set. Use `kBottomNavigationBarHeight` if you want the default previous behavior.
+
+### Fixed
+- Adjusting the number of tabs at runtime threw an error
+- The state of each tab was not disposed if stateManagement was true and gestures were enabled
+
 ## [5.4.0] - 2025-05-04
+## Fixed
+- Allow changing the tabs at runtime
+
 ## [5.3.1] - 2024-10-03
 ### Fixed
 - Improve documentation on the historyLength (https://github.com/jb3rndt/PersistentBottomNavBarV2/pull/138)
@@ -575,6 +609,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Includes platform specific behavior as an option (specify it in the two navigator functions).
 - Based on flutter's Cupertino(iOS) bottom navigation bar.
 
+[Unreleased]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.4.0...HEAD
 [5.4.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.1...5.4.0
 [5.3.1]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.3.0...5.3.1
 [5.3.0]: https://github.com/jb3rndt/PersistentBottomNavBarV2/compare/5.2.3...5.3.0

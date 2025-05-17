@@ -4,6 +4,8 @@ class Style13BottomNavBar extends StatelessWidget {
   Style13BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
+    this.height,
+    this.middleItemSize = 50,
     super.key,
   }) : assert(
           navBarConfig.items.length.isOdd,
@@ -12,21 +14,22 @@ class Style13BottomNavBar extends StatelessWidget {
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double? height;
+  final double middleItemSize;
 
   Widget _buildItem(BuildContext context, ItemConfig item, bool isSelected) =>
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeForegroundColor
+                  : item.inactiveForegroundColor,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             FittedBox(
@@ -47,8 +50,8 @@ class Style13BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 150,
-            height: navBarConfig.navBarHeight,
+            width: middleItemSize,
+            height: middleItemSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: item.activeForegroundColor,
@@ -96,9 +99,7 @@ class Style13BottomNavBar extends StatelessWidget {
             const SizedBox(height: 23),
             DecoratedNavBar(
               decoration: navBarDecoration,
-              filter: navBarConfig.selectedItem.filter,
-              opacity: navBarConfig.selectedItem.opacity,
-              height: navBarConfig.navBarHeight,
+              height: height,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: navBarConfig.items.map((item) {

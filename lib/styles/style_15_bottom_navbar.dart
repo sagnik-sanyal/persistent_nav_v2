@@ -4,6 +4,8 @@ class Style15BottomNavBar extends StatelessWidget {
   Style15BottomNavBar({
     required this.navBarConfig,
     this.navBarDecoration = const NavBarDecoration(),
+    this.height,
+    this.middleItemSize = 50,
     super.key,
   }) : assert(
           navBarConfig.items.length.isOdd,
@@ -12,20 +14,21 @@ class Style15BottomNavBar extends StatelessWidget {
 
   final NavBarConfig navBarConfig;
   final NavBarDecoration navBarDecoration;
+  final double? height;
+  final double middleItemSize;
 
   Widget _buildItem(ItemConfig item, bool isSelected) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
-            child: IconTheme(
-              data: IconThemeData(
-                size: item.iconSize,
-                color: isSelected
-                    ? item.activeForegroundColor
-                    : item.inactiveForegroundColor,
-              ),
-              child: isSelected ? item.icon : item.inactiveIcon,
+          IconTheme(
+            data: IconThemeData(
+              size: item.iconSize,
+              color: isSelected
+                  ? item.activeForegroundColor
+                  : item.inactiveForegroundColor,
             ),
+            child: isSelected ? item.icon : item.inactiveIcon,
           ),
           if (item.title != null)
             FittedBox(
@@ -41,28 +44,28 @@ class Style15BottomNavBar extends StatelessWidget {
         ],
       );
 
-  Widget _buildMiddleItem(ItemConfig item, bool isSelected) => Container(
-        margin: const EdgeInsets.only(left: 5, right: 5),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: item.activeForegroundColor,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: IconTheme(
-                data: IconThemeData(
-                  size: item.iconSize,
-                  color: isSelected
-                      ? item.activeForegroundColor
-                      : item.inactiveForegroundColor,
-                ),
-                child: isSelected ? item.icon : item.inactiveIcon,
-              ),
+  Widget _buildMiddleItem(ItemConfig item, bool isSelected) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 5, right: 5),
+            height: middleItemSize,
+            width: middleItemSize,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: item.activeForegroundColor,
             ),
-          ],
-        ),
+            child: IconTheme(
+              data: IconThemeData(
+                size: item.iconSize,
+                color: isSelected
+                    ? item.activeForegroundColor
+                    : item.inactiveForegroundColor,
+              ),
+              child: isSelected ? item.icon : item.inactiveIcon,
+            ),
+          ),
+        ],
       );
 
   @override
@@ -70,9 +73,7 @@ class Style15BottomNavBar extends StatelessWidget {
     final midIndex = (navBarConfig.items.length / 2).floor();
     return DecoratedNavBar(
       decoration: navBarDecoration,
-      filter: navBarConfig.selectedItem.filter,
-      opacity: navBarConfig.selectedItem.opacity,
-      height: navBarConfig.navBarHeight,
+      height: height,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: navBarConfig.items.map((item) {
