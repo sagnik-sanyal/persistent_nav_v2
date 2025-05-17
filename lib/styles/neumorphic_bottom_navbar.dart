@@ -6,13 +6,13 @@ class NeumorphicBottomNavBar extends StatelessWidget {
     super.key,
     this.navBarDecoration = const NavBarDecoration(),
     this.neumorphicProperties = const NeumorphicProperties(),
-    this.height = kBottomNavigationBarHeight,
+    this.height,
   });
 
   final NavBarConfig navBarConfig;
   final NeumorphicProperties neumorphicProperties;
   final NavBarDecoration navBarDecoration;
-  final double height;
+  final double? height;
 
   Widget _getNavItem(
     ItemConfig item,
