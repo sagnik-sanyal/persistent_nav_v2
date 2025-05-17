@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart";
 
-import "persistent_tab_view_test.dart";
+import "persistent_bottom_nav_bar_v2_test.dart";
 
 void main() {
   group("pushScreen", () {
