@@ -576,7 +576,7 @@ void main() {
     });
 
     testWidgets("sizes the navbar according to the height", (tester) async {
-      const double height = 42;
+      const double height = 60;
 
       await tester.pumpWidget(
         wrapTabView(
@@ -596,7 +596,33 @@ void main() {
       );
     });
 
-    testWidgets("puts padding around the navbar specified by margin",
+    testWidgets("puts no padding around the navbar when margin is zero",
+        (tester) async {
+      const margin = EdgeInsets.zero;
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
+            margin: margin,
+          ),
+        ),
+      );
+
+      expect(
+        const Offset(0, 600) -
+            tester.getBottomLeft(find.byType(DecoratedNavBar)),
+        equals(margin.bottomLeft),
+      );
+      expect(
+        Offset(800, 600 - tester.getSize(find.byType(DecoratedNavBar)).height) -
+            tester.getTopRight(find.byType(DecoratedNavBar)),
+        equals(margin.topRight),
+      );
+    });
+
+    testWidgets("puts padding around the navbar when margin is set",
         (tester) async {
       EdgeInsets margin = EdgeInsets.zero;
 
@@ -616,7 +642,7 @@ void main() {
         equals(margin.bottomLeft),
       );
       expect(
-        const Offset(800, 600 - 56) -
+        Offset(800, 600 - tester.getSize(find.byType(DecoratedNavBar)).height) -
             tester.getTopRight(find.byType(DecoratedNavBar)),
         equals(margin.topRight),
       );
@@ -626,9 +652,7 @@ void main() {
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
-            tabs: [1, 2, 3]
-                .map((id) => tabConfig(id, defaultScreen(id)))
-                .toList(),
+            tabs: tabs(),
             navBarBuilder: (config) => Style1BottomNavBar(navBarConfig: config),
             margin: margin,
           ),
@@ -656,7 +680,12 @@ void main() {
                   )
                   .first,
             ) -
-            Offset(800, 600 - 56 - margin.vertical),
+            Offset(
+              800,
+              600 -
+                  tester.getSize(find.byType(DecoratedNavBar)).height -
+                  margin.vertical,
+            ),
         equals(margin.topRight),
       );
     });
@@ -1171,7 +1200,7 @@ void main() {
       await scroll(tester, const Offset(0, 200), const Offset(0, -100));
       expect(
         tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
-        equals(kBottomNavigationBarHeight),
+        equals(initialHeight),
       );
 
       expect(find.byType(DecoratedNavBar).hitTestable(), findsNothing);
@@ -1181,6 +1210,10 @@ void main() {
       expect(
         tester.getSize(find.byType(DecoratedNavBar).first).height,
         equals(initialHeight),
+      );
+      expect(
+        tester.getRect(find.byType(DecoratedNavBar).first).bottom - 600,
+        equals(0),
       );
     });
 
@@ -1197,8 +1230,8 @@ void main() {
           ),
         ),
       );
-      final double originalIconSize =
-          tester.getSize(find.byType(Icon).first).height;
+      final double originalHeight =
+          tester.getSize(find.byType(DecoratedNavBar).first).height;
 
       await tester.pumpWidget(
         wrapTabView(
@@ -1213,12 +1246,16 @@ void main() {
         ),
       );
       expect(
-        tester.getSize(find.byType(Icon).first).height,
-        equals(originalIconSize - 4 * 2),
+        tester.getSize(find.byType(DecoratedNavBar).first).height,
+        equals(originalHeight + 4 * 2),
       );
     });
 
-    testWidgets("navBarPadding does not make navbar bigger", (tester) async {
+    testWidgets(
+        "navBarPadding does not make navbar bigger when height is fixed",
+        (tester) async {
+      const double height = kBottomNavigationBarHeight;
+
       await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
@@ -1227,6 +1264,7 @@ void main() {
               navBarConfig: config,
               navBarDecoration:
                   const NavBarDecoration(padding: EdgeInsets.all(4)),
+              height: height,
             ),
           ),
         ),
@@ -1234,7 +1272,7 @@ void main() {
 
       expect(
         tester.getSize(find.byType(DecoratedNavBar)).height,
-        equals(kBottomNavigationBarHeight),
+        equals(height),
       );
     });
 
@@ -1285,7 +1323,7 @@ void main() {
 
       expect(
         tester.getSize(find.byType(CustomTabView).first).height,
-        equals(600 - kBottomNavigationBarHeight),
+        equals(600 - tester.getSize(find.byType(DecoratedNavBar)).height),
       );
     });
 
@@ -1300,6 +1338,8 @@ void main() {
           ),
         ),
       );
+
+      final navbarHeight = tester.getSize(find.byType(DecoratedNavBar)).height;
 
       expect(
         tester.getSize(find.byType(CustomTabView).first).height,
@@ -1317,7 +1357,7 @@ void main() {
 
       expect(
         tester.getSize(find.byType(CustomTabView).first).height,
-        equals(600 - kBottomNavigationBarHeight),
+        equals(600 - navbarHeight),
       );
 
       await tester.pumpWidget(
@@ -1332,7 +1372,7 @@ void main() {
 
       expect(
         tester.getSize(find.byType(CustomTabView).first).height,
-        equals(600 - (kBottomNavigationBarHeight - 30)),
+        equals(600 - (navbarHeight - 30)),
       );
     });
 
