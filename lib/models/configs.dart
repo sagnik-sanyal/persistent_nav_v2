@@ -152,8 +152,8 @@ class NavigatorConfig {
     this.onUnknownRoute,
     this.initialRoute,
     this.navigatorObservers = const <NavigatorObserver>[],
-    GlobalKey<NavigatorState>? navigatorKey,
-  }) : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>();
+    this.navigatorKey,
+  });
 
   final String? defaultTitle;
 
@@ -167,7 +167,7 @@ class NavigatorConfig {
 
   final List<NavigatorObserver> navigatorObservers;
 
-  final GlobalKey<NavigatorState> navigatorKey;
+  final GlobalKey<NavigatorState>? navigatorKey;
 
   NavigatorConfig copyWith({
     String? defaultTitle,
