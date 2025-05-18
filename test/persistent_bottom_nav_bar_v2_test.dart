@@ -2314,8 +2314,8 @@ void main() {
 
   group("Regression", () {
     testWidgets("#31 one navbar border side does not throw error",
-        (widgetTester) async {
-      await widgetTester.pumpWidget(
+        (tester) async {
+      await tester.pumpWidget(
         wrapTabView(
           (context) => PersistentTabView(
             tabs: tabs(),
@@ -2333,6 +2333,53 @@ void main() {
           ),
         ),
       );
+    });
+
+    testWidgets(
+        "#205 recreating the tabs config does not lose the navigation state of any tab",
+        (tester) async {
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(
+              navBarConfig: config,
+              navBarDecoration: const NavBarDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tapElevatedButton(tester);
+      expectTab(0, level: 1);
+
+      await tester.pumpWidget(
+        wrapTabView(
+          (context) => PersistentTabView(
+            tabs: tabs(),
+            navBarBuilder: (config) => Style1BottomNavBar(
+              navBarConfig: config,
+              navBarDecoration: const NavBarDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.grey,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expectTab(0, level: 1);
     });
   });
 }
