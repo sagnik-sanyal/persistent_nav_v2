@@ -368,7 +368,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
     }
   }
 
-  void onItemSelected(index) {
+  void onItemSelected(int index) {
     if (widget.tabs[index].onPressed != null) {
       widget.tabs[index].onPressed!.call(context);
       return;
