@@ -344,6 +344,54 @@ void main() {
 
           expectTab(3);
         });
+
+        testWidgets("and re-adding tabs", (tester) async {
+          final List<PersistentTabConfig> localTabs = tabs();
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: localTabs,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+
+          expectTab(0);
+          expect(find.byType(Icon), findsNWidgets(3));
+
+          localTabs.removeAt(0);
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: localTabs,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+          await tester.pump();
+
+          expectTab(1);
+          expect(find.byType(Icon), findsNWidgets(2));
+
+          localTabs.insert(0, tabConfig(0, defaultScreen(0)));
+
+          await tester.pumpWidget(
+            wrapTabView(
+              (context) => PersistentTabView(
+                tabs: localTabs,
+                navBarBuilder: (config) =>
+                    Style1BottomNavBar(navBarConfig: config),
+              ),
+            ),
+          );
+          await tester.pump();
+
+          expectTab(0);
+          expect(find.byType(Icon), findsNWidgets(3));
+        });
       });
     });
 
@@ -908,88 +956,6 @@ void main() {
         await tapAndroidBackButton(tester);
 
         expectTab(0, level: 1);
-      });
-    });
-
-    group("handles altering tabs at runtime when", () {
-      testWidgets("removing tabs", (tester) async {
-        final List<PersistentTabConfig> localTabs = tabs();
-
-        await tester.pumpWidget(
-          wrapTabView(
-            (context) => PersistentTabView(
-              tabs: localTabs,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
-            ),
-          ),
-        );
-
-        expectTab(0);
-        expect(find.byType(Icon), findsNWidgets(3));
-
-        localTabs.removeAt(0);
-        await tester.pumpWidget(
-          wrapTabView(
-            (context) => PersistentTabView(
-              tabs: localTabs,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
-            ),
-          ),
-        );
-        await tester.pump();
-
-        expectTab(1);
-        expect(find.byType(Icon), findsNWidgets(2));
-      });
-
-      testWidgets("removing and re-adding tabs", (tester) async {
-        final List<PersistentTabConfig> localTabs = tabs();
-
-        await tester.pumpWidget(
-          wrapTabView(
-            (context) => PersistentTabView(
-              tabs: localTabs,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
-            ),
-          ),
-        );
-
-        expectTab(0);
-        expect(find.byType(Icon), findsNWidgets(3));
-
-        localTabs.removeAt(0);
-        await tester.pumpWidget(
-          wrapTabView(
-            (context) => PersistentTabView(
-              tabs: localTabs,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
-            ),
-          ),
-        );
-        await tester.pump();
-
-        expectTab(1);
-        expect(find.byType(Icon), findsNWidgets(2));
-
-        localTabs.insert(0, tabConfig(0, defaultScreen(0)));
-
-        await tester.pumpWidget(
-          wrapTabView(
-            (context) => PersistentTabView(
-              tabs: localTabs,
-              navBarBuilder: (config) =>
-                  Style1BottomNavBar(navBarConfig: config),
-            ),
-          ),
-        );
-        await tester.pump();
-
-        expectTab(0);
-        expect(find.byType(Icon), findsNWidgets(3));
       });
     });
 
