@@ -48,6 +48,7 @@ class CustomTabViewState extends State<CustomTabView> {
   Widget build(BuildContext context) => Navigator(
         key: widget.navigatorConfig.navigatorKey,
         initialRoute: widget.navigatorConfig.initialRoute,
+        onGenerateInitialRoutes: widget.navigatorConfig.onGenerateInitialRoutes,
         onGenerateRoute: _onGenerateRoute,
         onUnknownRoute: _onUnknownRoute,
         observers: _navigatorObservers,

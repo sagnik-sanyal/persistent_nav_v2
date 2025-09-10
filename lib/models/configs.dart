@@ -151,6 +151,7 @@ class NavigatorConfig {
     this.onGenerateRoute,
     this.onUnknownRoute,
     this.initialRoute,
+    this.onGenerateInitialRoutes = Navigator.defaultGenerateInitialRoutes,
     this.navigatorObservers = const <NavigatorObserver>[],
     this.navigatorKey,
   });
@@ -164,6 +165,9 @@ class NavigatorConfig {
   final RouteFactory? onUnknownRoute;
 
   final String? initialRoute;
+
+  final List<Route<dynamic>> Function(NavigatorState, String)
+      onGenerateInitialRoutes;
 
   final List<NavigatorObserver> navigatorObservers;
 
