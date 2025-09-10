@@ -20,6 +20,7 @@ class CustomTabViewState extends State<CustomTabView> {
   final HeroController _heroController =
       CupertinoApp.createCupertinoHeroController();
   late List<NavigatorObserver> _navigatorObservers;
+  final Set<String> _initialRoutesGenerated = <String>{};
 
   @override
   void initState() {
@@ -48,14 +49,39 @@ class CustomTabViewState extends State<CustomTabView> {
   Widget build(BuildContext context) => Navigator(
         key: widget.navigatorConfig.navigatorKey,
         initialRoute: widget.navigatorConfig.initialRoute,
-        onGenerateInitialRoutes: widget.navigatorConfig.onGenerateInitialRoutes,
+        onGenerateInitialRoutes: _onGenerateInitialRoutes,
         onGenerateRoute: _onGenerateRoute,
         onUnknownRoute: _onUnknownRoute,
         observers: _navigatorObservers,
       );
 
+  List<Route<dynamic>> _onGenerateInitialRoutes(
+    NavigatorState navigator,
+    String initialRouteName,
+  ) {
+    // Use the custom onGenerateInitialRoutes if provided
+    final routes = widget.navigatorConfig.onGenerateInitialRoutes(
+      navigator,
+      initialRouteName,
+    );
+
+    // Track which routes were generated initially
+    for (final route in routes) {
+      if (route.settings.name != null) {
+        _initialRoutesGenerated.add(route.settings.name!);
+      }
+    }
+
+    return routes;
+  }
+
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     final String? name = settings.name;
+
+    if (name != null && _initialRoutesGenerated.contains(name)) {
+      return null;
+    }
+
     final WidgetBuilder? pageContentBuilder = name == Navigator.defaultRouteName
         ? widget.home
         : widget.navigatorConfig.routes[name];
