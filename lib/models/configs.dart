@@ -166,8 +166,7 @@ class NavigatorConfig {
 
   final String? initialRoute;
 
-  final List<Route<dynamic>> Function(NavigatorState, String)
-      onGenerateInitialRoutes;
+  final RouteListFactory onGenerateInitialRoutes;
 
   final List<NavigatorObserver> navigatorObservers;
 
@@ -177,6 +176,7 @@ class NavigatorConfig {
     String? defaultTitle,
     Map<String, WidgetBuilder>? routes,
     RouteFactory? onGenerateRoute,
+    RouteListFactory? onGenerateInitialRoutes,
     RouteFactory? onUnknownRoute,
     String? initialRoute,
     List<NavigatorObserver>? navigatorObservers,
@@ -187,6 +187,8 @@ class NavigatorConfig {
         routes: routes ?? this.routes,
         onGenerateRoute: onGenerateRoute ?? this.onGenerateRoute,
         onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
+        onGenerateInitialRoutes:
+            onGenerateInitialRoutes ?? this.onGenerateInitialRoutes,
         initialRoute: initialRoute ?? this.initialRoute,
         navigatorObservers: navigatorObservers ?? this.navigatorObservers,
         navigatorKey: navigatorKey ?? this.navigatorKey,
